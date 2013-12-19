@@ -36,7 +36,7 @@ public class MainActivity extends Activity  implements SensorEventListener {
         //            .commit();
         //}
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
@@ -55,9 +55,11 @@ public class MainActivity extends Activity  implements SensorEventListener {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+        /*
+        Handle action bar item clicks here. The action bar will
+        automatically handle clicks on the Home/Up button, so long
+        as you specify a parent activity in AndroidManifest.xml.
+        */
         switch (item.getItemId()) {
             case R.id.action_settings:
                 return true;
@@ -68,9 +70,8 @@ public class MainActivity extends Activity  implements SensorEventListener {
     @Override
     public void onSensorChanged(SensorEvent event) {
         // Carefull! This ouputs a lot of data as it gets called reaaaaally ofte
-        Log.d(TAG, "Event[0]: " + Float.toString(event.values[0]));
-        Log.d(TAG, "Event[1]" + Float.toString(event.values[1]));
-        Log.d(TAG, "Event[2]" + Float.toString(event.values[2]));
+        level.setForceX(-event.values[0]);
+        level.setForceY(event.values[1]);
     }
 
     @Override
