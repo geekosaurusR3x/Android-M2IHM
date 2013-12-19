@@ -21,17 +21,20 @@ public class MainActivity extends Activity  implements SensorEventListener {
 
     private SensorManager mSensorManager;
 
+    private Level level;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        level = new Level(this);
+        setContentView(level);
 
-        DummyFragment dummyFragment = new DummyFragment();
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, dummyFragment)
-                    .commit();
-        }
+        //DummyFragment dummyFragment = new DummyFragment();
+        //if (savedInstanceState == null) {
+        //    getFragmentManager().beginTransaction()
+        //            .add(R.id.container, dummyFragment)
+        //            .commit();
+        //}
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
     }
