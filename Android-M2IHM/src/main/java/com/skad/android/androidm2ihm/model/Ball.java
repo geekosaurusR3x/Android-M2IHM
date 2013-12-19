@@ -1,11 +1,9 @@
-package com.skad.android.androidm2ihm;
-
-import android.graphics.BitmapFactory;
+package com.skad.android.androidm2ihm.model;
 
 /**
  * Created by skad on 19/12/13.
  */
-public class Ball extends Object {
+public class Ball extends SpriteObject {
     public Ball() {
         super();
     }

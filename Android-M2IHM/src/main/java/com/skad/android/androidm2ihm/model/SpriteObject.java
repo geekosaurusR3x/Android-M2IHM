@@ -1,11 +1,11 @@
-package com.skad.android.androidm2ihm;
+package com.skad.android.androidm2ihm.model;
 
 import android.graphics.Bitmap;
 
 /**
  * Created by skad on 19/12/13.
  */
-abstract public class Object {
+abstract public class SpriteObject {
     protected Bitmap Sprite;
     protected int X;
     protected int Y;

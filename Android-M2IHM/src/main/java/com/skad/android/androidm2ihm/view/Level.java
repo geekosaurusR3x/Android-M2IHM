@@ -1,10 +1,12 @@
-package com.skad.android.androidm2ihm;
+package com.skad.android.androidm2ihm.view;
 
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.View;
+import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.model.Ball;
 
 /**
  * Created by skad on 19/12/13.
@@ -16,9 +18,9 @@ public class Level  extends View{
 
     public Level(Context context) {
         super(context);
-        background = BitmapFactory.decodeResource(getResources(),R.drawable.wood_texture);
+        background = BitmapFactory.decodeResource(getResources(), R.drawable.wood_texture);
         balle = new Ball();
-        balle.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.balle));
+        balle.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
         balle.setX(50);
         balle.setY(50);
     }

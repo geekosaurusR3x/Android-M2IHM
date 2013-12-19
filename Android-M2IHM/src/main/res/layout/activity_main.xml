@@ -4,4 +4,61 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    tools:ignore="MergeRootFrame" />
+    tools:ignore="MergeRootFrame" >
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:layout_gravity="center"
+        android:background="@drawable/wood_texture" />
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Watcha wanna do?"
+            android:id="@+id/textView"
+            android:textSize="60sp"
+            android:layout_gravity="center"
+            style="@android:style/TextAppearance.Holo.Large" />
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp">
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="@string/btn_label_level_1"
+                android:id="@+id/button_level_1"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="@string/btn_label_level_2"
+                android:id="@+id/button_level_2"
+                android:layout_marginTop="20dp"/>
+
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="80dp"
+                android:text="@string/btn_label_level_3"
+                android:id="@+id/button_level_3"
+                android:layout_marginTop="20dp" />
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</FrameLayout>

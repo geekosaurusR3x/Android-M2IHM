@@ -4,5 +4,9 @@
     <string name="app_name">Android-M2IHM</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="btn_label_level_1">Level 1</string>
+    <string name="btn_label_level_2">Level 2</string>
+    <string name="btn_label_level_3">Level 3</string>
+    <string name="title_activity_level">LevelActivity</string>
 
 </resources>
