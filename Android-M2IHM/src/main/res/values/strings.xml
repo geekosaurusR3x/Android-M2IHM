@@ -8,5 +8,9 @@
     <string name="btn_label_level_2">Level 2</string>
     <string name="btn_label_level_3">Level 3</string>
     <string name="title_activity_level">LevelActivity</string>
+    <string name="pref_cat_ui">UI</string>
+    <string name="pref_key_hide_actionbar">pref_key_hide_ab</string>
+    <string name="pref_hide_actionbar">Hide ActionBar</string>
+    <string name="pref_hide_actionbar_summ">Hide ActionBar when playing</string>
 
 </resources>

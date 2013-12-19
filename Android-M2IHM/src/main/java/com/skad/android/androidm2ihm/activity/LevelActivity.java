@@ -3,12 +3,14 @@ package com.skad.android.androidm2ihm.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
 
+import android.preference.PreferenceManager;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.view.Level;
 
@@ -32,6 +34,10 @@ public class LevelActivity extends Activity   implements SensorEventListener {
         // Action bar
         ActionBar actionBar = getActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false)) {
+            actionBar.hide();
+        }
     }
 
     @Override
