@@ -33,9 +33,10 @@ public class LevelActivity extends Activity   implements SensorEventListener {
 
         // Action bar
         ActionBar actionBar = getActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        if (actionBar != null)
+            actionBar.setDisplayHomeAsUpEnabled(true);
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false)) {
+        if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false) && actionBar != null) {
             actionBar.hide();
         }
     }
@@ -48,7 +49,7 @@ public class LevelActivity extends Activity   implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Carefull! This ouputs a lot of data as it gets called reaaaaally ofte
+        // Carefull! This ouputs a lot of data as it gets called reaaaaally often
         mLevel.setForceX(-event.values[0]);
         mLevel.setForceY(event.values[1]);
     }

@@ -11,7 +11,7 @@ import com.skad.android.androidm2ihm.model.Ball;
 /**
  * Created by skad on 19/12/13.
  */
-public class Level  extends View{
+public class Level  extends View {
 
     Bitmap background;
     Ball balle;
