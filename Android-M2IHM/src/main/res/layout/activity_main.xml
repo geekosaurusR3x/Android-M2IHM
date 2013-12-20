@@ -11,6 +11,7 @@
         android:layout_height="match_parent"
         android:id="@+id/imageView"
         android:layout_gravity="center"
+        android:contentDescription="@string/img_desc_wooden_background"
         android:background="@drawable/wood_texture" />
 
     <LinearLayout
@@ -23,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Watcha wanna do?"
+            android:text="@string/txt_label_greeting"
             android:id="@+id/textView"
             android:textSize="60sp"
             android:layout_gravity="center"

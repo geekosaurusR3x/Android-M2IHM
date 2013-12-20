@@ -1,7 +1,6 @@
 package com.skad.android.androidm2ihm.view;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.view.View;
@@ -14,7 +13,7 @@ import com.skad.android.androidm2ihm.model.Ball;
 public class Level  extends View {
 
     // Bitmap background;
-    Ball balle;
+    private Ball balle;
 
     public Level(Context context) {
         super(context);

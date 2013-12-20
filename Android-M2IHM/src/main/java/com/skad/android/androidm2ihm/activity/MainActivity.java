@@ -22,13 +22,9 @@ public class MainActivity extends Activity implements Button.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
-    private SensorManager mSensorManager;
-    private Level level;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        level = new Level(this);
         setContentView(R.layout.activity_main);
 
         // Setup button click listener
