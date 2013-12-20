@@ -6,11 +6,11 @@
     tools:context="com.skad.android.androidm2ihm.activity.LevelActivity"
     tools:ignore="MergeRootFrame" >
 
-    <TextView
-        android:id="@+id/textview_level"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Level X"
-        android:layout_gravity="left|top" />
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/imageView"
+        android:layout_gravity="center"
+        android:background="@drawable/wood_texture" />
+
 </FrameLayout>

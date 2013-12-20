@@ -4,6 +4,7 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -11,6 +12,8 @@ import android.hardware.SensorManager;
 import android.os.Bundle;
 
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.ViewGroup;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.view.Level;
 
@@ -27,7 +30,9 @@ public class LevelActivity extends Activity   implements SensorEventListener {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLevel = new Level(this);
-        setContentView(mLevel);
+        setContentView(R.layout.activity_level);
+        View container = findViewById(R.id.container);
+        ((ViewGroup)container).addView(mLevel);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
 
@@ -38,6 +43,9 @@ public class LevelActivity extends Activity   implements SensorEventListener {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false) && actionBar != null) {
             actionBar.hide();
+        }
+        if (sharedPref.getBoolean(getString(R.string.pref_key_force_landscape), false)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
     }
 
