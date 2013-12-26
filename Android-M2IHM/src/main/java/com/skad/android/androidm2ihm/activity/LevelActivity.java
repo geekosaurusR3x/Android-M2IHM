@@ -34,7 +34,6 @@ public class LevelActivity extends Activity   implements SensorEventListener {
         View container = findViewById(R.id.container);
         ((ViewGroup)container).addView(mLevel);
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
 
         // Action bar
         ActionBar actionBar = getActionBar();
@@ -47,6 +46,12 @@ public class LevelActivity extends Activity   implements SensorEventListener {
         if (sharedPref.getBoolean(getString(R.string.pref_key_force_landscape), false)) {
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
