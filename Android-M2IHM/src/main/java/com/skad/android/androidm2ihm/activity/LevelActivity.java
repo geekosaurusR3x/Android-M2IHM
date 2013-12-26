@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
 import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.utils.ScreenOrientation;
 import com.skad.android.androidm2ihm.view.Level;
 
 /**
@@ -62,9 +63,29 @@ public class LevelActivity extends Activity   implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        // Carefull! This ouputs a lot of data as it gets called reaaaaally often
-        mLevel.setForceX(-event.values[0]);
-        mLevel.setForceY(event.values[1]);
+        float xValue = 0.0f;
+        float yValue = 0.0f;
+        int orientation = ScreenOrientation.getOrientation(this);
+        switch (orientation) {
+            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
+                xValue = event.values[1];
+                yValue = event.values[0];
+                break;
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
+                xValue = -event.values[1];
+                yValue = -event.values[0];
+                break;
+            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
+                xValue = -event.values[0];
+                yValue = event.values[1];
+                break;
+            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
+                xValue = event.values[0];
+                yValue = -event.values[1];
+                break;
+        }
+        mLevel.setForceX(xValue);
+        mLevel.setForceY(yValue);
     }
 
     @Override
@@ -76,6 +97,5 @@ public class LevelActivity extends Activity   implements SensorEventListener {
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-        //overridePendingTransition(android.R.anim.fade_out, R.anim.push_right_in);
     }
 }
