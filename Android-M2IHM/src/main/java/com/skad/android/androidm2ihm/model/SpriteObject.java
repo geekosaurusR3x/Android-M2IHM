@@ -31,6 +31,7 @@ abstract public class SpriteObject {
 
     public void setSprite(Bitmap sprite) {
         Sprite = sprite;
+
     }
 
     public Bitmap getSprite() {
@@ -52,7 +53,7 @@ abstract public class SpriteObject {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++)
                 {
                     int bitmap1Pixel = Sprite.getPixel(i-X, j-Y);
-                    int bitmap2Pixel = wall.getSprite().getPixel(i-wall.getX(), j-wall.getY());
+                    int bitmap2Pixel = wall.getSprite().getPixel(i - wall.getX(), j - wall.getY());
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel))
                     {
                         return true;

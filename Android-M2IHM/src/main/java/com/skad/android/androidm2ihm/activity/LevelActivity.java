@@ -18,6 +18,8 @@ import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.utils.ScreenOrientation;
 import com.skad.android.androidm2ihm.view.Level;
 
+import static android.os.SystemClock.sleep;
+
 /**
  * Created by pschmitt on 12/19/13.
  */
