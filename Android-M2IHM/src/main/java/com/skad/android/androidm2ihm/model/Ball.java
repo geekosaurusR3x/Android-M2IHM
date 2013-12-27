@@ -17,4 +17,14 @@ public class Ball extends SpriteObject {
     {
         super.Y+=Y;
     }
+
+    public void RemoveForceX(float X)
+    {
+        super.X-=X;
+    }
+
+    public void RemoveForceY(float Y)
+    {
+        super.Y-=Y;
+    }
 }
