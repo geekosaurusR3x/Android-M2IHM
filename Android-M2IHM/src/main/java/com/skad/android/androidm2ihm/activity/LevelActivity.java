@@ -28,6 +28,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     private int mLevelId;
     private Level mLevel;
     private SensorManager mSensorManager;
+    private boolean mPlayerFailed = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +62,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         if (actionBar != null) {
             actionBar.setTitle("Level " + mLevelId);
         }
+        drawLevel();
     }
 
     private void nextLevel() {
@@ -143,28 +145,46 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
+
+    private void pauseGame() {
+        mSensorManager.unregisterListener(this);
+        mLevel.pause();
+    }
+
     @Override
     public void onLevelCompleted() {
+        pauseGame();
+        mPlayerFailed = false;
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
         successDialogBuilder.setTitle("Success!");
         successDialogBuilder.setMessage("You completed level " + mLevelId + "\nProceed to level " + (mLevelId + 1) + "?");
         successDialogBuilder.setPositiveButton(getString(android.R.string.ok), this);
         successDialogBuilder.setCancelable(true);
         successDialogBuilder.create().show();
-        mSensorManager.unregisterListener(this);
-        mLevel.pause();
+
     }
 
     @Override
     public void onLevelFailed() {
-        mSensorManager.unregisterListener(this);
-        mLevel.pause();
+        pauseGame();
+        mPlayerFailed = true;
+        AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
+        successDialogBuilder.setTitle("Failure!");
+        successDialogBuilder.setMessage("Restart?");
+        successDialogBuilder.setPositiveButton(getString(android.R.string.ok), this);
+        successDialogBuilder.setCancelable(true);
+        successDialogBuilder.create().show();
     }
 
     @Override
     public void onClick(DialogInterface dialogInterface, int i) {
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
         mLevel.resume();
-        nextLevel();
+        if (mPlayerFailed) {
+            restartLevel();
+        } else {
+            nextLevel();
+        }
+
      }
 }
