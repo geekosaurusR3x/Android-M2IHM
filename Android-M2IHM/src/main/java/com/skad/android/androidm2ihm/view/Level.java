@@ -50,9 +50,6 @@ public class Level extends View {
         // les objects obligatoires
         mBall = new Ball();
         mEnd = new Hole();
-        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
-        mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
-
         InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
@@ -149,6 +146,8 @@ public class Level extends View {
                 e.printStackTrace();
             }
         }
+        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
+        mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
     }
 
     @Override
