@@ -11,8 +11,13 @@ abstract public class SpriteObject {
     protected Bitmap Sprite;
     protected int X;
     protected int Y;
+    protected int widht;
+    protected int height;
 
-
+    public SpriteObject(){
+        this.widht = 64;
+        this.height = 64;
+    }
     public int getX() {
         return X;
     }
@@ -29,8 +34,16 @@ abstract public class SpriteObject {
         Y = y;
     }
 
+    public void setWidht(int widht) {
+        this.widht = widht;
+    }
+
+    public void setHeight(int height) {
+        this.height = height;
+    }
+
     public void setSprite(Bitmap sprite) {
-        Sprite = sprite;
+        Sprite = Bitmap.createScaledBitmap(sprite, widht, height,false);
 
     }
 
@@ -40,7 +53,7 @@ abstract public class SpriteObject {
 
     public Rect getBoudingRectangle()
     {
-        return new Rect(X,Y,X+Sprite.getWidth(),Y+Sprite.getHeight());
+        return new Rect(X,Y,X+widht,Y+height);
     }
 
     public boolean intersect(SpriteObject wall)

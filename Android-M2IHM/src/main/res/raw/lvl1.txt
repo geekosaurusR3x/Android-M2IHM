@@ -1,0 +1,4 @@
+#lvl design type/x/y/width/height
+#type : p(player)/h(hole)/w(wall)/c(courbe)/g(gun)
+p/50/50/32/32
+h/250/250/64/64

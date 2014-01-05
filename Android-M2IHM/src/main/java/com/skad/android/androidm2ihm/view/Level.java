@@ -4,11 +4,13 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
 
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,35 +24,95 @@ public class Level  extends View {
     // Bitmap background;
     private Ball mBalle;
     private long mLastTime = 0;
+    private int mNumLevel = 0;
     private ArrayList mListWall = new ArrayList();
     private ArrayList mListHole = new ArrayList();
     private ArrayList mListBullet = new ArrayList();
     private ArrayList mListGun = new ArrayList();
 
-    public Level(Context context) {
+    public Level(Context context,int numlevel) {
         super(context);
+        this.mNumLevel = numlevel;
+        this.LoadLevel();
+    }
+
+    protected void LoadLevel()
+    {
         mBalle = new Ball();
+        InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
+        String line;
+        try {
+            while ((line = reader.readLine()) != null)
+            {
+                if(!line.substring(0, 1).matches("#"))
+                {
+                    String[] temp  = line.split("/");
+                    if(temp[0] == "p")
+                    {
+                        mBalle.setX(Integer.parseInt(temp[1]));
+                        mBalle.setY(Integer.parseInt(temp[2]));
+                        mBalle.setWidht(Integer.parseInt(temp[3]));
+                        mBalle.setHeight(Integer.parseInt(temp[4]));
+                    }
+
+                    if(temp[0] == "h")
+                    {
+                        Hole mHole = new Hole();
+                        mHole.setX(Integer.parseInt(temp[1]));
+                        mHole.setY(Integer.parseInt(temp[2]));
+                        mHole.setWidht(Integer.parseInt(temp[3]));
+                        mHole.setHeight(Integer.parseInt(temp[4]));
+                        mHole.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.hole_texture));
+                        mListHole.add(mHole);
+                    }
+                    if(temp[0] == "w")
+                    {
+                        Wall mWall = new Wall();
+                        mWall.setX(Integer.parseInt(temp[1]));
+                        mWall.setY(Integer.parseInt(temp[2]));
+                        mWall.setWidht(Integer.parseInt(temp[3]));
+                        mWall.setHeight(Integer.parseInt(temp[4]));
+                        mWall.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.wall_grey_texture));
+                        mListWall.add(mWall);
+                    }
+                    if(temp[0] == "c")
+                    {
+                        Wall mWall = new Wall();
+                        mWall.setX(Integer.parseInt(temp[1]));
+                        mWall.setY(Integer.parseInt(temp[2]));
+                        mWall.setWidht(Integer.parseInt(temp[3]));
+                        mWall.setHeight(Integer.parseInt(temp[4]));
+                        mWall.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.arcwall_bottom_left));
+                        mListWall.add(mWall);
+                    }
+                    if(temp[0] == "g")
+                    {
+                        Gun mGun = new Gun();
+                        mGun.setX(Integer.parseInt(temp[1]));
+                        mGun.setY(Integer.parseInt(temp[2]));
+                        mGun.setWidht(Integer.parseInt(temp[3]));
+                        mGun.setHeight(Integer.parseInt(temp[4]));
+                        mGun.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.cannon));
+                        mListGun.add(mGun);
+                    }
+                }
+            }
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
+        finally
+        {
+            try{
+                filelevelstream.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         mBalle.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
-        mBalle.setX(50);
-        mBalle.setY(50);
-
-        Wall mMur = new Wall();
-        mMur.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_bottom_left));
-        mMur.setX(300);
-        mMur.setY(300);
-        mListWall.add(mMur);
-
-        //Hole mHole = new Hole();
-        //mHole.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.hole_texture));
-        //mHole.setX(600);
-        //mHole.setY(600);
-        //mListHole.add(mHole);
-
-        Gun mGun = new Gun();
-        mGun.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.cannon));
-        mGun.setX(500);
-        mGun.setY(600);
-        mListGun.add(mGun);
     }
 
     @Override

@@ -32,7 +32,7 @@ public class LevelActivity extends Activity   implements SensorEventListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLevel = new Level(this);
+        mLevel = new Level(this,R.raw.lvl1);
         setContentView(R.layout.activity_level);
         View container = findViewById(R.id.container);
         ((ViewGroup)container).addView(mLevel);
