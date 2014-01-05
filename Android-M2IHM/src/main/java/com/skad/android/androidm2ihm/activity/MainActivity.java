@@ -1,21 +1,12 @@
 package com.skad.android.androidm2ihm.activity;
 
 import android.app.Activity;
-import android.app.Fragment;
-import android.content.Context;
 import android.content.Intent;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import com.skad.android.androidm2ihm.view.Level;
 import com.skad.android.androidm2ihm.R;
 
 public class MainActivity extends Activity implements Button.OnClickListener {
@@ -58,6 +49,7 @@ public class MainActivity extends Activity implements Button.OnClickListener {
     @Override
     public void onClick(View view) {
         Intent gameIntent = new Intent(this, LevelActivity.class);
+        gameIntent.putExtra(getString(R.string.extra_key_level), Integer.parseInt(view.getTag().toString()));
         startActivity(gameIntent);
     }
 }
