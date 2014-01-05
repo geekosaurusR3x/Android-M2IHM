@@ -23,6 +23,7 @@ public class Level extends View {
 
     // Bitmap background;
     private Ball mBalle;
+    private Hole mEnd;
     private long mLastTime = 0;
     private int mNumLevel = 0;
 
@@ -38,7 +39,12 @@ public class Level extends View {
     }
 
     protected void LoadLevel() {
+        //les object obligatoires
         mBalle = new Ball();
+        mEnd = new Hole();
+        mBalle.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
+        mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
+
         InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
@@ -116,6 +122,13 @@ public class Level extends View {
                             gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cannon));
                             mListGun.add(gun);
                             break;
+                        case "e":
+                            mEnd.setX(Integer.parseInt(temp[1]));
+                            mEnd.setY(Integer.parseInt(temp[2]));
+                            mEnd.setWidht(Integer.parseInt(temp[3]));
+                            mEnd.setHeight(Integer.parseInt(temp[4]));
+                            break;
+
                     }
                 }
             }
@@ -128,8 +141,6 @@ public class Level extends View {
                 e.printStackTrace();
             }
         }
-
-        mBalle.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
     }
 
     @Override
@@ -148,13 +159,13 @@ public class Level extends View {
         for (final Object mBullet : mListBullet) {
             canvas.drawBitmap(((SpriteObject) (mBullet)).getSprite(), ((SpriteObject) (mBullet)).getX(), ((SpriteObject) (mBullet)).getY(), null);
         }
-
+        canvas.drawBitmap(mEnd.getSprite(), mEnd.getX(), mEnd.getY(), null);
         canvas.drawBitmap(mBalle.getSprite(), mBalle.getX(), mBalle.getY(), null);
         invalidate();
     }
 
     private void update() {
-        for (final Object mHole : mListHole) {
+        for (final Object mHole : mListHole) {  //gameover
             if (((Hole) (mHole)).intoHole(mBalle)) {
                 ((Activity) getContext()).finish();
             }
@@ -170,6 +181,10 @@ public class Level extends View {
             }
         }
         mLastTime = currentTimeMillis();
+        if (mEnd.intoHole(mBalle))
+        {   //win
+            ((Activity) getContext()).finish();
+        }
     }
 
     public void setForceX(float forceX) {
