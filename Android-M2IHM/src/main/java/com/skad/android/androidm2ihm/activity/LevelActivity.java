@@ -3,6 +3,7 @@ package com.skad.android.androidm2ihm.activity;
 import android.app.ActionBar;
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
@@ -10,7 +11,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
-
 import android.preference.PreferenceManager;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,21 +18,37 @@ import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.utils.ScreenOrientation;
 import com.skad.android.androidm2ihm.view.Level;
 
-import static android.os.SystemClock.sleep;
-
 /**
  * Created by pschmitt on 12/19/13.
  */
-public class LevelActivity extends Activity   implements SensorEventListener {
+public class LevelActivity extends Activity implements SensorEventListener {
     private static final String TAG = "LevelActivity";
 
+    private int mLevelId;
     private Level mLevel;
     private SensorManager mSensorManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mLevel = new Level(this,R.raw.lvl1);
+
+        // Determine which level should be loaded
+        Intent parentIntent = getIntent();
+        mLevelId = parentIntent.getIntExtra(getString(R.string.extra_key_level), 1);
+        int levelResId = R.raw.lvl1;
+        switch (mLevelId) {
+            case 1:
+                levelResId = R.raw.lvl1;
+                break;
+            case 2:
+                levelResId = R.raw.lvl2;
+                break;
+            case 3:
+                levelResId = R.raw.lvl3;
+                break;
+        }
+
+        mLevel = new Level(this, levelResId);
         setContentView(R.layout.activity_level);
         View container = findViewById(R.id.container);
         ((ViewGroup)container).addView(mLevel);

@@ -42,6 +42,7 @@
                 android:layout_width="200dp"
                 android:layout_height="80dp"
                 android:text="@string/btn_label_level_1"
+                android:tag="@integer/btn_tag_level_1"
                 android:id="@+id/button_level_1"/>
 
             <Button
@@ -49,6 +50,7 @@
                 android:layout_height="80dp"
                 android:text="@string/btn_label_level_2"
                 android:id="@+id/button_level_2"
+                android:tag="@integer/btn_tag_level_2"
                 android:layout_marginTop="20dp"/>
 
             <Button
@@ -56,6 +58,7 @@
                 android:layout_height="80dp"
                 android:text="@string/btn_label_level_3"
                 android:id="@+id/button_level_3"
+                android:tag="@integer/btn_tag_level_3"
                 android:layout_marginTop="20dp" />
         </LinearLayout>
 

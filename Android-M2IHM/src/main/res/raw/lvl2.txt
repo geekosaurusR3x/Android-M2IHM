@@ -1,0 +1,4 @@
+#lvl design type/x/y/width/height
+#type : p(player)/h(hole)/w(wall)/abl(arc bottom left)/abr(arc bottom right)/atl(arc top left)/atr(arc top right)/g(gun)
+p/50/50/32/32
+h/350/450/64/64
