@@ -1,6 +1,5 @@
 package com.skad.android.androidm2ihm.view;
 
-import android.app.Activity;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -22,23 +21,33 @@ import static java.lang.System.currentTimeMillis;
 public class Level extends View {
 
     // Bitmap background;
-    private Ball mBalle;
+    private Ball mBall;
     private long mLastTime = 0;
     private int mNumLevel = 0;
+    private boolean mPaused = false;
 
     private ArrayList mListWall = new ArrayList();
     private ArrayList mListHole = new ArrayList();
     private ArrayList mListBullet = new ArrayList();
     private ArrayList mListGun = new ArrayList();
 
+    private onLevelEventListener mParentActivity;
+
     public Level(Context context, int numlevel) {
         super(context);
+        try {
+            mParentActivity = (onLevelEventListener) context;
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement onLevelEventListener");
+        }
         this.mNumLevel = numlevel;
-        this.LoadLevel();
+        this.loadLevel();
     }
 
-    protected void LoadLevel() {
-        mBalle = new Ball();
+
+
+    protected void loadLevel() {
+        mBall = new Ball();
         InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
@@ -48,10 +57,10 @@ public class Level extends View {
                     String[] temp = line.split("/");
                     switch (temp[0]) {
                         case "p":
-                            mBalle.setX(Integer.parseInt(temp[1]));
-                            mBalle.setY(Integer.parseInt(temp[2]));
-                            mBalle.setWidht(Integer.parseInt(temp[3]));
-                            mBalle.setHeight(Integer.parseInt(temp[4]));
+                            mBall.setX(Integer.parseInt(temp[1]));
+                            mBall.setY(Integer.parseInt(temp[2]));
+                            mBall.setWidht(Integer.parseInt(temp[3]));
+                            mBall.setHeight(Integer.parseInt(temp[4]));
                             break;
                         case "h":
                             Hole hole = new Hole();
@@ -129,34 +138,38 @@ public class Level extends View {
             }
         }
 
-        mBalle.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
+        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        update();
-        for (final Object mMur : mListWall) {
-            canvas.drawBitmap(((SpriteObject) (mMur)).getSprite(), ((SpriteObject) (mMur)).getX(), ((SpriteObject) (mMur)).getY(), null);
-        }
-        for (final Object mHole : mListHole) {
-            canvas.drawBitmap(((SpriteObject) (mHole)).getSprite(), ((SpriteObject) (mHole)).getX(), ((SpriteObject) (mHole)).getY(), null);
-        }
-        for (final Object mGun : mListGun) {
-            canvas.drawBitmap(((SpriteObject) (mGun)).getSprite(), ((SpriteObject) (mGun)).getX(), ((SpriteObject) (mGun)).getY(), null);
-        }
-        for (final Object mBullet : mListBullet) {
-            canvas.drawBitmap(((SpriteObject) (mBullet)).getSprite(), ((SpriteObject) (mBullet)).getX(), ((SpriteObject) (mBullet)).getY(), null);
+        if (mPaused) {
+            return;
         }
 
-        canvas.drawBitmap(mBalle.getSprite(), mBalle.getX(), mBalle.getY(), null);
+        update();
+        for (final Object wall : mListWall) {
+            canvas.drawBitmap(((SpriteObject) (wall)).getSprite(), ((SpriteObject) (wall)).getX(), ((SpriteObject) (wall)).getY(), null);
+        }
+        for (final Object hole : mListHole) {
+            canvas.drawBitmap(((SpriteObject) (hole)).getSprite(), ((SpriteObject) (hole)).getX(), ((SpriteObject) (hole)).getY(), null);
+        }
+        for (final Object gun : mListGun) {
+            canvas.drawBitmap(((SpriteObject) (gun)).getSprite(), ((SpriteObject) (gun)).getX(), ((SpriteObject) (gun)).getY(), null);
+        }
+        for (final Object bullet : mListBullet) {
+            canvas.drawBitmap(((SpriteObject) (bullet)).getSprite(), ((SpriteObject) (bullet)).getX(), ((SpriteObject) (bullet)).getY(), null);
+        }
+
+        canvas.drawBitmap(mBall.getSprite(), mBall.getX(), mBall.getY(), null);
         invalidate();
     }
 
     private void update() {
         for (final Object mHole : mListHole) {
-            if (((Hole) (mHole)).intoHole(mBalle)) {
-                ((Activity) getContext()).finish();
+            if (((Hole) (mHole)).intoHole(mBall)) {
+                mParentActivity.onLevelCompleted();
             }
         }
         for (final Object mBullet : mListBullet) {
@@ -170,30 +183,44 @@ public class Level extends View {
             }
         }
         mLastTime = currentTimeMillis();
+        // TODO Handle player failures (wall/bullet collision)
     }
 
     public void setForceX(float forceX) {
-        int lastx = mBalle.getX();
-        mBalle.ApplyForceX(forceX);
-        if (Colision()) {
-            mBalle.setX(lastx);
+        int lastx = mBall.getX();
+        mBall.applyForceX(forceX);
+        if (collision()) {
+            mBall.setX(lastx);
         }
     }
 
     public void setForceY(float forceY) {
-        int lasty = mBalle.getY();
-        mBalle.ApplyForceY(forceY);
-        if (Colision()) {
-            mBalle.setY(lasty);
+        int lasty = mBall.getY();
+        mBall.applyForceY(forceY);
+        if (collision()) {
+            mBall.setY(lasty);
         }
     }
 
-    protected boolean Colision() {
-        for (final Object mMur : mListWall) {
-            if (mBalle.intersect((SpriteObject) (mMur))) {
+    protected boolean collision() {
+        for (final Object wall : mListWall) {
+            if (mBall.intersects((SpriteObject) (wall))) {
                 return true;
             }
         }
         return false;
+    }
+
+    public void pause() {
+        mPaused = true;
+    }
+
+    public void resume() {
+        mPaused = false;
+    }
+
+    public interface onLevelEventListener {
+        public void onLevelCompleted();
+        public void onLevelFailed();
     }
 }

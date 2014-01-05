@@ -8,26 +8,21 @@ public class Ball extends SpriteObject {
         super();
         this.widht = 32;
         this.height = 32;
-
     }
 
-    public void ApplyForceX(float X)
-    {
-         super.X+=X;
+    public void applyForceX(float X) {
+        super.X += X;
     }
 
-    public void ApplyForceY(float Y)
-    {
-        super.Y+=Y;
+    public void applyForceY(float Y) {
+        super.Y += Y;
     }
 
-    public void RemoveForceX(float X)
-    {
-        super.X-=X;
+    public void removeForceX(float X) {
+        super.X -= X;
     }
 
-    public void RemoveForceY(float Y)
-    {
-        super.Y-=Y;
+    public void removeForceY(float Y) {
+        super.Y -= Y;
     }
 }

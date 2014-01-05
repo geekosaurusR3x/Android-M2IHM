@@ -2,8 +2,9 @@ package com.skad.android.androidm2ihm.activity;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
-import android.content.Intent;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
@@ -21,7 +22,7 @@ import com.skad.android.androidm2ihm.view.Level;
 /**
  * Created by pschmitt on 12/19/13.
  */
-public class LevelActivity extends Activity implements SensorEventListener {
+public class LevelActivity extends Activity implements SensorEventListener, Level.onLevelEventListener, DialogInterface.OnClickListener {
     private static final String TAG = "LevelActivity";
 
     private int mLevelId;
@@ -31,10 +32,50 @@ public class LevelActivity extends Activity implements SensorEventListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_level);
 
         // Determine which level should be loaded
-        Intent parentIntent = getIntent();
-        mLevelId = parentIntent.getIntExtra(getString(R.string.extra_key_level), 1);
+        mLevelId = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
+        drawLevel();
+
+        // Setup sensors
+        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+
+        // Action bar
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            updateActionBarTitle();
+        }
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false) && actionBar != null) {
+            actionBar.hide();
+        }
+        if (sharedPref.getBoolean(getString(R.string.pref_key_force_landscape), false)) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        }
+    }
+
+    private void restartLevel() {
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Level " + mLevelId);
+        }
+    }
+
+    private void nextLevel() {
+        if (mLevelId < 3) {
+            mLevelId++;
+        }
+        drawLevel();
+        updateActionBarTitle();
+    }
+
+    private void updateActionBarTitle() {
+
+    }
+
+    private void drawLevel() {
         int levelResId = R.raw.lvl1;
         switch (mLevelId) {
             case 1:
@@ -47,24 +88,9 @@ public class LevelActivity extends Activity implements SensorEventListener {
                 levelResId = R.raw.lvl3;
                 break;
         }
-
         mLevel = new Level(this, levelResId);
-        setContentView(R.layout.activity_level);
         View container = findViewById(R.id.container);
         ((ViewGroup)container).addView(mLevel);
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-
-        // Action bar
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null)
-            actionBar.setDisplayHomeAsUpEnabled(true);
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false) && actionBar != null) {
-            actionBar.hide();
-        }
-        if (sharedPref.getBoolean(getString(R.string.pref_key_force_landscape), false)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
     }
 
     @Override
@@ -116,4 +142,29 @@ public class LevelActivity extends Activity implements SensorEventListener {
         super.onBackPressed();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
+
+    @Override
+    public void onLevelCompleted() {
+        AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
+        successDialogBuilder.setTitle("Success!");
+        successDialogBuilder.setMessage("You completed level " + mLevelId + "\nProceed to level " + (mLevelId + 1) + "?");
+        successDialogBuilder.setPositiveButton(getString(android.R.string.ok), this);
+        successDialogBuilder.setCancelable(true);
+        successDialogBuilder.create().show();
+        mSensorManager.unregisterListener(this);
+        mLevel.pause();
+    }
+
+    @Override
+    public void onLevelFailed() {
+        mSensorManager.unregisterListener(this);
+        mLevel.pause();
+    }
+
+    @Override
+    public void onClick(DialogInterface dialogInterface, int i) {
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+        mLevel.resume();
+        nextLevel();
+     }
 }

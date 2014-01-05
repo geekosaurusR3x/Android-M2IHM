@@ -56,7 +56,7 @@ abstract public class SpriteObject {
         return new Rect(X,Y,X+widht,Y+height);
     }
 
-    public boolean intersect(SpriteObject wall)
+    public boolean intersects(SpriteObject wall)
     {
         if(Rect.intersects(getBoudingRectangle(),wall.getBoudingRectangle()))
         {
