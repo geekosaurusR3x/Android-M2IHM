@@ -48,7 +48,7 @@ public class Level  extends View {
                 if(!line.substring(0, 1).matches("#"))
                 {
                     String[] temp  = line.split("/");
-                    if(temp[0] == "p")
+                    if(temp[0].matches("p"))
                     {
                         mBalle.setX(Integer.parseInt(temp[1]));
                         mBalle.setY(Integer.parseInt(temp[2]));
@@ -56,7 +56,7 @@ public class Level  extends View {
                         mBalle.setHeight(Integer.parseInt(temp[4]));
                     }
 
-                    if(temp[0] == "h")
+                    if(temp[0].matches("h"))
                     {
                         Hole mHole = new Hole();
                         mHole.setX(Integer.parseInt(temp[1]));
@@ -66,7 +66,7 @@ public class Level  extends View {
                         mHole.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.hole_texture));
                         mListHole.add(mHole);
                     }
-                    if(temp[0] == "w")
+                    if(temp[0].matches("w"))
                     {
                         Wall mWall = new Wall();
                         mWall.setX(Integer.parseInt(temp[1]));
@@ -76,7 +76,7 @@ public class Level  extends View {
                         mWall.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.wall_grey_texture));
                         mListWall.add(mWall);
                     }
-                    if(temp[0] == "c")
+                    if(temp[0].matches("abl"))
                     {
                         Wall mWall = new Wall();
                         mWall.setX(Integer.parseInt(temp[1]));
@@ -86,7 +86,37 @@ public class Level  extends View {
                         mWall.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.arcwall_bottom_left));
                         mListWall.add(mWall);
                     }
-                    if(temp[0] == "g")
+                    if(temp[0].matches("abr"))
+                    {
+                        Wall mWall = new Wall();
+                        mWall.setX(Integer.parseInt(temp[1]));
+                        mWall.setY(Integer.parseInt(temp[2]));
+                        mWall.setWidht(Integer.parseInt(temp[3]));
+                        mWall.setHeight(Integer.parseInt(temp[4]));
+                        mWall.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.arcwall_bottom_right));
+                        mListWall.add(mWall);
+                    }
+                    if(temp[0].matches("atl"))
+                    {
+                        Wall mWall = new Wall();
+                        mWall.setX(Integer.parseInt(temp[1]));
+                        mWall.setY(Integer.parseInt(temp[2]));
+                        mWall.setWidht(Integer.parseInt(temp[3]));
+                        mWall.setHeight(Integer.parseInt(temp[4]));
+                        mWall.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.arcwall_top_left));
+                        mListWall.add(mWall);
+                    }
+                    if(temp[0].matches("atr"))
+                    {
+                        Wall mWall = new Wall();
+                        mWall.setX(Integer.parseInt(temp[1]));
+                        mWall.setY(Integer.parseInt(temp[2]));
+                        mWall.setWidht(Integer.parseInt(temp[3]));
+                        mWall.setHeight(Integer.parseInt(temp[4]));
+                        mWall.setSprite(BitmapFactory.decodeResource(getResources(),R.drawable.arcwall_top_right));
+                        mListWall.add(mWall);
+                    }
+                    if(temp[0].matches("g"))
                     {
                         Gun mGun = new Gun();
                         mGun.setX(Integer.parseInt(temp[1]));
