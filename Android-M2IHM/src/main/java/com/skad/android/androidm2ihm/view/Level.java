@@ -22,6 +22,8 @@ public class Level extends View {
 
     // Bitmap background;
     private Ball mBall;
+    private Hole mEnd;
+
     private long mLastTime = 0;
     private int mNumLevel = 0;
     private boolean mPaused = false;
@@ -44,10 +46,13 @@ public class Level extends View {
         this.loadLevel();
     }
 
-
-
     protected void loadLevel() {
+        // les objects obligatoires
         mBall = new Ball();
+        mEnd = new Hole();
+        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
+        mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
+
         InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
@@ -125,6 +130,13 @@ public class Level extends View {
                             gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cannon));
                             mListGun.add(gun);
                             break;
+                        case "e":
+                            mEnd.setX(Integer.parseInt(temp[1]));
+                            mEnd.setY(Integer.parseInt(temp[2]));
+                            mEnd.setWidht(Integer.parseInt(temp[3]));
+                            mEnd.setHeight(Integer.parseInt(temp[4]));
+                            break;
+
                     }
                 }
             }
@@ -137,8 +149,6 @@ public class Level extends View {
                 e.printStackTrace();
             }
         }
-
-        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
     }
 
     @Override
@@ -162,15 +172,20 @@ public class Level extends View {
             canvas.drawBitmap(((SpriteObject) (bullet)).getSprite(), ((SpriteObject) (bullet)).getX(), ((SpriteObject) (bullet)).getY(), null);
         }
 
+        canvas.drawBitmap(mEnd.getSprite(), mEnd.getX(), mEnd.getY(), null);
         canvas.drawBitmap(mBall.getSprite(), mBall.getX(), mBall.getY(), null);
         invalidate();
     }
 
     private void update() {
-        for (final Object mHole : mListHole) {
+        for (final Object mHole : mListHole) { //gameover
             if (((Hole) (mHole)).intoHole(mBall)) {
-                mParentActivity.onLevelCompleted();
+                mParentActivity.onLevelFailed();
             }
+        }
+        if (mEnd.intoHole(mBall)) {
+            // win
+            mParentActivity.onLevelCompleted();
         }
         for (final Object mBullet : mListBullet) {
             ((Bullet) (mBullet)).forward();
@@ -221,6 +236,7 @@ public class Level extends View {
 
     public interface onLevelEventListener {
         public void onLevelCompleted();
+
         public void onLevelFailed();
     }
 }
