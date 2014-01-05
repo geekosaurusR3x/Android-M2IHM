@@ -2,3 +2,4 @@
 #type : p(player)/h(hole)/w(wall)/abl(arc bottom left)/abr(arc bottom right)/atl(arc top left)/atr(arc top right)/g(gun)
 p/50/50/32/32
 h/250/250/64/64
+e/600/600/64/64
