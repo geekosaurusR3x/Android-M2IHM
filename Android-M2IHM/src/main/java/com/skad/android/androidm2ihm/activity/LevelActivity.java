@@ -78,7 +78,10 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
 
     private void updateActionBarTitle() {
-
+        ActionBar actionBar = getActionBar();
+        if (actionBar != null) {
+            actionBar.setTitle("Level " + mLevelId);
+        }
     }
 
     private void drawLevel() {
@@ -112,7 +115,10 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
-
+        if (mBackgroundMusic != null) {
+            mBackgroundMusic.release();
+            mBackgroundMusic = null;
+        }
     }
 
     @Override

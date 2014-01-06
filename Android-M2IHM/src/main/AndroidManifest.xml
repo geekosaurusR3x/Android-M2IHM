@@ -33,7 +33,8 @@
         </activity>
         <activity
             android:name=".activity.LevelActivity"
-            android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity">
+            android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity"
+            android:hardwareAccelerated="true">
 
         </activity>
         <activity android:name=".activity.SettingsActivity" android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity"/>
