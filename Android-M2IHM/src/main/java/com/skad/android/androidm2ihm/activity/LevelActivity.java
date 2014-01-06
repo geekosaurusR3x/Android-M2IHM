@@ -58,19 +58,19 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
 
     private void restartLevel() {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("Level " + mLevelId);
-        }
         drawLevel();
+        updateActionBarTitle();
     }
 
     private void nextLevel() {
         if (mLevelId < 3) {
             mLevelId++;
+            drawLevel();
+            updateActionBarTitle();
+        } else {
+            // Player completed last level, exit
+            finish();
         }
-        drawLevel();
-        updateActionBarTitle();
     }
 
     private void updateActionBarTitle() {
@@ -92,7 +92,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         }
         mLevel = new Level(this, levelResId);
         View container = findViewById(R.id.container);
-        ((ViewGroup)container).addView(mLevel);
+        ((ViewGroup) container).addView(mLevel);
     }
 
     @Override
@@ -156,12 +156,17 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         pauseGame();
         mPlayerFailed = false;
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
-        successDialogBuilder.setTitle("Success!");
-        successDialogBuilder.setMessage("You completed level " + mLevelId + "\nProceed to level " + (mLevelId + 1) + "?");
-        successDialogBuilder.setPositiveButton(getString(android.R.string.ok), this);
-        successDialogBuilder.setCancelable(true);
+        successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
+        String msg = "";
+        if (mLevelId < 3) {
+            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, (mLevelId + 1));
+        } else {
+            msg = getString(R.string.dialog_success_msg_alt);
+        }
+        successDialogBuilder.setMessage(msg);
+        successDialogBuilder.setPositiveButton(android.R.string.ok, this);
+        successDialogBuilder.setNeutralButton(R.string.dialog_success_restart, this);
         successDialogBuilder.create().show();
-
     }
 
     @Override
@@ -169,22 +174,26 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         pauseGame();
         mPlayerFailed = true;
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
-        successDialogBuilder.setTitle("Failure!");
-        successDialogBuilder.setMessage("Restart?");
+        successDialogBuilder.setTitle(getString(R.string.dialog_failure_title));
+        successDialogBuilder.setMessage(getString(R.string.dialog_failure_msg));
         successDialogBuilder.setPositiveButton(getString(android.R.string.ok), this);
         successDialogBuilder.setCancelable(true);
         successDialogBuilder.create().show();
     }
 
     @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
+    public void onClick(DialogInterface dialogInterface, int btnId) {
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
         mLevel.resume();
-        if (mPlayerFailed) {
-            restartLevel();
-        } else {
-            nextLevel();
+        switch (btnId) {
+            case DialogInterface.BUTTON_POSITIVE:
+                if (!mPlayerFailed) {
+                    nextLevel();
+                    break;
+                }
+            case DialogInterface.BUTTON_NEUTRAL:
+                restartLevel();
+                break;
         }
-
-     }
+    }
 }
