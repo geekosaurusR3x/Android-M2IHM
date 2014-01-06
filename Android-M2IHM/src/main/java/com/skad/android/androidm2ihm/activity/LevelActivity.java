@@ -11,13 +11,18 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.utils.ScreenOrientation;
 import com.skad.android.androidm2ihm.view.Level;
+
+import java.io.IOException;
+import java.util.logging.Logger;
 
 /**
  * Created by pschmitt on 12/19/13.
@@ -25,6 +30,7 @@ import com.skad.android.androidm2ihm.view.Level;
 public class LevelActivity extends Activity implements SensorEventListener, Level.onLevelEventListener, DialogInterface.OnClickListener {
     private static final String TAG = "LevelActivity";
 
+    private MediaPlayer mBackgroundMusic;
     private int mLevelId;
     private Level mLevel;
     private SensorManager mSensorManager;
@@ -78,6 +84,9 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
 
     private void drawLevel() {
+        this.mBackgroundMusic = MediaPlayer.create(this,  R.raw.background);
+        this.mBackgroundMusic.setLooping(true);
+        this.mBackgroundMusic.start();
         int levelResId = R.raw.lvl1;
         switch (mLevelId) {
             case 1:
@@ -105,8 +114,18 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     protected void onPause() {
         super.onPause();
         mSensorManager.unregisterListener(this);
+
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        Log.d(TAG,"destroy");
+        if(mBackgroundMusic != null) {
+            mBackgroundMusic.release();
+            mBackgroundMusic = null;
+        }
+    }
     @Override
     public void onSensorChanged(SensorEvent event) {
         float xValue = 0.0f;
@@ -147,6 +166,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
 
 
     private void pauseGame() {
+        mBackgroundMusic.stop();
         mSensorManager.unregisterListener(this);
         mLevel.pause();
     }

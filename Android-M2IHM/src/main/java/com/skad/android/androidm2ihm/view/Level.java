@@ -3,6 +3,8 @@ package com.skad.android.androidm2ihm.view;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
@@ -50,6 +52,7 @@ public class Level extends View {
         // les objects obligatoires
         mBall = new Ball();
         mEnd = new Hole();
+
         InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
