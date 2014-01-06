@@ -6,7 +6,7 @@ package com.skad.android.androidm2ihm.model;
 public class Ball extends SpriteObject {
     public Ball() {
         super();
-        this.widht = 32;
+        this.width = 32;
         this.height = 32;
     }
 

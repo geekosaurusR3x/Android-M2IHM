@@ -75,14 +75,14 @@ public class Level extends View {
                         case "p":
                             mBall.setX(Integer.parseInt(temp[1]));
                             mBall.setY(Integer.parseInt(temp[2]));
-                            mBall.setWidht(Integer.parseInt(temp[3]));
+                            mBall.setWidth(Integer.parseInt(temp[3]));
                             mBall.setHeight(Integer.parseInt(temp[4]));
                             break;
                         case "h":
                             Hole hole = new Hole();
                             hole.setX(Integer.parseInt(temp[1]));
                             hole.setY(Integer.parseInt(temp[2]));
-                            hole.setWidht(Integer.parseInt(temp[3]));
+                            hole.setWidth(Integer.parseInt(temp[3]));
                             hole.setHeight(Integer.parseInt(temp[4]));
                             hole.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.hole_texture));
                             mListHole.add(hole);
@@ -91,7 +91,7 @@ public class Level extends View {
                             Wall wall = new Wall();
                             wall.setX(Integer.parseInt(temp[1]));
                             wall.setY(Integer.parseInt(temp[2]));
-                            wall.setWidht(Integer.parseInt(temp[3]));
+                            wall.setWidth(Integer.parseInt(temp[3]));
                             wall.setHeight(Integer.parseInt(temp[4]));
                             wall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.wall_grey_texture));
                             mListWall.add(wall);
@@ -100,7 +100,7 @@ public class Level extends View {
                             Wall wall1 = new Wall();
                             wall1.setX(Integer.parseInt(temp[1]));
                             wall1.setY(Integer.parseInt(temp[2]));
-                            wall1.setWidht(Integer.parseInt(temp[3]));
+                            wall1.setWidth(Integer.parseInt(temp[3]));
                             wall1.setHeight(Integer.parseInt(temp[4]));
                             wall1.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_bottom_left));
                             mListWall.add(wall1);
@@ -109,7 +109,7 @@ public class Level extends View {
                             Wall wall2 = new Wall();
                             wall2.setX(Integer.parseInt(temp[1]));
                             wall2.setY(Integer.parseInt(temp[2]));
-                            wall2.setWidht(Integer.parseInt(temp[3]));
+                            wall2.setWidth(Integer.parseInt(temp[3]));
                             wall2.setHeight(Integer.parseInt(temp[4]));
                             wall2.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_bottom_right));
                             mListWall.add(wall2);
@@ -118,7 +118,7 @@ public class Level extends View {
                             Wall wall3 = new Wall();
                             wall3.setX(Integer.parseInt(temp[1]));
                             wall3.setY(Integer.parseInt(temp[2]));
-                            wall3.setWidht(Integer.parseInt(temp[3]));
+                            wall3.setWidth(Integer.parseInt(temp[3]));
                             wall3.setHeight(Integer.parseInt(temp[4]));
                             wall3.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_top_left));
                             mListWall.add(wall3);
@@ -127,7 +127,7 @@ public class Level extends View {
                             Wall wall4 = new Wall();
                             wall4.setX(Integer.parseInt(temp[1]));
                             wall4.setY(Integer.parseInt(temp[2]));
-                            wall4.setWidht(Integer.parseInt(temp[3]));
+                            wall4.setWidth(Integer.parseInt(temp[3]));
                             wall4.setHeight(Integer.parseInt(temp[4]));
                             wall4.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_top_right));
                             mListWall.add(wall4);
@@ -136,7 +136,7 @@ public class Level extends View {
                             Gun gun = new Gun();
                             gun.setX(Integer.parseInt(temp[1]));
                             gun.setY(Integer.parseInt(temp[2]));
-                            gun.setWidht(Integer.parseInt(temp[3]));
+                            gun.setWidth(Integer.parseInt(temp[3]));
                             gun.setHeight(Integer.parseInt(temp[4]));
                             gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cannon));
                             mListGun.add(gun);
@@ -144,7 +144,7 @@ public class Level extends View {
                         case "e":
                             mEnd.setX(Integer.parseInt(temp[1]));
                             mEnd.setY(Integer.parseInt(temp[2]));
-                            mEnd.setWidht(Integer.parseInt(temp[3]));
+                            mEnd.setWidth(Integer.parseInt(temp[3]));
                             mEnd.setHeight(Integer.parseInt(temp[4]));
                             break;
 

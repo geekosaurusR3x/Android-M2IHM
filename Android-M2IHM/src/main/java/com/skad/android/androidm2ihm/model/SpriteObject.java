@@ -11,13 +11,14 @@ abstract public class SpriteObject {
     protected Bitmap Sprite;
     protected int X;
     protected int Y;
-    protected int widht;
+    protected int width;
     protected int height;
 
-    public SpriteObject(){
-        this.widht = 64;
+    public SpriteObject() {
+        this.width = 64;
         this.height = 64;
     }
+
     public int getX() {
         return X;
     }
@@ -34,41 +35,34 @@ abstract public class SpriteObject {
         Y = y;
     }
 
-    public void setWidht(int widht) {
-        this.widht = widht;
+    public void setWidth(int width) {
+        this.width = width;
     }
 
     public void setHeight(int height) {
         this.height = height;
     }
 
-    public void setSprite(Bitmap sprite) {
-        Sprite = Bitmap.createScaledBitmap(sprite, widht, height,false);
-
-    }
-
     public Bitmap getSprite() {
         return Sprite;
     }
 
-    public Rect getBoudingRectangle()
-    {
-        return new Rect(X,Y,X+widht,Y+height);
+    public void setSprite(Bitmap sprite) {
+        Sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
     }
 
-    public boolean intersects(SpriteObject wall)
-    {
-        if(Rect.intersects(getBoudingRectangle(),wall.getBoudingRectangle()))
-        {
-            Rect collisionBounds = getCollisionBounds(getBoudingRectangle(), wall.getBoudingRectangle());
-            for (int i = collisionBounds.left; i < collisionBounds.right; i++)
-            {
-                for (int j = collisionBounds.top; j < collisionBounds.bottom; j++)
-                {
-                    int bitmap1Pixel = Sprite.getPixel(i-X, j-Y);
+    public Rect getBoundingRectangle() {
+        return new Rect(X, Y, X + width, Y + height);
+    }
+
+    public boolean intersects(SpriteObject wall) {
+        if (Rect.intersects(getBoundingRectangle(), wall.getBoundingRectangle())) {
+            Rect collisionBounds = getCollisionBounds(getBoundingRectangle(), wall.getBoundingRectangle());
+            for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
+                for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
+                    int bitmap1Pixel = Sprite.getPixel(i - X, j - Y);
                     int bitmap2Pixel = wall.getSprite().getPixel(i - wall.getX(), j - wall.getY());
-                    if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel))
-                    {
+                    if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return true;
                     }
                 }
@@ -78,10 +72,10 @@ abstract public class SpriteObject {
     }
 
     private Rect getCollisionBounds(Rect rect1, Rect rect2) {
-        int left = (int) Math.max(rect1.left, rect2.left);
-        int top = (int) Math.max(rect1.top, rect2.top);
-        int right = (int) Math.min(rect1.right, rect2.right);
-        int bottom = (int) Math.min(rect1.bottom, rect2.bottom);
+        int left = Math.max(rect1.left, rect2.left);
+        int top = Math.max(rect1.top, rect2.top);
+        int right = Math.min(rect1.right, rect2.right);
+        int bottom = Math.min(rect1.bottom, rect2.bottom);
         return new Rect(left, top, right, bottom);
     }
 
