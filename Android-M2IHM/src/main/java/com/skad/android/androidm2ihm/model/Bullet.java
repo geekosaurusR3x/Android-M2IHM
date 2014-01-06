@@ -3,36 +3,33 @@ package com.skad.android.androidm2ihm.model;
 /**
  * Created by skad on 27/12/13.
  */
-public class Bullet extends SpriteObject{
+public class Bullet extends SpriteObject {
     protected int mDirX;
     protected int mDirY;
     protected int mVelocity;
 
-    public Bullet()
-    {
+    public Bullet() {
         super();
     }
 
-    public void setmDirX(int mDirX) {
+    public void setDirX(int mDirX) {
         this.mDirX = mDirX;
     }
 
-    public void setmDirY(int mDirY) {
+    public void setDirY(int mDirY) {
         this.mDirY = mDirY;
     }
 
-    public void setmVelocity(int mVelocity) {
-        this.mVelocity = mVelocity;
+    public void setVelocity(int velocity) {
+        this.mVelocity = velocity;
     }
 
-    public void forward()
-    {
-        X += mVelocity*mDirX;
-        Y += mVelocity*mDirY;
+    public void forward() {
+        x += mVelocity * mDirX;
+        y += mVelocity * mDirY;
     }
 
-    public void decreseVelocity()
-    {
+    public void decreseVelocity() {
         mVelocity--;
     }
 }

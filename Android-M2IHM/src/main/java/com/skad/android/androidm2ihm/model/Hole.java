@@ -6,8 +6,8 @@ import android.graphics.Rect;
  * Created by skad on 27/12/13.
  */
 public class Hole extends SpriteObject {
-    public Hole() {
-        super();
+    public Hole(int x, int y, int width, int height) {
+        super(x, y, width, height);
     }
 
     public boolean intoHole(SpriteObject balle) {

@@ -9,8 +9,8 @@ import android.graphics.Rect;
  */
 abstract public class SpriteObject {
     protected Bitmap Sprite;
-    protected int X;
-    protected int Y;
+    protected int x;
+    protected int y;
     protected int width;
     protected int height;
 
@@ -19,20 +19,27 @@ abstract public class SpriteObject {
         this.height = 64;
     }
 
+    public SpriteObject(int x, int y, int width, int height) {
+        this.x = x;
+        this.y = y;
+        this.width = width;
+        this.height = height;
+    }
+
     public int getX() {
-        return X;
+        return x;
     }
 
     public void setX(int x) {
-        X = x;
+        this.x = x;
     }
 
     public int getY() {
-        return Y;
+        return y;
     }
 
     public void setY(int y) {
-        Y = y;
+        this.y = y;
     }
 
     public void setWidth(int width) {
@@ -52,7 +59,7 @@ abstract public class SpriteObject {
     }
 
     public Rect getBoundingRectangle() {
-        return new Rect(X, Y, X + width, Y + height);
+        return new Rect(x, y, x + width, y + height);
     }
 
     public boolean intersects(SpriteObject wall) {
@@ -60,7 +67,7 @@ abstract public class SpriteObject {
             Rect collisionBounds = getCollisionBounds(getBoundingRectangle(), wall.getBoundingRectangle());
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
-                    int bitmap1Pixel = Sprite.getPixel(i - X, j - Y);
+                    int bitmap1Pixel = Sprite.getPixel(i - x, j - y);
                     int bitmap2Pixel = wall.getSprite().getPixel(i - wall.getX(), j - wall.getY());
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return true;
