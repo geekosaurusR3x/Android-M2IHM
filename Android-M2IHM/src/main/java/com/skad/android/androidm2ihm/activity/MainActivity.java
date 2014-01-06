@@ -48,6 +48,9 @@ public class MainActivity extends Activity implements Button.OnClickListener, Di
             case R.id.action_highscore:
                 showHighScores();
                 return true;
+            case R.id.action_about:
+                startActivity(new Intent(this, AboutActivity.class));
+                return true;
         }
         return super.onOptionsItemSelected(item);
     }
