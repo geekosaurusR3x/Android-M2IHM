@@ -24,6 +24,8 @@ import com.skad.android.androidm2ihm.view.Level;
 import java.io.IOException;
 import java.util.logging.Logger;
 
+import static java.lang.System.currentTimeMillis;
+
 /**
  * Created by pschmitt on 12/19/13.
  */
@@ -35,6 +37,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     private Level mLevel;
     private SensorManager mSensorManager;
     private boolean mPlayerFailed = false;
+    private long mLastTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -149,8 +152,12 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
                 yValue = -event.values[1];
                 break;
         }
-        mLevel.setForceX(xValue);
-        mLevel.setForceY(yValue);
+        if (currentTimeMillis() - mLastTime > 10)
+        {
+            mLevel.setForceX(xValue);
+            mLevel.setForceY(yValue);
+            mLastTime = currentTimeMillis();
+        }
     }
 
     @Override
