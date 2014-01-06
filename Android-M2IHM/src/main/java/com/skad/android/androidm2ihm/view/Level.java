@@ -36,10 +36,10 @@ public class Level extends View {
     private int mIdSoundWin;
     private boolean mPaused = false;
 
-    private ArrayList mListWall = new ArrayList();
-    private ArrayList mListHole = new ArrayList();
-    private ArrayList mListBullet = new ArrayList();
-    private ArrayList mListGun = new ArrayList();
+    private ArrayList<Wall> mListWall = new ArrayList<>();
+    private ArrayList<Hole> mListHole = new ArrayList<>();
+    private ArrayList<Bullet> mListBullet = new ArrayList<>();
+    private ArrayList<Gun> mListGun = new ArrayList<>();
 
     private onLevelEventListener mParentActivity;
 
@@ -191,7 +191,6 @@ public class Level extends View {
     }
 
     private void update() {
-
         for (final Object mHole : mListHole) { //gameover
             if (((Hole) (mHole)).intoHole(mBall)) {
                 mSoundPool.play(mIdSoundGameOver,1,1,0,0,1);
@@ -203,12 +202,12 @@ public class Level extends View {
             mSoundPool.play(mIdSoundWin,1,1,0,0,1);
             mParentActivity.onLevelCompleted();
         }
-        for (final Object mBullet : mListBullet) {
-            ((Bullet) (mBullet)).forward();
+        for (final Bullet mBullet : mListBullet) {
+            mBullet.forward();
         }
         if (currentTimeMillis() - mLastTime > 10000) {
-            for (final Object mGun : mListGun) {
-                Bullet mBullet = ((Gun) (mGun)).fire();
+            for (final Gun mGun : mListGun) {
+                Bullet mBullet = mGun.fire();
                 mBullet.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.boulet));
                 mListBullet.add(mBullet);
             }
