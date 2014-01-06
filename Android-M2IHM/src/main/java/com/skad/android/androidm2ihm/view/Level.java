@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
@@ -25,9 +26,13 @@ public class Level extends View {
     // Bitmap background;
     private Ball mBall;
     private Hole mEnd;
+    private SoundPool mSoundPool;
 
     private long mLastTime = 0;
     private int mNumLevel = 0;
+    private int mIdSoundWall;
+    private int mIdSoundGameOver;
+    private int mIdSoundWin;
     private boolean mPaused = false;
 
     private ArrayList mListWall = new ArrayList();
@@ -45,6 +50,10 @@ public class Level extends View {
             throw new ClassCastException("Activity must implement onLevelEventListener");
         }
         this.mNumLevel = numlevel;
+        mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        mIdSoundWall = mSoundPool.load(context,R.raw.wall_hit,1);
+        mIdSoundGameOver = mSoundPool.load(context,R.raw.gameover,1);
+        mIdSoundWin = mSoundPool.load(context,R.raw.win,1);
         this.loadLevel();
     }
 
@@ -52,6 +61,7 @@ public class Level extends View {
         // les objects obligatoires
         mBall = new Ball();
         mEnd = new Hole();
+
 
         InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
@@ -182,11 +192,13 @@ public class Level extends View {
     private void update() {
         for (final Object mHole : mListHole) { //gameover
             if (((Hole) (mHole)).intoHole(mBall)) {
+                mSoundPool.play(mIdSoundGameOver,1,1,0,0,1);
                 mParentActivity.onLevelFailed();
             }
         }
         if (mEnd.intoHole(mBall)) {
             // win
+            mSoundPool.play(mIdSoundWin,1,1,0,0,1);
             mParentActivity.onLevelCompleted();
         }
         for (final Object mBullet : mListBullet) {
@@ -222,6 +234,7 @@ public class Level extends View {
     protected boolean collision() {
         for (final Object wall : mListWall) {
             if (mBall.intersects((SpriteObject) (wall))) {
+                mSoundPool.play(mIdSoundWall,1,1,0,0,1);
                 return true;
             }
         }
