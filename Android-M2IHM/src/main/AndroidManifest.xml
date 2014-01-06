@@ -1,20 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:uses-featureandroid="http://schemas.android.com/apk/res-auto"
-    package="com.skad.android.androidm2ihm"
-    android:versionCode="1"
-    android:versionName="1.0">
+          package="com.skad.android.androidm2ihm"
+          android:versionCode="1"
+          android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="16"/>
 
     <uses-feature
         android:name="android.hardware.sensor.gyroscope"
-        android:required="true" />
+        android:required="true"/>
     <uses-feature
         android:name="android.hardware.sensor.accelerometer"
-        android:required="true" />
+        android:required="true"/>
 
     <application
         android:allowBackup="true"
@@ -26,18 +25,23 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".activity.LevelActivity"
             android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity"
-            android:hardwareAccelerated="true">
+            android:theme="@android:style/Theme.Holo.NoActionBar">
 
         </activity>
-        <activity android:name=".activity.SettingsActivity" android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity"/>
+        <activity
+            android:name=".activity.SettingsActivity"
+            android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity"/>
+        <activity
+            android:name=".activity.AboutActivity"
+            android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity"/>
     </application>
 
 </manifest>
