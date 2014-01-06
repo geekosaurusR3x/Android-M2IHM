@@ -23,10 +23,11 @@
 
     <string name="extra_key_level">Level_ID</string>
     <string name="dialog_success_title">Success!</string>
-    <string name="dialog_success_msg">You completed level %1$d!\nProceed to level %2$d?</string>
+    <string name="dialog_success_msg">You completed level %1$d!\nYour score: %2$d (Highscore: %3$d)\nProceed to level %4$d?</string>
     <string name="dialog_failure_title">Failure!</string>
     <string name="dialog_failure_msg">Restart?</string>
     <string name="dialog_success_msg_alt">You did it! You completed the very last level. Congrats!</string>
     <string name="dialog_success_restart">Restart</string>
+    <string name="pref_key_highscore">highscore</string>
 
 </resources>

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.media.SoundPool;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
@@ -23,13 +22,15 @@ import static java.lang.System.currentTimeMillis;
  */
 public class Level extends View {
 
+    private Score mScore;
+
     // Bitmap background;
     private Ball mBall;
     private Hole mEnd;
     private SoundPool mSoundPool;
 
     private long mLastTime = 0;
-    private int mNumLevel = 0;
+    private int mLevelResId = 0;
     private int mIdSoundWall;
     private int mIdSoundGameOver;
     private int mIdSoundWin;
@@ -42,19 +43,20 @@ public class Level extends View {
 
     private onLevelEventListener mParentActivity;
 
-    public Level(Context context, int numlevel) {
+    public Level(Context context, int levelResId, int levelId) {
         super(context);
         try {
             mParentActivity = (onLevelEventListener) context;
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement onLevelEventListener");
         }
-        this.mNumLevel = numlevel;
+        mLevelResId = levelResId;
+        mScore = new Score(levelId);
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         mIdSoundWall = mSoundPool.load(context,R.raw.wall_hit,1);
         mIdSoundGameOver = mSoundPool.load(context,R.raw.gameover,1);
         mIdSoundWin = mSoundPool.load(context,R.raw.win,1);
-        this.loadLevel();
+        loadLevel();
     }
 
     protected void loadLevel() {
@@ -62,8 +64,7 @@ public class Level extends View {
         mBall = new Ball();
         mEnd = new Hole();
 
-
-        InputStream filelevelstream = getResources().openRawResource(this.mNumLevel);
+        InputStream filelevelstream = getResources().openRawResource(this.mLevelResId);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
         try {
@@ -190,6 +191,7 @@ public class Level extends View {
     }
 
     private void update() {
+
         for (final Object mHole : mListHole) { //gameover
             if (((Hole) (mHole)).intoHole(mBall)) {
                 mSoundPool.play(mIdSoundGameOver,1,1,0,0,1);
@@ -235,6 +237,7 @@ public class Level extends View {
         for (final Object wall : mListWall) {
             if (mBall.intersects((SpriteObject) (wall))) {
                 mSoundPool.play(mIdSoundWall,1,1,0,0,1);
+                mScore.collided();
                 return true;
             }
         }
@@ -249,9 +252,12 @@ public class Level extends View {
         mPaused = false;
     }
 
+    public int getScore() {
+        return mScore.getTotalScore();
+    }
+
     public interface onLevelEventListener {
         public void onLevelCompleted();
-
         public void onLevelFailed();
     }
 }

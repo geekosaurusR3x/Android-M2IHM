@@ -18,13 +18,9 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.utils.ScreenOrientation;
 import com.skad.android.androidm2ihm.view.Level;
-
-import java.io.IOException;
-import java.util.logging.Logger;
-
-import static java.lang.System.currentTimeMillis;
 
 /**
  * Created by pschmitt on 12/19/13.
@@ -37,7 +33,6 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     private Level mLevel;
     private SensorManager mSensorManager;
     private boolean mPlayerFailed = false;
-    private long mLastTime = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +97,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
                 levelResId = R.raw.lvl3;
                 break;
         }
-        mLevel = new Level(this, levelResId);
+        mLevel = new Level(this, levelResId, mLevelId);
         View container = findViewById(R.id.container);
         ((ViewGroup) container).addView(mLevel);
     }
@@ -123,7 +118,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG,"destroy");
+        Log.d(TAG, "destroy");
         if(mBackgroundMusic != null) {
             mBackgroundMusic.release();
             mBackgroundMusic = null;
@@ -152,12 +147,8 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
                 yValue = -event.values[1];
                 break;
         }
-        if (currentTimeMillis() - mLastTime > 10)
-        {
-            mLevel.setForceX(xValue);
-            mLevel.setForceY(yValue);
-            mLastTime = currentTimeMillis();
-        }
+        mLevel.setForceX(xValue);
+        mLevel.setForceY(yValue);
     }
 
     @Override
@@ -178,15 +169,24 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         mLevel.pause();
     }
 
+    private void saveHighScore() {
+        int score = mLevel.getScore();
+        int highscore = Score.getHighScore(this);
+        if (score > highscore) {
+            Score.saveHighScore(this, score);
+        }
+    }
+
     @Override
     public void onLevelCompleted() {
         pauseGame();
+        saveHighScore();
         mPlayerFailed = false;
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
         successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
         String msg = "";
         if (mLevelId < 3) {
-            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, (mLevelId + 1));
+            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, mLevel.getScore(), Score.getHighScore(this), (mLevelId + 1));
         } else {
             msg = getString(R.string.dialog_success_msg_alt);
         }
