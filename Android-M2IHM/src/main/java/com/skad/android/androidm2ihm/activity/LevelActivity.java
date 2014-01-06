@@ -119,7 +119,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "destroy");
-        if(mBackgroundMusic != null) {
+        if (mBackgroundMusic != null) {
             mBackgroundMusic.release();
             mBackgroundMusic = null;
         }
@@ -162,7 +162,6 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-
     private void pauseGame() {
         mBackgroundMusic.stop();
         mSensorManager.unregisterListener(this);
@@ -170,10 +169,10 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
 
     private void saveHighScore() {
-        int score = mLevel.getScore();
-        int highscore = Score.getHighScore(this);
-        if (score > highscore) {
-            Score.saveHighScore(this, score);
+        Score score = mLevel.getScore();
+        int highscore = score.getHighScore(this);
+        if (score.getTotalScore() > highscore) {
+            score.saveHighScore(this);
         }
     }
 
@@ -186,7 +185,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
         String msg = "";
         if (mLevelId < 3) {
-            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, mLevel.getScore(), Score.getHighScore(this), (mLevelId + 1));
+            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, mLevel.getScore().getTotalScore(), mLevel.getScore().getHighScore(this), (mLevelId + 1));
         } else {
             msg = getString(R.string.dialog_success_msg_alt);
         }

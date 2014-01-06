@@ -27,13 +27,25 @@ public class Score {
         return score > 0 ? score : 0;
     }
 
-    public static int getHighScore(Context context) {
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        return sharedPref.getInt(context.getString(R.string.pref_key_highscore), -1);
+    public int getHighScore(Context context, int levelId) {
+        mLevelId = levelId;
+        return getHighScore(context);
     }
 
-    public static void saveHighScore(Context context, int score) {
+    public int getHighScore(Context context) {
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-        sharedPref.edit().putInt(context.getString(R.string.pref_key_highscore), score).commit();
+        return sharedPref.getInt(String.format(context.getString(R.string.pref_key_highscore), mLevelId), 0);
+    }
+
+    public void saveHighScore(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref.edit().putInt(String.format(context.getString(R.string.pref_key_highscore), mLevelId), getTotalScore()).commit();
+    }
+
+    public static void resetHighScores(Context context) {
+        for (int i = 1; i < 4; i++) {
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+            sharedPref.edit().remove(String.format(context.getString(R.string.pref_key_highscore), i)).commit();
+        }
     }
 }

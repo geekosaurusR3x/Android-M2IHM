@@ -236,7 +236,7 @@ public class Level extends View {
     protected boolean collision() {
         for (final Object wall : mListWall) {
             if (mBall.intersects((SpriteObject) (wall))) {
-                mSoundPool.play(mIdSoundWall,1,1,0,0,1);
+                mSoundPool.play(mIdSoundWall, 1, 1, 0, 0, 1);
                 mScore.collided();
                 return true;
             }
@@ -252,8 +252,8 @@ public class Level extends View {
         mPaused = false;
     }
 
-    public int getScore() {
-        return mScore.getTotalScore();
+    public Score getScore() {
+        return mScore;
     }
 
     public interface onLevelEventListener {
