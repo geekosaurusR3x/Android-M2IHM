@@ -181,18 +181,18 @@ public class Level extends View {
     }
 
     public void setForceX(float forceX) {
-        int lastx = mBall.getX();
+        int lastX = mBall.getX();
         mBall.applyForceX(forceX);
         if (collision()) {
-            mBall.setX(lastx);
+            mBall.setX(lastX);
         }
     }
 
     public void setForceY(float forceY) {
-        int lasty = mBall.getY();
+        int lastY = mBall.getY();
         mBall.applyForceY(forceY);
         if (collision()) {
-            mBall.setY(lasty);
+            mBall.setY(lastY);
         }
     }
 
