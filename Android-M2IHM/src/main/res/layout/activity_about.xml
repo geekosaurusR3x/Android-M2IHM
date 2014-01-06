@@ -10,7 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Images"
+        android:text="@string/about_images"
         android:id="@+id/textView"/>
 
     <ImageView
@@ -23,7 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="NASA"
+        android:text="@string/about_author_nasa"
         android:id="@+id/textView8"
         />
 
@@ -31,7 +31,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="http://www.cbsnews.com/pictures/space-junk-bad-and-getting-worse/"
+        android:text="@string/about_author_nasa_url"
         android:id="@+id/textView9"
         android:autoLink="web"/>
 
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Audio"
+        android:text="@string/about_audio"
         android:id="@+id/textView2"
         android:layout_marginTop="20dp"/>
 
@@ -54,7 +54,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="http://www.freesound.org/people/fins/sounds/133284/"
+        android:text="@string/about_author_fins_url"
         android:id="@+id/textView7"
         android:autoLink="web"/>
 
@@ -62,7 +62,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Libraries"
+        android:text="@string/about_libraries"
         android:id="@+id/textView3"
         android:layout_marginTop="20dp"/>
 
@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Authors"
+        android:text="@string/about_authors"
         android:id="@+id/textView4"
         android:layout_marginTop="20dp"/>
 
@@ -78,7 +78,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Vincent Lamouroux, Philipp Schmitt"
+        android:text="@string/about_authors_content"
         android:id="@+id/textView5"/>
 
 </LinearLayout>

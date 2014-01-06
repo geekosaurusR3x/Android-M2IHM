@@ -3,16 +3,14 @@ package com.skad.android.androidm2ihm.model;
 /**
  * Created by skad on 27/12/13.
  */
-public class Gun extends SpriteObject{
+public class Gun extends SpriteObject {
     private int mVelocity = 1;
 
     public Gun(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
 
-    public Bullet fire()
-    {
-
+    public Bullet fire() {
         Bullet temp = new Bullet();
         temp.setX(x);
         temp.setY(y);

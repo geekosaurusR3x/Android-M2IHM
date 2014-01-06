@@ -4,9 +4,9 @@ package com.skad.android.androidm2ihm.model;
  * Created by skad on 27/12/13.
  */
 public class Bullet extends SpriteObject {
-    protected int mDirX;
-    protected int mDirY;
-    protected int mVelocity;
+    private int mDirX;
+    private int mDirY;
+    private int mVelocity;
 
     public Bullet() {
         super();

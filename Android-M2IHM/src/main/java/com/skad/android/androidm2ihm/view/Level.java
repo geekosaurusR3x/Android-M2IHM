@@ -55,7 +55,7 @@ public class Level extends View {
         loadLevel();
     }
 
-    protected void loadLevel() {
+    private void loadLevel() {
         InputStream filelevelstream = getResources().openRawResource(this.mLevelResId);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
@@ -72,6 +72,7 @@ public class Level extends View {
                     switch (objectType) {
                         case "p": // player (ball)
                             mBall = new Ball(xPos, yPos, width, height);
+                            mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
                             break;
                         case "h": // hole
                             Hole hole = new Hole(xPos, yPos, width, height);
@@ -110,8 +111,8 @@ public class Level extends View {
                             break;
                         case "e":
                             mEnd = new Hole(xPos, yPos, width, height);
+                            mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
                             break;
-
                     }
                 }
             }
@@ -124,8 +125,6 @@ public class Level extends View {
                 e.printStackTrace();
             }
         }
-        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
-        mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
     }
 
     @Override
@@ -196,7 +195,7 @@ public class Level extends View {
         }
     }
 
-    protected boolean collision() {
+    private boolean collision() {
         for (final Wall wall : mListWall) {
             if (mBall.intersects(wall)) {
                 mSoundPool.play(mIdSoundWall, 1, 1, 0, 0, 1);

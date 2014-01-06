@@ -8,7 +8,7 @@ import android.graphics.Rect;
  * Created by skad on 19/12/13.
  */
 abstract public class SpriteObject {
-    protected Bitmap Sprite;
+    private Bitmap Sprite;
     protected int x;
     protected int y;
     protected int width;
@@ -19,7 +19,7 @@ abstract public class SpriteObject {
         this.height = 64;
     }
 
-    public SpriteObject(int x, int y, int width, int height) {
+    protected SpriteObject(int x, int y, int width, int height) {
         this.x = x;
         this.y = y;
         this.width = width;
