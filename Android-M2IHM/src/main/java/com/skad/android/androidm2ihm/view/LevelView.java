@@ -170,10 +170,14 @@ public class LevelView extends View implements Observer {
         }
         for (final Bullet mBullet : mListBullet) {
             mBullet.forward();
+            mBullet.decreseVelocity();
         }
-        if (currentTimeMillis() - mLastTime > 100) {
+        for (final Gun mGun : mListGun) {
+            mGun.rotate(mBall.getX(),mBall.getY());
+        }
+        if (currentTimeMillis() - mLastTime > 1000) {
             for (final Gun mGun : mListGun) {
-                Bullet mBullet = mGun.fire();
+                Bullet mBullet = mGun.fire(mBall.getX(),mBall.getY());
                 mBullet.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.bullet));
                 mListBullet.add(mBullet);
             }

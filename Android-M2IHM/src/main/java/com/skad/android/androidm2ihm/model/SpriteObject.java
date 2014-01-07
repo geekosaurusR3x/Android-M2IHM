@@ -2,13 +2,16 @@ package com.skad.android.androidm2ihm.model;
 
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Rect;
+import android.util.Log;
 
 /**
  * Created by skad on 19/12/13.
  */
 abstract public class SpriteObject {
     private Bitmap Sprite;
+    private Bitmap OriginalSprite;
     protected int x;
     protected int y;
     protected int width;
@@ -56,6 +59,7 @@ abstract public class SpriteObject {
 
     public void setSprite(Bitmap sprite) {
         Sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
+        OriginalSprite = Sprite;
     }
 
     public Rect getBoundingRectangle() {
@@ -88,5 +92,20 @@ abstract public class SpriteObject {
 
     private boolean isFilled(int pixel) {
         return pixel != Color.TRANSPARENT;
+    }
+
+    public void rotate(int CibleX, int CibleY)
+    {
+        double dx =     CibleX - this.getBoundingRectangle().centerX();
+        double dy =     CibleY - this.getBoundingRectangle().centerY();
+        float angle = (float) Math.toDegrees(Math.atan2( dy,dx));
+        if(angle < 0){
+            angle += 360;
+        }
+
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(this.OriginalSprite,this.OriginalSprite.getWidth(),this.OriginalSprite.getHeight(), true);
+        this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
     }
 }
