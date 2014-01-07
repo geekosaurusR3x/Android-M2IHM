@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
@@ -35,6 +37,10 @@ public class LevelView extends View implements Observer {
     private int mIdSoundGameOver;
     private int mIdSoundWin;
     private boolean mPaused = false;
+
+    private double mRatioWidth = 1;
+    private double mRatioHeight = 1;
+
     private ArrayList<Wall> mListWall = new ArrayList<>();
     private ArrayList<Hole> mListHole = new ArrayList<>();
     private ArrayList<Bullet> mListBullet = new ArrayList<>();
@@ -59,6 +65,9 @@ public class LevelView extends View implements Observer {
     }
 
     private void loadLevel() {
+        DisplayMetrics metrics = super.getContext().getResources().getDisplayMetrics();
+        int screenwidth = metrics.widthPixels;
+        int screenheight = metrics.heightPixels;
         InputStream filelevelstream = getResources().openRawResource(this.mLevelResId);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
@@ -72,7 +81,17 @@ public class LevelView extends View implements Observer {
                     int width = Integer.parseInt(temp[3]);
                     int height = Integer.parseInt(temp[4]);
 
+                    //Ajusting for the screen size
+                    xPos = (int)(xPos*mRatioHeight);
+                    yPos = (int) (yPos*mRatioWidth);
+                    width = (int) (width*mRatioHeight);
+                    height = (int) (height*mRatioWidth);
+
                     switch (objectType) {
+                        case "screen": //screensize and ratio
+                            mRatioWidth = (double)screenwidth/width ;
+                            mRatioHeight = (double)screenheight/height ;
+                            break;
                         case "p": // player (ball)
                             mBall = new Ball(xPos, yPos, width, height);
                             mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ball));
@@ -110,6 +129,8 @@ public class LevelView extends View implements Observer {
                         case "g": // gun
                             Gun gun = new Gun(xPos, yPos, width, height);
                             gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.gun));
+                            gun.setRatioHeight(mRatioHeight);
+                            gun.setRatioWidth(mRatioWidth);
                             mListGun.add(gun);
                             break;
                         case "e":

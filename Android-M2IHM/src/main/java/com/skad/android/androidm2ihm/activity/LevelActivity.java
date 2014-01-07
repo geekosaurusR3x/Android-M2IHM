@@ -64,9 +64,6 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false) && actionBar != null) {
             actionBar.hide();
         }
-        if (sharedPref.getBoolean(getString(R.string.pref_key_force_landscape), false)) {
-            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-        }
     }
 
     private void restartLevel() {
@@ -143,27 +140,8 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
     @Override
     public void onSensorChanged(SensorEvent event) {
-        float xValue = 0.0f;
-        float yValue = 0.0f;
-        int orientation = ScreenOrientation.getOrientation(this);
-        switch (orientation) {
-            case ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE:
-                xValue = event.values[1];
-                yValue = event.values[0];
-                break;
-            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_LANDSCAPE:
-                xValue = -event.values[1];
-                yValue = -event.values[0];
-                break;
-            case ActivityInfo.SCREEN_ORIENTATION_PORTRAIT:
-                xValue = -event.values[0];
-                yValue = event.values[1];
-                break;
-            case ActivityInfo.SCREEN_ORIENTATION_REVERSE_PORTRAIT:
-                xValue = event.values[0];
-                yValue = -event.values[1];
-                break;
-        }
+        float xValue = event.values[1];
+        float yValue = event.values[0];
         mLevelView.setForceX(xValue);
         mLevelView.setForceY(yValue);
     }

@@ -7,10 +7,5 @@
             android:title="@string/pref_hide_actionbar"
             android:summary="@string/pref_hide_actionbar_summ"
             android:defaultValue="false" />
-        <CheckBoxPreference
-            android:key="@string/pref_key_force_landscape"
-            android:title="@string/pref_force_landscape"
-            android:summary="@string/pref_force_landscape_summ"
-            android:defaultValue="false" />
     </PreferenceCategory>
 </PreferenceScreen>

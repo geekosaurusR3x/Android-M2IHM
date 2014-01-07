@@ -16,6 +16,8 @@ abstract public class SpriteObject {
     protected int y;
     protected int width;
     protected int height;
+    protected double ratioWidth;
+    protected double ratioHeight;
 
     public SpriteObject() {
         this.width = 64;
@@ -55,6 +57,14 @@ abstract public class SpriteObject {
 
     public Bitmap getSprite() {
         return Sprite;
+    }
+
+    public void setRatioWidth(double ratioWidth) {
+        this.ratioWidth = ratioWidth;
+    }
+
+    public void setRatioHeight(double ratioHeight) {
+        this.ratioHeight = ratioHeight;
     }
 
     public void setSprite(Bitmap sprite) {
