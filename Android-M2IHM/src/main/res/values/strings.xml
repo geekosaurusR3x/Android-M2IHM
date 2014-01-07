@@ -39,10 +39,11 @@
 
     <string name="action_about">About</string>
     <string name="about_images">Images</string>
-    <string name="about_author_nasa">NASA</string>
-    <string name="about_author_nasa_url">http://www.cbsnews.com/pictures/space-junk-bad-and-getting-worse/</string>
+    <string name="about_images_author_sprites">DANIEL COOK</string>
+    <string name="about_images_author_sprites_url">http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html</string>
     <string name="about_audio">Audio</string>
-    <string name="about_author_fins_url">http://www.freesound.org/people/fins/sounds/133284/</string>
+    <string name="about_audio_fins_url">http://www.freesound.org/people/fins/sounds/133284/</string>
+    <string name="about_audio_background_url">http://www.playonloop.com/2013-music-loops/mecha-world/</string>
     <string name="about_libraries">Libraries</string>
     <string name="about_authors">Authors</string>
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>

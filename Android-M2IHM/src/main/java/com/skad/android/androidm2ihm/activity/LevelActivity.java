@@ -96,7 +96,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
 
     private void drawLevel() {
-        this.mBackgroundMusic = MediaPlayer.create(this,  R.raw.background);
+        this.mBackgroundMusic = MediaPlayer.create(this,  R.raw.background_music);
         this.mBackgroundMusic.setLooping(true);
         this.mBackgroundMusic.start();
         int levelResId = R.raw.lvl1;

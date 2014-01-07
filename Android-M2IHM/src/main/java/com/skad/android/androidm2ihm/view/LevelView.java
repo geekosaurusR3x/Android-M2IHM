@@ -75,11 +75,11 @@ public class LevelView extends View implements Observer {
                     switch (objectType) {
                         case "p": // player (ball)
                             mBall = new Ball(xPos, yPos, width, height);
-                            mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.balle));
+                            mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ball));
                             break;
                         case "h": // hole
                             Hole hole = new Hole(xPos, yPos, width, height);
-                            hole.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.hole_texture));
+                            hole.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.hole));
                             mListHole.add(hole);
                             break;
                         case "w": // wall (straight)
@@ -109,7 +109,7 @@ public class LevelView extends View implements Observer {
                             break;
                         case "g": // gun
                             Gun gun = new Gun(xPos, yPos, width, height);
-                            gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cannon));
+                            gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.gun));
                             mListGun.add(gun);
                             break;
                         case "e":
@@ -174,11 +174,11 @@ public class LevelView extends View implements Observer {
         if (currentTimeMillis() - mLastTime > 100) {
             for (final Gun mGun : mListGun) {
                 Bullet mBullet = mGun.fire();
-                mBullet.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.boulet));
+                mBullet.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.bullet));
                 mListBullet.add(mBullet);
             }
+            mLastTime = currentTimeMillis();
         }
-        mLastTime = currentTimeMillis();
         // TODO Handle player failures (wall/bullet collision)
     }
 
