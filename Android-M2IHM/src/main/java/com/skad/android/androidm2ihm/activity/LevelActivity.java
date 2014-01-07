@@ -77,6 +77,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
 
     private void nextLevel() {
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
         if (mLevelId < 3) {
             mLevelId++;
             drawLevel();
