@@ -17,20 +17,24 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.utils.ScreenOrientation;
-import com.skad.android.androidm2ihm.view.Level;
+import com.skad.android.androidm2ihm.view.LevelView;
 
 /**
  * Created by pschmitt on 12/19/13.
  */
-public class LevelActivity extends Activity implements SensorEventListener, Level.onLevelEventListener, DialogInterface.OnClickListener {
+public class LevelActivity extends Activity implements SensorEventListener, LevelView.onLevelEventListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
     private static final String TAG = "LevelActivity";
+
+    // Views
+    private TextView mScoreView;
 
     private MediaPlayer mBackgroundMusic;
     private int mLevelId;
-    private Level mLevel;
+    private LevelView mLevelView;
     private SensorManager mSensorManager;
     private boolean mPlayerFailed = false;
 
@@ -42,6 +46,10 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         // Determine which level should be loaded
         mLevelId = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
         drawLevel();
+
+        // Retain views
+        mScoreView = (TextView) findViewById(R.id.txt_score);
+        mScoreView.setText(String.format(getString(R.string.score), mLevelView.getScore().getTotalScore()));
 
         // Setup sensors
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
@@ -62,6 +70,8 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     }
 
     private void restartLevel() {
+        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+        mLevelView.resume();
         drawLevel();
         updateActionBarTitle();
     }
@@ -100,9 +110,9 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
                 levelResId = R.raw.lvl3;
                 break;
         }
-        mLevel = new Level(this, levelResId, mLevelId);
+        mLevelView = new LevelView(this, levelResId, mLevelId);
         View container = findViewById(R.id.container);
-        ((ViewGroup) container).addView(mLevel);
+        ((ViewGroup) container).addView(mLevelView);
     }
 
     @Override
@@ -153,8 +163,8 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
                 yValue = -event.values[1];
                 break;
         }
-        mLevel.setForceX(xValue);
-        mLevel.setForceY(yValue);
+        mLevelView.setForceX(xValue);
+        mLevelView.setForceY(yValue);
     }
 
     @Override
@@ -171,11 +181,11 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
     private void pauseGame() {
         mBackgroundMusic.stop();
         mSensorManager.unregisterListener(this);
-        mLevel.pause();
+        mLevelView.pause();
     }
 
     private void saveHighScore() {
-        Score score = mLevel.getScore();
+        Score score = mLevelView.getScore();
         int highscore = score.getHighScore(this);
         if (score.getTotalScore() > highscore) {
             score.saveHighScore(this);
@@ -191,7 +201,7 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
         String msg = "";
         if (mLevelId < 3) {
-            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, mLevel.getScore().getTotalScore(), mLevel.getScore().getHighScore(this), (mLevelId + 1));
+            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, mLevelView.getScore().getTotalScore(), mLevelView.getScore().getHighScore(this), (mLevelId + 1));
         } else {
             msg = getString(R.string.dialog_success_msg_alt);
         }
@@ -210,13 +220,12 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         successDialogBuilder.setMessage(getString(R.string.dialog_failure_msg));
         successDialogBuilder.setPositiveButton(getString(android.R.string.ok), this);
         successDialogBuilder.setCancelable(true);
+        successDialogBuilder.setOnCancelListener(this);
         successDialogBuilder.create().show();
     }
 
     @Override
     public void onClick(DialogInterface dialogInterface, int btnId) {
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-        mLevel.resume();
         switch (btnId) {
             case DialogInterface.BUTTON_POSITIVE:
                 if (!mPlayerFailed) {
@@ -227,5 +236,15 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
                 restartLevel();
                 break;
         }
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog) {
+        restartLevel();
+    }
+
+    @Override
+    public void onScoreUpdated() {
+        mScoreView.setText(String.format(getString(R.string.score), mLevelView.getScore().getTotalScore()));
     }
 }

@@ -14,21 +14,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Observable;
+import java.util.Observer;
 
 import static java.lang.System.currentTimeMillis;
 
 /**
  * Created by skad on 19/12/13.
  */
-public class Level extends View {
+public class LevelView extends View implements Observer {
 
     private Score mScore;
     // Bitmap background;
     private Ball mBall;
     private Hole mEnd;
     private SoundPool mSoundPool;
-    private long mLastTime = 0;
-    private int mLevelResId = 0;
+    private long mLastTime;
+    private int mLevelResId;
     private int mIdSoundWall;
     private int mIdSoundGameOver;
     private int mIdSoundWin;
@@ -39,7 +41,7 @@ public class Level extends View {
     private ArrayList<Gun> mListGun = new ArrayList<>();
     private onLevelEventListener mParentActivity;
 
-    public Level(Context context, int levelResId, int levelId) {
+    public LevelView(Context context, int levelResId, int levelId) {
         super(context);
         try {
             mParentActivity = (onLevelEventListener) context;
@@ -48,6 +50,7 @@ public class Level extends View {
         }
         mLevelResId = levelResId;
         mScore = new Score(levelId);
+        mScore.addObserver(this);
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
         mIdSoundWall = mSoundPool.load(context, R.raw.wall_hit, 1);
         mIdSoundGameOver = mSoundPool.load(context, R.raw.gameover, 1);
@@ -218,9 +221,16 @@ public class Level extends View {
         return mScore;
     }
 
+    @Override
+    public void update(Observable observable, Object data) {
+        mParentActivity.onScoreUpdated();
+    }
+
     public interface onLevelEventListener {
         public void onLevelCompleted();
 
         public void onLevelFailed();
+
+        public void onScoreUpdated();
     }
 }

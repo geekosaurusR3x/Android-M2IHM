@@ -9,9 +9,17 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView"
+        android:id="@+id/img_background"
         android:layout_gravity="center"
         android:contentDescription="@string/img_desc_wooden_background"
         android:background="@drawable/wood_texture" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="0"
+        android:id="@+id/txt_score"
+        android:layout_gravity="right|top"/>
 
 </FrameLayout>

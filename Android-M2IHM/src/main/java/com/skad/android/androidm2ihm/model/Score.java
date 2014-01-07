@@ -5,10 +5,12 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import com.skad.android.androidm2ihm.R;
 
+import java.util.Observable;
+
 /**
  * Created by pschmitt on 1/6/14.
  */
-public class Score {
+public class Score extends Observable {
 
     private int mCollisions;
     private int mLevelId;
@@ -20,10 +22,16 @@ public class Score {
 
     public void collided() {
         mCollisions++;
+        setChanged();
+        notifyObservers();
+    }
+
+    public void reset() {
+        mCollisions = 0;
     }
 
     public int getTotalScore() {
-        int score = (100 * mLevelId) - mCollisions;
+        int score = (1000 * mLevelId) - mCollisions;
         return score > 0 ? score : 0;
     }
 
