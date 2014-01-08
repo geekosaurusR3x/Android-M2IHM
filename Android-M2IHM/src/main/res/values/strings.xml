@@ -9,18 +9,8 @@
 
     <string name="title_activity_level">LevelActivity</string>
 
-    <string name="pref_cat_ui">UI</string>
-    <string name="pref_key_hide_actionbar">pref_key_hide_ab</string>
-    <string name="pref_hide_actionbar">Hide ActionBar</string>
-    <string name="pref_hide_actionbar_summ">Hide ActionBar when playing</string>
-    <string name="pref_key_highscore">highscore_%1$d</string>
-
     <string name="txt_label_greeting">Watcha want to do?</string>
     <string name="img_desc_wooden_background">Wooden Background</string>
-
-    <integer name="btn_tag_level_1">1</integer>
-    <integer name="btn_tag_level_3">3</integer>
-    <integer name="btn_tag_level_2">2</integer>
 
     <string name="extra_key_level">Level_ID</string>
     <string name="dialog_success_title">Success!</string>
