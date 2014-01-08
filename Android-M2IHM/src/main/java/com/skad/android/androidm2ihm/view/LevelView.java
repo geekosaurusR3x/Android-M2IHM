@@ -6,7 +6,6 @@ import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
@@ -37,14 +36,12 @@ public class LevelView extends View implements Observer {
     private int mIdSoundGameOver;
     private int mIdSoundWin;
     private boolean mPaused = false;
-
     private double mRatioWidth = 1;
     private double mRatioHeight = 1;
-
-    private ArrayList<Wall> mListWall = new ArrayList<>();
-    private ArrayList<Hole> mListHole = new ArrayList<>();
-    private ArrayList<Bullet> mListBullet = new ArrayList<>();
-    private ArrayList<Gun> mListGun = new ArrayList<>();
+    private ArrayList<Wall> mListWall = new ArrayList<Wall>();
+    private ArrayList<Hole> mListHole = new ArrayList<Hole>();
+    private ArrayList<Bullet> mListBullet = new ArrayList<Bullet>();
+    private ArrayList<Gun> mListGun = new ArrayList<Gun>();
     private onLevelEventListener mParentActivity;
 
     public LevelView(Context context, int levelResId, int levelId) {
@@ -82,61 +79,60 @@ public class LevelView extends View implements Observer {
                     int height = Integer.parseInt(temp[4]);
 
                     //Ajusting for the screen size
-                    xPos = (int)(xPos*mRatioHeight);
-                    yPos = (int) (yPos*mRatioWidth);
-                    width = (int) (width*mRatioHeight);
-                    height = (int) (height*mRatioWidth);
+                    xPos = (int) (xPos * mRatioHeight);
+                    yPos = (int) (yPos * mRatioWidth);
+                    width = (int) (width * mRatioHeight);
+                    height = (int) (height * mRatioWidth);
 
-                    switch (objectType) {
-                        case "screen": //screensize and ratio
-                            mRatioWidth = (double)screenwidth/width ;
-                            mRatioHeight = (double)screenheight/height ;
-                            break;
-                        case "p": // player (ball)
-                            mBall = new Ball(xPos, yPos, width, height);
-                            mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ball));
-                            break;
-                        case "h": // hole
-                            Hole hole = new Hole(xPos, yPos, width, height);
-                            hole.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.hole));
-                            mListHole.add(hole);
-                            break;
-                        case "w": // wall (straight)
-                            Wall wall = new Wall(xPos, yPos, width, height);
-                            wall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.wall_grey_texture));
-                            mListWall.add(wall);
-                            break;
-                        case "abl": // wall (curved - bottom left)
-                            Wall wall1 = new Wall(xPos, yPos, width, height);
-                            wall1.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_bottom_left));
-                            mListWall.add(wall1);
-                            break;
-                        case "abr": // wall (curved - bottom right)
-                            Wall wall2 = new Wall(xPos, yPos, width, height);
-                            wall2.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_bottom_right));
-                            mListWall.add(wall2);
-                            break;
-                        case "atl": // wall (curved - top left)
-                            Wall wall3 = new Wall(xPos, yPos, width, height);
-                            wall3.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_top_left));
-                            mListWall.add(wall3);
-                            break;
-                        case "atr": // wall (curved - top right)
-                            Wall wall4 = new Wall(xPos, yPos, width, height);
-                            wall4.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_top_right));
-                            mListWall.add(wall4);
-                            break;
-                        case "g": // gun
-                            Gun gun = new Gun(xPos, yPos, width, height);
-                            gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.gun));
-                            gun.setRatioHeight(mRatioHeight);
-                            gun.setRatioWidth(mRatioWidth);
-                            mListGun.add(gun);
-                            break;
-                        case "e":
-                            mEnd = new Hole(xPos, yPos, width, height);
-                            mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
-                            break;
+                    if (objectType.equals("screen")) { //screensize and ratio
+                        mRatioWidth = (double) screenwidth / width;
+                        mRatioHeight = (double) screenheight / height;
+                    }
+                    if (objectType.equals("p")) { // player (ball)
+                        mBall = new Ball(xPos, yPos, width, height);
+                        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ball));
+                    }
+                    if (objectType.equals("h")) { // hole
+                        Hole hole = new Hole(xPos, yPos, width, height);
+                        hole.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.hole));
+                        mListHole.add(hole);
+                    }
+                    if (objectType.equals("w")) { // wall (straight)
+                        Wall wall = new Wall(xPos, yPos, width, height);
+                        wall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.wall_grey_texture));
+                        mListWall.add(wall);
+                    }
+                    if (objectType.equals("abl")) { // wall (curved - bottom left)
+                        Wall wall1 = new Wall(xPos, yPos, width, height);
+                        wall1.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_bottom_left));
+                        mListWall.add(wall1);
+                    }
+                    if (objectType.equals("abr")) { // wall (curved - bottom right)
+                        Wall wall2 = new Wall(xPos, yPos, width, height);
+                        wall2.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_bottom_right));
+                        mListWall.add(wall2);
+                    }
+                    if (objectType.equals("atl")) { // wall (curved - top left)
+                        Wall wall3 = new Wall(xPos, yPos, width, height);
+                        wall3.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_top_left));
+                        mListWall.add(wall3);
+                    }
+                    if (objectType.equals("atr")) { // wall (curved - top right)
+                        Wall wall4 = new Wall(xPos, yPos, width, height);
+                        wall4.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.arcwall_top_right));
+                        mListWall.add(wall4);
+                    }
+                    if (objectType.equals("g")) { // gun
+                        Gun gun = new Gun(xPos, yPos, width, height);
+                        gun.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.gun));
+                        gun.setRatioHeight(mRatioHeight);
+                        gun.setRatioWidth(mRatioWidth);
+                        mListGun.add(gun);
+                    }
+                    if (objectType.equals("e")) {
+                        mEnd = new Hole(xPos, yPos, width, height);
+                        mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
+
                     }
                 }
             }
@@ -194,11 +190,11 @@ public class LevelView extends View implements Observer {
             mBullet.decreseVelocity();
         }
         for (final Gun mGun : mListGun) {
-            mGun.rotate(mBall.getX(),mBall.getY());
+            mGun.rotate(mBall.getX(), mBall.getY());
         }
         if (currentTimeMillis() - mLastTime > 1000) {
             for (final Gun mGun : mListGun) {
-                Bullet mBullet = mGun.fire(mBall.getX(),mBall.getY());
+                Bullet mBullet = mGun.fire(mBall.getX(), mBall.getY());
                 mBullet.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.bullet));
                 mListBullet.add(mBullet);
             }

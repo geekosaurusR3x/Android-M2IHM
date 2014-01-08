@@ -1,10 +1,10 @@
 package com.skad.android.androidm2ihm.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.widget.Button;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
 
-public class MainActivity extends Activity implements Button.OnClickListener, DialogInterface.OnClickListener {
+public class MainActivity extends ActionBarActivity implements Button.OnClickListener, DialogInterface.OnClickListener {
 
     private static final String TAG = "MainActivity";
 
@@ -31,7 +31,7 @@ public class MainActivity extends Activity implements Button.OnClickListener, Di
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
-        return true;
+        return super.onCreateOptionsMenu(menu);
     }
 
     @Override

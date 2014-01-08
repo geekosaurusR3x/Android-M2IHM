@@ -2,7 +2,7 @@ package com.skad.android.androidm2ihm.activity;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import com.skad.android.androidm2ihm.fragment.SettingsFragment;
+import com.skad.android.androidm2ihm.R;
 
 /**
  * Settings screen
@@ -14,8 +14,6 @@ public class SettingsActivity extends PreferenceActivity {
         super.onCreate(savedInstanceState);
 
         // Display the fragment as the main content.
-        getFragmentManager().beginTransaction()
-                .replace(android.R.id.content, new SettingsFragment())
-                .commit();
+        addPreferencesFromResource(R.xml.preferences);
     }
 }

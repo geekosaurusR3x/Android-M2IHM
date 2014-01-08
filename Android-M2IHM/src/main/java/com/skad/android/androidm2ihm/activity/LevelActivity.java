@@ -1,32 +1,28 @@
 package com.skad.android.androidm2ihm.activity;
 
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
-import com.skad.android.androidm2ihm.utils.ScreenOrientation;
 import com.skad.android.androidm2ihm.view.LevelView;
 
 /**
  * Created by pschmitt on 12/19/13.
  */
-public class LevelActivity extends Activity implements SensorEventListener, LevelView.onLevelEventListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
+public class LevelActivity extends ActionBarActivity implements SensorEventListener, LevelView.onLevelEventListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
     private static final String TAG = "LevelActivity";
 
     // Views
@@ -54,14 +50,9 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         // Setup sensors
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 
-        // Action bar
-        ActionBar actionBar = getActionBar();
+        // Hide ActionBar
+        ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            updateActionBarTitle();
-        }
-        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
-        if (sharedPref.getBoolean(getString(R.string.pref_key_hide_actionbar), false) && actionBar != null) {
             actionBar.hide();
         }
     }
@@ -70,7 +61,6 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
         mLevelView.resume();
         drawLevel();
-        updateActionBarTitle();
     }
 
     private void nextLevel() {
@@ -78,17 +68,9 @@ public class LevelActivity extends Activity implements SensorEventListener, Leve
         if (mLevelId < 3) {
             mLevelId++;
             drawLevel();
-            updateActionBarTitle();
         } else {
             // Player completed last level, exit
             finish();
-        }
-    }
-
-    private void updateActionBarTitle() {
-        ActionBar actionBar = getActionBar();
-        if (actionBar != null) {
-            actionBar.setTitle("Level " + mLevelId);
         }
     }
 
