@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Android-M2IHM</string>
+    <string name="action_settings">Parametres</string>
+    <string name="btn_label_level_1">Niveau 1</string>
+    <string name="btn_label_level_2">Niveau 2</string>
+    <string name="btn_label_level_3">Niveau 3</string>
+
+    <string name="title_activity_level">LevelActivity</string>
+
+    <string name="pref_cat_ui">UI</string>
+    <string name="pref_hide_actionbar">Cacher ActionBar</string>
+    <string name="pref_hide_actionbar_summ">Cacher l\'ActionBar si activé</string>
+    <string name="pref_key_highscore">highscore_%1$d</string>
+
+    <string name="txt_label_greeting">Quel Niveau?</string>
+    <string name="img_desc_wooden_background">Fond d\'ecran spacial</string>
+
+    <integer name="btn_tag_level_1">1</integer>
+    <integer name="btn_tag_level_3">3</integer>
+    <integer name="btn_tag_level_2">2</integer>
+
+    <string name="extra_key_level">Level_ID</string>
+    <string name="dialog_success_title">Gagné !</string>
+    <string name="dialog_success_msg">Vous avez finit le niveau  %1$d!\nVotre score: %2$d (Highscore: %3$d)\nNiveau suivant %4$d?</string>
+    <string name="dialog_failure_title">Perdu !</string>
+    <string name="dialog_failure_msg">Recomencer ?</string>
+    <string name="dialog_success_msg_alt">Bravo d\'avoir finit le jeux !</string>
+    <string name="dialog_success_restart">Recomencer ?</string>
+    <string name="action_highscore">Meilleurs scores</string>
+    <string name="dialog_highscores_title">Meilleurs scores</string>
+    <string name="dialog_highscores_msg">Level 1: %1$d\nLevel 2: %2$d\nLevel 3: %3$d</string>
+    <string name="dialog_highscores_btn_reset">Remise à zero ?</string>
+
+    <string name="action_about">A propos</string>
+    <string name="about_images">Images</string>
+    <string name="about_images_author_sprites">DANIEL COOK</string>
+    <string name="about_images_author_sprites_url">http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html</string>
+    <string name="about_audio">Audio</string>
+    <string name="about_audio_fins_url">http://www.freesound.org/people/fins/sounds/133284/</string>
+    <string name="about_audio_background_url">http://www.playonloop.com/2013-music-loops/mecha-world/</string>
+    <string name="about_libraries">Libraries</string>
+    <string name="about_authors">Auteurs</string>
+    <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
+
+    <string name="score">Score: %1$d</string>
+
+
+</resources>
