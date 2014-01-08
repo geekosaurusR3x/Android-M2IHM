@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="action_settings">Einstellungen</string>
+    <string name="btn_label_level_1">Level 1</string>
+    <string name="btn_label_level_2">Level 2</string>
+    <string name="btn_label_level_3">Level 3</string>
+
+    <string name="title_activity_level">LevelActivity</string>
+
+    <string name="pref_cat_ui">UI</string>
+    <string name="pref_hide_actionbar">ActionBar verstecken</string>
+    <string name="pref_hide_actionbar_summ">ActionBar verstecken</string>
+    <string name="pref_key_highscore">highscore_%1$d</string>
+
+    <string name="txt_label_greeting">Levelauswahl</string>
+    <string name="img_desc_wooden_background">Hintergrundbild - Sternenhimmel</string>
+
+    <string name="extra_key_level">Level_ID</string>
+    <string name="dialog_success_title">Gewonnen!</string>
+    <string name="dialog_success_msg">Sie haben Level %1$d geschafft!\nIhr score: %2$d (Highscore: %3$d)\nZum nächsten Level (%4$d)?</string>
+    <string name="dialog_failure_title">Verloren!</string>
+    <string name="dialog_failure_msg">Nochmal?</string>
+    <string name="dialog_success_msg_alt">Bravo, sie haben das letzte Level gemeistert!</string>
+    <string name="dialog_success_restart">Nochmal?</string>
+    <string name="action_highscore">Highscores</string>
+    <string name="dialog_highscores_title">Highscores</string>
+    <string name="dialog_highscores_msg">Level 1: %1$d\nLevel 2: %2$d\nLevel 3: %3$d</string>
+    <string name="dialog_highscores_btn_reset">Zurücksetzen</string>
+
+    <string name="action_about">Über</string>
+    <string name="about_images">Bilder</string>
+    <string name="about_images_author_sprites">DANIEL COOK</string>
+    <string name="about_images_author_sprites_url">http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html</string>
+    <string name="about_audio">Audio</string>
+    <string name="about_audio_fins_url">http://www.freesound.org/people/fins/sounds/133284/</string>
+    <string name="about_audio_background_url">http://www.playonloop.com/2013-music-loops/mecha-world/</string>
+    <string name="about_libraries">Software-Bibliotheken</string>
+    <string name="about_authors">Authoren</string>
+    <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
+
+    <string name="score">Score: %1$d</string>
+
+
+</resources>
