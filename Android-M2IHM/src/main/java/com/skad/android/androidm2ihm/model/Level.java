@@ -9,6 +9,9 @@ import java.util.List;
 public class Level {
     public static final int LEVEL_COUNT = 3;
 
+    public static enum COLLISION {COLLISION_WALL, COLLISION_BULLET}
+
+    ;
     // Business objects
     private int mLevelNumber;
     private Ball mBall;
@@ -24,7 +27,9 @@ public class Level {
 
     public static Level getInstance() {
         if (mInstance == null) {
-            mInstance = new Level();
+            synchronized (Level.class) {
+                mInstance = new Level();
+            }
         }
         return mInstance;
     }
@@ -94,6 +99,10 @@ public class Level {
         this.mBulletList = bulletList;
     }
 
+    public boolean containsGuns() {
+        return mGunList.isEmpty();
+    }
+
     public List<Gun> getGunList() {
         return mGunList;
     }
@@ -110,6 +119,12 @@ public class Level {
         this.mLevelNumber = levelNumber;
     }
 
+    /**
+     * Retrieve all the sprites!
+     * Note: The order matters as the first object is drawn first (followers will be "above")
+     *
+     * @return An (Array)List containing all sprites
+     */
     public List<SpriteObject> getAllSprites() {
         List<SpriteObject> spriteList = new ArrayList<SpriteObject>();
 
@@ -117,8 +132,8 @@ public class Level {
         spriteList.addAll(mHoleList);
         spriteList.addAll(mGunList);
         spriteList.addAll(mWallList);
-        spriteList.add(mBall);
         spriteList.add(mEnd);
+        spriteList.add(mBall);
 
         return spriteList;
     }

@@ -2,10 +2,16 @@ package com.skad.android.androidm2ihm.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.os.*;
 import android.os.Process;
 import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.model.Bullet;
+import com.skad.android.androidm2ihm.model.Gun;
+import com.skad.android.androidm2ihm.model.Level;
+
+import static java.lang.System.currentTimeMillis;
 
 /**
  * Created by pschmitt on 1/8/14.
@@ -17,19 +23,17 @@ public class GameService extends Service {
     private ServiceHandler mServiceHandler;
     // Music player
     private MediaPlayer mBackgroundMusic;
+    private Level mLevel;
+    private long mLastBulletFiredTime;
 
     @Override
     public IBinder onBind(Intent intent) {
-        mBackgroundMusic = MediaPlayer.create(this, R.raw.background_music);
-        mBackgroundMusic.setLooping(true);
-        mBackgroundMusic.start();
         return mBinder;
     }
 
     @Override
     public boolean onUnbind(Intent intent) {
-        mBackgroundMusic.release();
-        mBackgroundMusic = null;
+        stopBackgroundMusicPlayback();
         return super.onUnbind(intent);
     }
 
@@ -42,6 +46,42 @@ public class GameService extends Service {
         // Get the HandlerThread's Looper and use it for our Handler
         mServiceLooper = thread.getLooper();
         mServiceHandler = new ServiceHandler(mServiceLooper);
+        mLevel = Level.getInstance();
+        startBackgroundMusicPlayback();
+        mServiceLooper.getThread().run();
+        // fireBullets();
+    }
+
+    public void fireBullets() {
+        synchronized (this) {
+            for (; ; ) {
+                for (final Gun mGun : mLevel.getGunList()) {
+                    Bullet mBullet = mGun.fire(mLevel.getBall().getX(), mLevel.getBall().getY());
+                    mBullet.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.bullet));
+                    mLevel.getBulletList().add(mBullet);
+                    // A new bullet was fired, request update
+                    // invalidate();
+                }
+                try {
+                    wait(currentTimeMillis() + 10 * 1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+    public void startBackgroundMusicPlayback() {
+        mBackgroundMusic = MediaPlayer.create(this, R.raw.background_music);
+        mBackgroundMusic.setLooping(true);
+        mBackgroundMusic.start();
+    }
+
+    public void stopBackgroundMusicPlayback() {
+        if (mBackgroundMusic != null) {
+            mBackgroundMusic.release();
+            mBackgroundMusic = null;
+        }
     }
 
     // Handler that receives messages from the thread
@@ -52,14 +92,12 @@ public class GameService extends Service {
 
         @Override
         public void handleMessage(Message msg) {
-            // Normally we would do some work here, like download a file.
-            // For our sample, we just sleep for 5 seconds.
-                synchronized (this) {
-                    try {
+            synchronized (this) {
+                try {
 
-                    } catch (Exception e) {
-                    }
+                } catch (Exception e) {
                 }
+            }
             // Stop the service using the startId, so that we don't stop
             // the service in the middle of handling another job
             stopSelf(msg.arg1);
@@ -72,7 +110,7 @@ public class GameService extends Service {
      */
     public class LocalBinder extends Binder {
         public GameService getService() {
-            // Return this instance of LocalService so clients can call public methods
+            // Return this instance of GameService so clients can call public methods
             return GameService.this;
         }
     }

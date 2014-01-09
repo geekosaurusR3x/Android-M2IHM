@@ -18,7 +18,9 @@ public class Bullet extends SpriteObject {
         this.mDirX = mDirX;
     }
 
-    public void setDirY(double mDirY) { this.mDirY = mDirY; }
+    public void setDirY(double mDirY) {
+        this.mDirY = mDirY;
+    }
 
     public void setVelocity(int velocity) {
         this.mVelocity = velocity;
@@ -29,8 +31,10 @@ public class Bullet extends SpriteObject {
         y += mVelocity * mDirY;
     }
 
-    public void decreseVelocity() {
-        if(mVelocity>0) { mVelocity--;}
+    public void decreaseVelocity() {
+        if (mVelocity > 0) {
+            mVelocity--;
+        }
     }
 
     public int getTimeToLive() {
