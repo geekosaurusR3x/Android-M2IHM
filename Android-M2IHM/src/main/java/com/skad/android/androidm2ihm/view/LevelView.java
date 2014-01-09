@@ -9,6 +9,7 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
+import com.skad.android.androidm2ihm.utils.Functions;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -31,6 +32,7 @@ public class LevelView extends View implements Observer {
     private Hole mEnd;
     private SoundPool mSoundPool;
     private long mLastTime;
+    private long mLastTimeSpaceObject;
     private int mLevelResId;
     private int mIdSoundWall;
     private int mIdSoundGameOver;
@@ -38,10 +40,14 @@ public class LevelView extends View implements Observer {
     private boolean mPaused = false;
     private double mRatioWidth = 1;
     private double mRatioHeight = 1;
+    private int mScreenWidth = 1;
+    private int mScreenHeight = 1;
     private ArrayList<Wall> mListWall = new ArrayList<Wall>();
     private ArrayList<Hole> mListHole = new ArrayList<Hole>();
     private ArrayList<Bullet> mListBullet = new ArrayList<Bullet>();
     private ArrayList<Gun> mListGun = new ArrayList<Gun>();
+    private ArrayList<SpaceObject> mListSpaceObject = new ArrayList<SpaceObject>();
+
     private onLevelEventListener mParentActivity;
 
     public LevelView(Context context, int levelResId, int levelId) {
@@ -63,8 +69,8 @@ public class LevelView extends View implements Observer {
 
     private void loadLevel() {
         DisplayMetrics metrics = super.getContext().getResources().getDisplayMetrics();
-        int screenwidth = metrics.widthPixels;
-        int screenheight = metrics.heightPixels;
+        mScreenWidth = metrics.widthPixels;
+        mScreenHeight = metrics.heightPixels;
         InputStream filelevelstream = getResources().openRawResource(this.mLevelResId);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;
@@ -85,8 +91,8 @@ public class LevelView extends View implements Observer {
                     height = (int) (height * mRatioWidth);
 
                     if (objectType.equals("screen")) { //screensize and ratio
-                        mRatioWidth = (double) screenwidth / width;
-                        mRatioHeight = (double) screenheight / height;
+                        mRatioWidth = (double) mScreenWidth / width;
+                        mRatioHeight = (double) mScreenHeight / height;
                     }
                     if (objectType.equals("p")) { // player (ball)
                         mBall = new Ball(xPos, yPos, width, height);
@@ -155,6 +161,10 @@ public class LevelView extends View implements Observer {
         }
 
         update();
+        for (final SpaceObject spaceObject : mListSpaceObject) {
+            canvas.drawBitmap(spaceObject.getSprite(), spaceObject.getX(), spaceObject.getY(), null);
+        }
+
         for (final Wall wall : mListWall) {
             canvas.drawBitmap(wall.getSprite(), wall.getX(), wall.getY(), null);
         }
@@ -192,6 +202,23 @@ public class LevelView extends View implements Observer {
         for (final Gun mGun : mListGun) {
             mGun.rotate(mBall.getX(), mBall.getY());
         }
+
+        for (final SpaceObject mSpaceObject : mListSpaceObject) {
+            mSpaceObject.forward();
+        }
+
+        if (currentTimeMillis() - mLastTimeSpaceObject > 10000) {
+            Object [] pos = Functions.GenerateAleaXY(mScreenHeight,mScreenWidth);
+            Object [] cible = Functions.GenerateAleaXY(mScreenHeight,mScreenWidth);
+            double  scalefactor = Functions.GenerateAleaDouble(2);
+            SpaceObject mSpaceObect = new SpaceObject((Integer)(pos[0]),(Integer)(pos[1]),(int)(128*mRatioWidth*scalefactor),(int)(128*mRatioHeight*scalefactor));
+            mSpaceObect.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ship1));
+            mSpaceObect.setDir((Integer)(cible[0]),(Integer)(cible[1]));
+            mSpaceObect.setVelocity(10);
+            mListSpaceObject.add(mSpaceObect);
+            mLastTimeSpaceObject = currentTimeMillis();
+        }
+
         if (currentTimeMillis() - mLastTime > 1000) {
             for (final Gun mGun : mListGun) {
                 Bullet mBullet = mGun.fire(mBall.getX(), mBall.getY());

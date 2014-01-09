@@ -109,17 +109,20 @@ abstract public class SpriteObject {
 
     public void rotate(int CibleX, int CibleY)
     {
-        double dx =     CibleX - this.getBoundingRectangle().centerX();
-        double dy =     CibleY - this.getBoundingRectangle().centerY();
-        float angle = (float) Math.toDegrees(Math.atan2( dy,dx));
-        if(angle < 0){
-            angle += 360;
-        }
+        if( this.OriginalSprite != null)
+        {
+            double dx =     CibleX - this.getBoundingRectangle().centerX();
+            double dy =     CibleY - this.getBoundingRectangle().centerY();
+            float angle = (float) Math.toDegrees(Math.atan2( dy,dx));
+            if(angle < 0){
+                angle += 360;
+            }
 
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        Bitmap scaledBitmap = Bitmap.createScaledBitmap(this.OriginalSprite,this.OriginalSprite.getWidth(),this.OriginalSprite.getHeight(), true);
-        this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
+            Matrix matrix = new Matrix();
+            matrix.postRotate(angle);
+            Bitmap scaledBitmap = Bitmap.createScaledBitmap(this.OriginalSprite,this.OriginalSprite.getWidth(),this.OriginalSprite.getHeight(), true);
+            this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
+        }
     }
 
     public void setDir(double CibleX, double CibleY) {
@@ -128,6 +131,7 @@ abstract public class SpriteObject {
         double r = Math.sqrt((x * x) + (y * y));
         this.mDirX = x/r;
         this.mDirY = y/r;
+        this.rotate((int)CibleX,(int)CibleY);
     }
 
     public void setVelocity(int velocity) {

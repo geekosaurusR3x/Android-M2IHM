@@ -93,6 +93,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         mLevelView = new LevelView(this, levelResId, mLevelId);
         View container = findViewById(R.id.container);
         ((ViewGroup) container).addView(mLevelView);
+
     }
 
     @Override
