@@ -6,6 +6,7 @@ import android.graphics.Canvas;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
@@ -32,7 +33,7 @@ public class LevelView extends View implements Observer {
     private Hole mEnd;
     private SoundPool mSoundPool;
     private long mLastTime;
-    private long mLastTimeSpaceObject;
+
     private int mLevelResId;
     private int mIdSoundWall;
     private int mIdSoundGameOver;
@@ -46,7 +47,6 @@ public class LevelView extends View implements Observer {
     private ArrayList<Hole> mListHole = new ArrayList<Hole>();
     private ArrayList<Bullet> mListBullet = new ArrayList<Bullet>();
     private ArrayList<Gun> mListGun = new ArrayList<Gun>();
-    private ArrayList<SpaceObject> mListSpaceObject = new ArrayList<SpaceObject>();
 
     private onLevelEventListener mParentActivity;
 
@@ -96,7 +96,7 @@ public class LevelView extends View implements Observer {
                     }
                     if (objectType.equals("p")) { // player (ball)
                         mBall = new Ball(xPos, yPos, width, height);
-                        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ball));
+                        mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.playership));
                     }
                     if (objectType.equals("h")) { // hole
                         Hole hole = new Hole(xPos, yPos, width, height);
@@ -161,9 +161,7 @@ public class LevelView extends View implements Observer {
         }
 
         update();
-        for (final SpaceObject spaceObject : mListSpaceObject) {
-            canvas.drawBitmap(spaceObject.getSprite(), spaceObject.getX(), spaceObject.getY(), null);
-        }
+
 
         for (final Wall wall : mListWall) {
             canvas.drawBitmap(wall.getSprite(), wall.getX(), wall.getY(), null);
@@ -184,6 +182,7 @@ public class LevelView extends View implements Observer {
     }
 
     private void update() {
+
         for (final Hole mHole : mListHole) { //gameover
             if (mHole.intoHole(mBall)) {
                 mSoundPool.play(mIdSoundGameOver, 1, 1, 0, 0, 1);
@@ -203,22 +202,6 @@ public class LevelView extends View implements Observer {
             mGun.rotate(mBall.getX(), mBall.getY());
         }
 
-        for (final SpaceObject mSpaceObject : mListSpaceObject) {
-            mSpaceObject.forward();
-        }
-
-        if (currentTimeMillis() - mLastTimeSpaceObject > 10000) {
-            Object [] pos = Functions.GenerateAleaXY(mScreenHeight,mScreenWidth);
-            Object [] cible = Functions.GenerateAleaXY(mScreenHeight,mScreenWidth);
-            double  scalefactor = Functions.GenerateAleaDouble(2);
-            SpaceObject mSpaceObect = new SpaceObject((Integer)(pos[0]),(Integer)(pos[1]),(int)(128*mRatioWidth*scalefactor),(int)(128*mRatioHeight*scalefactor));
-            mSpaceObect.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ship1));
-            mSpaceObect.setDir((Integer)(cible[0]),(Integer)(cible[1]));
-            mSpaceObect.setVelocity(10);
-            mListSpaceObject.add(mSpaceObect);
-            mLastTimeSpaceObject = currentTimeMillis();
-        }
-
         if (currentTimeMillis() - mLastTime > 1000) {
             for (final Gun mGun : mListGun) {
                 Bullet mBullet = mGun.fire(mBall.getX(), mBall.getY());
@@ -230,19 +213,16 @@ public class LevelView extends View implements Observer {
         // TODO Handle player failures (wall/bullet collision)
     }
 
-    public void setForceX(float forceX) {
-        int lastX = mBall.getX();
-        mBall.applyForceX(forceX);
+    public void setForce(float forceX, float forceY)
+    {   int lastX = mBall.getX();
+        int lastY = mBall.getY();
+
+        mBall.setDir(forceX, forceY);
+        mBall.forward();
         if (collision()) {
             mBall.setX(lastX);
-        }
-    }
-
-    public void setForceY(float forceY) {
-        int lastY = mBall.getY();
-        mBall.applyForceY(forceY);
-        if (collision()) {
             mBall.setY(lastY);
+
         }
     }
 

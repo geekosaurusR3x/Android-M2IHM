@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.util.Log;
+import com.skad.android.androidm2ihm.utils.Functions;
 
 /**
  * Created by skad on 19/12/13.
@@ -18,13 +19,12 @@ abstract public class SpriteObject {
     protected int height;
     protected double ratioWidth;
     protected double ratioHeight;
-    private double mDirX;
-    private double mDirY;
-    private int mVelocity;
+    protected double mDirX;
+    protected double mDirY;
+    private double mVelocity;
 
     public SpriteObject() {
-        this.width = 64;
-        this.height = 64;
+        this(0, 0, 64, 64);
     }
 
     protected SpriteObject(int x, int y, int width, int height) {
@@ -32,6 +32,7 @@ abstract public class SpriteObject {
         this.y = y;
         this.width = width;
         this.height = height;
+        this.setVelocity(1);
     }
 
     public int getX() {
@@ -124,13 +125,11 @@ abstract public class SpriteObject {
             this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
         }
     }
-
+      
     public void setDir(double CibleX, double CibleY) {
-        double x = CibleX - getX();
-        double y = CibleY - getY();
-        double r = Math.sqrt((x * x) + (y * y));
-        this.mDirX = x/r;
-        this.mDirY = y/r;
+        Object[] temp = Functions.GetVectorFromPoint(getX(), getY(), CibleX, CibleY);
+        this.mDirX = (Double)temp[0];
+        this.mDirY = (Double)temp[1];
         this.rotate((int)CibleX,(int)CibleY);
     }
 
@@ -141,6 +140,13 @@ abstract public class SpriteObject {
     public void forward() {
         x += mVelocity * mDirX;
         y += mVelocity * mDirY;
+    }
+
+
+
+    public void backward() {
+        x -= mVelocity * mDirX;
+        y -= mVelocity * mDirY;
     }
 
     public void decreseVelocity() {

@@ -5,6 +5,7 @@ package com.skad.android.androidm2ihm.model;
  */
 public class SpaceObject  extends SpriteObject{
     public SpaceObject() {
+        super();
     }
 
     public SpaceObject(int x, int y, int width, int height) {
