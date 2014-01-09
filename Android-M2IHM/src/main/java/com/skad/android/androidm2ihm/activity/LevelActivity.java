@@ -1,22 +1,23 @@
 package com.skad.android.androidm2ihm.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
+import android.content.*;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
+import com.skad.android.androidm2ihm.service.GameService;
 import com.skad.android.androidm2ihm.view.LevelView;
 
 /**
@@ -28,11 +29,23 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     // Views
     private TextView mScoreView;
 
-    private MediaPlayer mBackgroundMusic;
-    private int mLevelId;
+    // Service
+    private GameService mService;
+    boolean mBound = false;
+
+    private int mLevel;
     private LevelView mLevelView;
     private SensorManager mSensorManager;
     private boolean mPlayerFailed = false;
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        // Bind to LocalService
+        Intent intent = new Intent(this, GameService.class);
+        bindService(intent, mConnection, Context.BIND_AUTO_CREATE);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +53,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         setContentView(R.layout.activity_level);
 
         // Determine which level should be loaded
-        mLevelId = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
+        mLevel = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
         drawLevel();
 
         // Retain views
@@ -65,8 +78,8 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
 
     private void nextLevel() {
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-        if (mLevelId < 3) {
-            mLevelId++;
+        if (mLevel < 3) {
+            mLevel++;
             drawLevel();
         } else {
             // Player completed last level, exit
@@ -75,11 +88,11 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     }
 
     private void drawLevel() {
-        this.mBackgroundMusic = MediaPlayer.create(this,  R.raw.background_music);
-        this.mBackgroundMusic.setLooping(true);
-        this.mBackgroundMusic.start();
+        // this.mBackgroundMusic = MediaPlayer.create(this,  R.raw.background_music);
+        // this.mBackgroundMusic.setLooping(true);
+        // this.mBackgroundMusic.start();
         int levelResId = R.raw.lvl1;
-        switch (mLevelId) {
+        switch (mLevel) {
             case 1:
                 levelResId = R.raw.lvl1;
                 break;
@@ -90,7 +103,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
                 levelResId = R.raw.lvl3;
                 break;
         }
-        mLevelView = new LevelView(this, levelResId, mLevelId);
+        mLevelView = new LevelView(this, levelResId, mLevel);
         View container = findViewById(R.id.container);
         ((ViewGroup) container).addView(mLevelView);
     }
@@ -104,22 +117,18 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     @Override
     protected void onPause() {
         super.onPause();
+        // Unbind service
+        if (mBound)
+            unbindService(mConnection);
         mSensorManager.unregisterListener(this);
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.release();
-            mBackgroundMusic = null;
-        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         Log.d(TAG, "destroy");
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.release();
-            mBackgroundMusic = null;
-        }
     }
+
     @Override
     public void onSensorChanged(SensorEvent event) {
         float xValue = event.values[1];
@@ -140,7 +149,6 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     }
 
     private void pauseGame() {
-        mBackgroundMusic.stop();
         mSensorManager.unregisterListener(this);
         mLevelView.pause();
     }
@@ -161,8 +169,8 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
         successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
         String msg = "";
-        if (mLevelId < 3) {
-            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, mLevelView.getScore().getTotalScore(), mLevelView.getScore().getHighScore(this), (mLevelId + 1));
+        if (mLevel < 3) {
+            msg = String.format(getString(R.string.dialog_success_msg), mLevel, mLevelView.getScore().getTotalScore(), mLevelView.getScore().getHighScore(this), (mLevel + 1));
         } else {
             msg = getString(R.string.dialog_success_msg_alt);
         }
@@ -208,4 +216,30 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     public void onScoreUpdated() {
         mScoreView.setText(String.format(getString(R.string.score), mLevelView.getScore().getTotalScore()));
     }
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection mConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            GameService.LocalBinder binder = (GameService.LocalBinder) service;
+            mService = binder.getService();
+            mBound = true;
+            Toast.makeText(LevelActivity.this, "GameService started", Toast.LENGTH_LONG).show();
+
+            // Is this the right place?
+            mService.parseLevelFile(LevelActivity.this, mLevel);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            Toast.makeText(LevelActivity.this, "GameService stopped", Toast.LENGTH_LONG).show();
+            mBound = false;
+        }
+    };
+
 }

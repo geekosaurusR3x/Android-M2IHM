@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -24,6 +25,8 @@ import static java.lang.System.currentTimeMillis;
  * Created by skad on 19/12/13.
  */
 public class LevelView extends View implements Observer {
+
+    private static final String TAG = "LevelView";
 
     private Score mScore;
     // Bitmap background;
@@ -38,10 +41,12 @@ public class LevelView extends View implements Observer {
     private boolean mPaused = false;
     private double mRatioWidth = 1;
     private double mRatioHeight = 1;
+
     private ArrayList<Wall> mListWall = new ArrayList<Wall>();
     private ArrayList<Hole> mListHole = new ArrayList<Hole>();
     private ArrayList<Bullet> mListBullet = new ArrayList<Bullet>();
     private ArrayList<Gun> mListGun = new ArrayList<Gun>();
+
     private onLevelEventListener mParentActivity;
 
     public LevelView(Context context, int levelResId, int levelId) {
@@ -62,11 +67,12 @@ public class LevelView extends View implements Observer {
     }
 
     private void loadLevel() {
-        DisplayMetrics metrics = super.getContext().getResources().getDisplayMetrics();
-        int screenwidth = metrics.widthPixels;
-        int screenheight = metrics.heightPixels;
-        InputStream filelevelstream = getResources().openRawResource(this.mLevelResId);
-        BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
+        // TODO Externalize! Views shouldn't load files
+        DisplayMetrics metrics = getContext().getResources().getDisplayMetrics();
+        int screenWidth = metrics.widthPixels;
+        int screenHeight = metrics.heightPixels;
+        InputStream fileLevelStream = getResources().openRawResource(this.mLevelResId);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(fileLevelStream));
         String line;
         try {
             while ((line = reader.readLine()) != null) {
@@ -78,15 +84,15 @@ public class LevelView extends View implements Observer {
                     int width = Integer.parseInt(temp[3]);
                     int height = Integer.parseInt(temp[4]);
 
-                    //Ajusting for the screen size
+                    // Ajusting for the screen size
                     xPos = (int) (xPos * mRatioHeight);
                     yPos = (int) (yPos * mRatioWidth);
                     width = (int) (width * mRatioHeight);
                     height = (int) (height * mRatioWidth);
 
-                    if (objectType.equals("screen")) { //screensize and ratio
-                        mRatioWidth = (double) screenwidth / width;
-                        mRatioHeight = (double) screenheight / height;
+                    if (objectType.equals("screen")) { // screensize and ratio
+                        mRatioWidth = (double) screenWidth / width;
+                        mRatioHeight = (double) screenHeight / height;
                     }
                     if (objectType.equals("p")) { // player (ball)
                         mBall = new Ball(xPos, yPos, width, height);
@@ -132,7 +138,6 @@ public class LevelView extends View implements Observer {
                     if (objectType.equals("e")) {
                         mEnd = new Hole(xPos, yPos, width, height);
                         mEnd.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
-
                     }
                 }
             }
@@ -140,7 +145,7 @@ public class LevelView extends View implements Observer {
             e.printStackTrace();
         } finally {
             try {
-                filelevelstream.close();
+                fileLevelStream.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -174,7 +179,7 @@ public class LevelView extends View implements Observer {
     }
 
     private void update() {
-        for (final Hole mHole : mListHole) { //gameover
+        for (final Hole mHole : mListHole) { // gameover
             if (mHole.intoHole(mBall)) {
                 mSoundPool.play(mIdSoundGameOver, 1, 1, 0, 0, 1);
                 mParentActivity.onLevelFailed();
@@ -185,9 +190,15 @@ public class LevelView extends View implements Observer {
             mSoundPool.play(mIdSoundWin, 1, 1, 0, 0, 1);
             mParentActivity.onLevelCompleted();
         }
-        for (final Bullet mBullet : mListBullet) {
-            mBullet.forward();
-            mBullet.decreseVelocity();
+        Bullet bullet;
+        for (Iterator<Bullet> itBullet = mListBullet.iterator(); itBullet.hasNext(); ) {
+            bullet = itBullet.next();
+            if (bullet.getTimeToLive() <= 0) {
+                mListBullet.remove(bullet);
+            }
+            bullet.forward();
+            bullet.decreaseTimeToLive();
+            bullet.decreseVelocity();
         }
         for (final Gun mGun : mListGun) {
             mGun.rotate(mBall.getX(), mBall.getY());
@@ -204,17 +215,21 @@ public class LevelView extends View implements Observer {
     }
 
     public void setForceX(float forceX) {
+        int screenWidth = getWidth();
+
         int lastX = mBall.getX();
         mBall.applyForceX(forceX);
-        if (collision()) {
+        if (collision() || mBall.getX() < 0 || mBall.getX() > screenWidth - mBall.getSprite().getWidth()) {
             mBall.setX(lastX);
         }
     }
 
     public void setForceY(float forceY) {
+        int screenHeight = getHeight();
+
         int lastY = mBall.getY();
         mBall.applyForceY(forceY);
-        if (collision()) {
+        if (collision() || mBall.getY() < 0 || mBall.getY() > screenHeight - mBall.getSprite().getHeight()) {
             mBall.setY(lastY);
         }
     }
@@ -224,6 +239,15 @@ public class LevelView extends View implements Observer {
             if (mBall.intersects(wall)) {
                 mSoundPool.play(mIdSoundWall, 1, 1, 0, 0, 1);
                 mScore.collided();
+                return true;
+            }
+        }
+        for (final Bullet bullet : mListBullet) {
+            if (mBall.intersects(bullet)) {
+                mScore.collided();
+                // Log.d(TAG, "X:" + mBall.getX() + " Y: " + mBall.getY());
+                // setForceX(-10);
+                // setForceY(-10);
                 return true;
             }
         }

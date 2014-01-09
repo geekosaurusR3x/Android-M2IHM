@@ -8,9 +8,8 @@ public class Bullet extends SpriteObject {
     private double mDirY;
     private int mVelocity;
 
-    public Bullet() {
-        super();
-    }
+    private int mTimeToLive = 100;
+
     public Bullet(int x, int y, int width, int height) {
         super(x, y, width, height);
     }
@@ -32,5 +31,17 @@ public class Bullet extends SpriteObject {
 
     public void decreseVelocity() {
         if(mVelocity>0) { mVelocity--;}
+    }
+
+    public int getTimeToLive() {
+        return mTimeToLive;
+    }
+
+    public void decreaseTimeToLive() {
+        mTimeToLive--;
+    }
+
+    public void setTimeToLive(int mTimeToLive) {
+        this.mTimeToLive = mTimeToLive;
     }
 }
