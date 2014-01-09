@@ -18,6 +18,9 @@ abstract public class SpriteObject {
     protected int height;
     protected double ratioWidth;
     protected double ratioHeight;
+    private double mDirX;
+    private double mDirY;
+    private int mVelocity;
 
     public SpriteObject() {
         this.width = 64;
@@ -117,5 +120,26 @@ abstract public class SpriteObject {
         matrix.postRotate(angle);
         Bitmap scaledBitmap = Bitmap.createScaledBitmap(this.OriginalSprite,this.OriginalSprite.getWidth(),this.OriginalSprite.getHeight(), true);
         this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
+    }
+
+    public void setDir(double CibleX, double CibleY) {
+        double x = CibleX - getX();
+        double y = CibleY - getY();
+        double r = Math.sqrt((x * x) + (y * y));
+        this.mDirX = x/r;
+        this.mDirY = y/r;
+    }
+
+    public void setVelocity(int velocity) {
+        this.mVelocity = velocity;
+    }
+
+    public void forward() {
+        x += mVelocity * mDirX;
+        y += mVelocity * mDirY;
+    }
+
+    public void decreseVelocity() {
+        if(mVelocity>0) { mVelocity--;}
     }
 }

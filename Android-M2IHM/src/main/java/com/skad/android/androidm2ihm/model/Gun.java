@@ -13,11 +13,7 @@ public class Gun extends SpriteObject {
 
     public Bullet fire(int CibleX, int CibleY) {
         Bullet temp = new Bullet(this.getBoundingRectangle().centerX(),this.getBoundingRectangle().centerY(),(int)(32*this.ratioWidth),(int)(32*this.ratioHeight));
-        int x = CibleX - getX();
-        int y = CibleY - getY();
-        double r = Math.sqrt((x * x) + (y * y));
-        temp.setDirX(x/r);
-        temp.setDirY(y/r);
+        temp.setDir(CibleX,CibleY);
         temp.setVelocity(mVelocity);
         return temp;
 }
