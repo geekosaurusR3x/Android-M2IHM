@@ -30,6 +30,15 @@ public class Score extends Observable {
         mCollisions = 0;
     }
 
+    public void nextLevel() {
+        mLevelId++;
+        reset();
+    }
+
+    public void setLevel(int levelNumber) {
+        mLevelId = levelNumber;
+    }
+
     public int getTotalScore() {
         int score = (1000 * mLevelId) - mCollisions;
         return score > 0 ? score : 0;

@@ -17,7 +17,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
-import com.skad.android.androidm2ihm.view.BackgroundView;
 import com.skad.android.androidm2ihm.view.LevelView;
 
 /**
@@ -32,7 +31,6 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     private MediaPlayer mBackgroundMusic;
     private int mLevelId;
     private LevelView mLevelView;
-    private BackgroundView mBackgroundView;
     private SensorManager mSensorManager;
     private boolean mPlayerFailed = false;
 
@@ -93,12 +91,8 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
                 break;
         }
         mLevelView = new LevelView(this, levelResId, mLevelId);
-        mBackgroundView = new BackgroundView(this);
-        View containerLvl = findViewById(R.id.view_lvl);
-        ((ViewGroup) containerLvl).addView(mLevelView);
-        View containerBackground = findViewById(R.id.view_background);
-        ((ViewGroup) containerBackground).addView(mBackgroundView);
-
+        View container = findViewById(R.id.container);
+        ((ViewGroup) container).addView(mLevelView);
     }
 
     @Override
@@ -130,7 +124,8 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     public void onSensorChanged(SensorEvent event) {
         float xValue = event.values[1];
         float yValue = event.values[0];
-        mLevelView.setForce(xValue, yValue);
+        mLevelView.setForceX(xValue);
+        mLevelView.setForceY(yValue);
     }
 
     @Override

@@ -4,27 +4,24 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.Log;
-import com.skad.android.androidm2ihm.utils.Functions;
+import com.skad.android.androidm2ihm.utils.Helper;
 
 /**
  * Created by skad on 19/12/13.
  */
 abstract public class SpriteObject {
-    private Bitmap Sprite;
-    private Bitmap OriginalSprite;
     protected int x;
     protected int y;
     protected int width;
     protected int height;
     protected double ratioWidth;
     protected double ratioHeight;
-    protected double mDirX;
-    protected double mDirY;
-    private double mVelocity;
+    private Bitmap Sprite;
+    private Bitmap OriginalSprite;
 
     public SpriteObject() {
-        this(0, 0, 64, 64);
+        this.width = 64;
+        this.height = 64;
     }
 
     protected SpriteObject(int x, int y, int width, int height) {
@@ -32,7 +29,6 @@ abstract public class SpriteObject {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.setVelocity(1);
     }
 
     public int getX() {
@@ -63,17 +59,17 @@ abstract public class SpriteObject {
         return Sprite;
     }
 
+    public void setSprite(Bitmap sprite) {
+        Sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
+        OriginalSprite = Sprite;
+    }
+
     public void setRatioWidth(double ratioWidth) {
         this.ratioWidth = ratioWidth;
     }
 
     public void setRatioHeight(double ratioHeight) {
         this.ratioHeight = ratioHeight;
-    }
-
-    public void setSprite(Bitmap sprite) {
-        Sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
-        OriginalSprite = Sprite;
     }
 
     public Rect getBoundingRectangle() {
@@ -85,7 +81,10 @@ abstract public class SpriteObject {
             Rect collisionBounds = getCollisionBounds(getBoundingRectangle(), wall.getBoundingRectangle());
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
-                    int bitmap1Pixel = Sprite.getPixel(i - x, j - y);
+                    int deltaX = i - x, deltaY = j - y;
+                    deltaX = Helper.maxOrZero(deltaX, Sprite.getWidth());
+                    deltaY = Helper.maxOrZero(deltaY, Sprite.getHeight());
+                    int bitmap1Pixel = Sprite.getPixel(deltaX, deltaY);
                     int bitmap2Pixel = wall.getSprite().getPixel(i - wall.getX(), j - wall.getY());
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return true;
@@ -108,48 +107,17 @@ abstract public class SpriteObject {
         return pixel != Color.TRANSPARENT;
     }
 
-    public void rotate(int CibleX, int CibleY)
-    {
-        if( this.OriginalSprite != null)
-        {
-            double dx =     CibleX - this.getBoundingRectangle().centerX();
-            double dy =     CibleY - this.getBoundingRectangle().centerY();
-            float angle = (float) Math.toDegrees(Math.atan2( dy,dx));
-            if(angle < 0){
-                angle += 360;
-            }
-
-            Matrix matrix = new Matrix();
-            matrix.postRotate(angle);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(this.OriginalSprite,this.OriginalSprite.getWidth(),this.OriginalSprite.getHeight(), true);
-            this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
+    public void rotate(int CibleX, int CibleY) {
+        double dx = CibleX - this.getBoundingRectangle().centerX();
+        double dy = CibleY - this.getBoundingRectangle().centerY();
+        float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+        if (angle < 0) {
+            angle += 360;
         }
-    }
-      
-    public void setDir(double CibleX, double CibleY) {
-        Object[] temp = Functions.GetVectorFromPoint(getX(), getY(), CibleX, CibleY);
-        this.mDirX = (Double)temp[0];
-        this.mDirY = (Double)temp[1];
-        this.rotate((int)CibleX,(int)CibleY);
-    }
 
-    public void setVelocity(int velocity) {
-        this.mVelocity = velocity;
-    }
-
-    public void forward() {
-        x += mVelocity * mDirX;
-        y += mVelocity * mDirY;
-    }
-
-
-
-    public void backward() {
-        x -= mVelocity * mDirX;
-        y -= mVelocity * mDirY;
-    }
-
-    public void decreseVelocity() {
-        if(mVelocity>0) { mVelocity--;}
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        Bitmap scaledBitmap = Bitmap.createScaledBitmap(this.OriginalSprite, this.OriginalSprite.getWidth(), this.OriginalSprite.getHeight(), true);
+        this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
     }
 }
