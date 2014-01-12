@@ -1,6 +1,7 @@
 package com.skad.android.androidm2ihm.model;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
 
@@ -176,6 +177,65 @@ public class Level extends Observable {
             setChanged();
             notifyObservers(EVENT.GAME_OVER);
         }
+    }
+
+    public void updateBullets() {
+        for (Gun gun : mGunList) {
+            long currentTimeMs = System.currentTimeMillis();
+            gun.rotate((int) mBall.getXPos(), (int) mBall.getYPos());
+            if (currentTimeMs - gun.getLastTimeFired() > gun.getFireRate()) {
+                gun.fire((int) mBall.getXPos(), (int) mBall.getYPos());
+                gun.setLastTimeFired(currentTimeMs);
+                // Log.d(TAG, "Fired bullet #" + gun.getBulletList().size());
+            }
+            Iterator<Bullet> bulletIterator = gun.getBulletList().iterator();
+            while (bulletIterator.hasNext()) {
+                Bullet bullet = bulletIterator.next();
+                bullet.forward();
+                //bullet.decreaseVelocity();
+                for (final Wall wall : mWallList) {
+                    if (bullet.intersects(wall)) {
+                        bulletIterator.remove();
+                    }
+                }
+            }
+        }
+    }
+
+    public void update() {
+        /*if (playerHitWall()) { // Player hit a wall
+            mBall.setXPos(lastX);
+            mBall.setYPos(lastY);
+            mBall.setShowAlternateSprite(true);
+            // TODO bounce
+            // ball.setDir(-ball.getDirX(), ball.getDirY());
+            setChanged();
+            notifyObservers(EVENT.COLLISION_WALL);
+        } else {
+            mBall.setShowAlternateSprite(false);
+        }
+        for (final Gun gun : mGunList) {
+            Bullet bullet = playerWasHitByBullet(gun);
+            if (bullet != null) { // Player got hit by a bullet
+                // TODO bounce
+                mBall.setShowAlternateSprite(true);
+                gun.removeBullet(bullet);
+                setChanged();
+                notifyObservers(EVENT.COLLISION_BULLET);
+            } else {
+                mBall.setShowAlternateSprite(false);
+            }
+        }
+        if (playerReachedEnd()) { // Epic win
+            //mLevelListener.onLevelCompleted();
+            setChanged();
+            notifyObservers(EVENT.GAME_SUCCESS);
+        }
+        if (playerFellIntoHole()) { // Game over
+            //mLevelListener.onLevelFailed();
+            setChanged();
+            notifyObservers(EVENT.GAME_OVER);
+        }*/
     }
 
     /**

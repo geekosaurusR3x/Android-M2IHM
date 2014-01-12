@@ -53,6 +53,9 @@ public class LevelParser {
                     int yPos = Integer.parseInt(temp[2]);
                     int width = Integer.parseInt(temp[3]);
                     int height = Integer.parseInt(temp[4]);
+                    int fireRate = 1000; // Default fire rate
+                    if (temp.length > 5)
+                        fireRate = Integer.parseInt(temp[5]);
 
                     // Ajusting for the screen size
                     xPos = (int) (xPos * ratioHeight);
@@ -68,7 +71,7 @@ public class LevelParser {
                         ball.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded));
                         ball.setAlternateSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded_red));
                     } else if (objectType.equals("g")) { // gun
-                        Gun gun = new Gun(xPos, yPos, width, height);
+                        Gun gun = new Gun(xPos, yPos, width, height, fireRate);
                         gun.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.gun));
                         gun.setBulletSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
                         gun.setRatioHeight(ratioHeight);

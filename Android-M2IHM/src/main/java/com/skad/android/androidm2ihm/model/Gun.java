@@ -13,10 +13,20 @@ public class Gun extends SpriteObject {
     private long mLastTimeFired = 0;
     private List<Bullet> mBulletList;
     private Bitmap mBulletSprite;
+    private int mFireRate = 1000;
 
-    public Gun(int x, int y, int width, int height) {
+    public Gun(int x, int y, int width, int height, int fireRate) {
         super(x, y, width, height);
         mBulletList = new ArrayList<Bullet>();
+        mFireRate = fireRate;
+    }
+
+    public int getFireRate() {
+        return mFireRate;
+    }
+
+    public void setFireRate(int fireRate) {
+        this.mFireRate = fireRate;
     }
 
     public Bitmap getBulletSprite() {
