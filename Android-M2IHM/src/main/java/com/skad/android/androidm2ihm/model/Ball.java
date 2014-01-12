@@ -4,10 +4,14 @@ package com.skad.android.androidm2ihm.model;
  * Created by skad on 19/12/13.
  */
 public class Ball extends SpriteObject {
+
+    public static final double ROTATE_THRESHOLD = 0.2;
+
     public Ball() {
         super();
-        this.width = 32;
-        this.height = 32;
+        mWidth = 32;
+        mHeight = 32;
+        mVelocity = 2.0;
     }
 
     public Ball(int x, int y, int width, int height) {
@@ -15,25 +19,14 @@ public class Ball extends SpriteObject {
     }
 
     @Override
-    public void setDir(double CibleX, double CibleY)
-    {
-        this.mDirX = CibleX;
-        this.mDirY = CibleY;
-        if(Math.abs(CibleX) > 0.2 && Math.abs(CibleY) > 0.2 )
-        {
-            this.rotate((int)(getX()+(100*CibleX)),(int)(getY()+(100*CibleY)));
+    public void setDir(double targetX, double targetY) {
+        if (mDir != null) {
+            mDir.setXandY(targetX, targetY);
+        } else {
+            mDir = new Vector2D(targetX, targetY);
         }
-    }
-
-    public void applyForceY(float Y) {
-        super.y += Y;
-    }
-
-    public void removeForceX(float X) {
-        super.x -= X;
-    }
-
-    public void removeForceY(float Y) {
-        super.y -= Y;
+        if (Math.abs(targetX) > ROTATE_THRESHOLD && Math.abs(targetY) > ROTATE_THRESHOLD) {
+            rotate((int) (getXPos() + (100 * targetX)), (int) (getYPos() + (100 * targetY)));
+        }
     }
 }

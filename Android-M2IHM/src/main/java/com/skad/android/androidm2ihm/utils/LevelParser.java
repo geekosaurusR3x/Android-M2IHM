@@ -65,10 +65,12 @@ public class LevelParser {
                         ratioHeight = (double) screenHeight / height;
                     } else if (objectType.equals("p")) { // player (ball)
                         ball = new Ball(xPos, yPos, width, height);
-                        ball.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.ball));
+                        ball.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded));
+                        ball.setAlternateSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded_red));
                     } else if (objectType.equals("g")) { // gun
                         Gun gun = new Gun(xPos, yPos, width, height);
                         gun.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.gun));
+                        gun.setBulletSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
                         gun.setRatioHeight(ratioHeight);
                         gun.setRatioWidth(ratioWidth);
                         gunList.add(gun);
@@ -81,17 +83,19 @@ public class LevelParser {
                         holeList.add(hole);
                     } else { // Walls
                         Wall wall = new Wall(xPos, yPos, width, height);
+                        int drawableResID = 0;
                         if (objectType.equals("w")) { // wall (straight)
-                            wall.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.wall_grey_texture));
+                            drawableResID = R.drawable.wall_grey_texture;
                         } else if (objectType.equals("abl")) { // wall (curved - bottom left)
-                            wall.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.arcwall_bottom_left));
+                            drawableResID = R.drawable.arcwall_bottom_left;
                         } else if (objectType.equals("abr")) { // wall (curved - bottom right)
-                            wall.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.arcwall_bottom_right));
+                            drawableResID = R.drawable.arcwall_bottom_right;
                         } else if (objectType.equals("atl")) { // wall (curved - top left)
-                            wall.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.arcwall_top_left));
+                            drawableResID = R.drawable.arcwall_top_left;
                         } else if (objectType.equals("atr")) { // wall (curved - top right)
-                            wall.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.arcwall_top_right));
+                            drawableResID = R.drawable.arcwall_top_right;
                         }
+                        wall.setSprite(BitmapFactory.decodeResource(context.getResources(), drawableResID));
                         wallList.add(wall);
                     }
                 }

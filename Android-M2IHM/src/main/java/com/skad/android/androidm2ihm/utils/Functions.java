@@ -7,40 +7,32 @@ public class Functions {
     private Functions() {
     }
 
-    public static Object[] GenerateAleaXY(int Xmax, int Ymax)
-    {
+    public static int[] GenerateAleaXY(int xMax, int yMax) {
         int lower = 0;
-
-        Object[] temp = {(int)(Math.random() * (Xmax-lower)) + lower,(int)(Math.random() * (Ymax-lower)) + lower};
-
+        int[] temp = {(int) (Math.random() * (xMax - lower)) + lower, (int) (Math.random() * (yMax - lower)) + lower};
         return temp;
     }
 
-    public static double GenerateAleaDouble(int Xmax)
-    {
+    public static double randomDouble(int xMax) {
         int lower = 0;
-
-        return (Math.random() * (Xmax-lower)) + lower;
+        return (Math.random() * (xMax - lower)) + lower;
     }
 
-    public static double GenerateAleaInt(int Xmax)
-    {
+    public static double randomInt(int xMax) {
         int lower = 0;
-
-        return (int)((Math.random() * (Xmax-lower)) + lower);
+        return (int) ((Math.random() * (xMax - lower)) + lower);
     }
-    public static Object[] GetVectorFromPoint(double X1, double Y1, double X2, double Y2)
-    {
+
+    public static double[] vectorFromPoint(double X1, double Y1, double X2, double Y2) {
         double x = X2 - X1;
         double y = Y2 - Y1;
-
-        return GetVectorNormeFromVector(x,y);
+        return normalVectorFromVector(x, y);
     }
-    public static Object[] GetVectorNormeFromVector(double X,double Y)
-    {
+
+    public static double[] normalVectorFromVector(double X, double Y) {
         double r = Math.sqrt((X * X) + (Y * Y));
-        Object[] temp = {X/r,Y/r};
-        return  temp;
+        double[] temp = {X / r, Y / r};
+        return temp;
     }
 
 }

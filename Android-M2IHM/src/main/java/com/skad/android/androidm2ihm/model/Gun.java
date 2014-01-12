@@ -1,21 +1,56 @@
 package com.skad.android.androidm2ihm.model;
 
 
+import android.graphics.Bitmap;
+
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by skad on 27/12/13.
  */
 public class Gun extends SpriteObject {
-    private int mVelocity = 50;
+    private long mLastTimeFired = 0;
+    private List<Bullet> mBulletList;
+    private Bitmap mBulletSprite;
 
     public Gun(int x, int y, int width, int height) {
         super(x, y, width, height);
+        mBulletList = new ArrayList<Bullet>();
     }
 
-    public Bullet fire(int CibleX, int CibleY) {
-        Bullet temp = new Bullet(this.getBoundingRectangle().centerX(),this.getBoundingRectangle().centerY(),(int)(32*this.ratioWidth),(int)(32*this.ratioHeight));
-        temp.setDir(CibleX,CibleY);
-        temp.setVelocity(mVelocity);
-        return temp;
-}
+    public Bitmap getBulletSprite() {
+        return mBulletSprite;
+    }
 
+    public void setBulletSprite(Bitmap sprite) {
+        mBulletSprite = sprite;
+    }
+
+    public List<Bullet> getBulletList() {
+        return mBulletList;
+    }
+
+    public void setBulletList(List<Bullet> bulletList) {
+        this.mBulletList = bulletList;
+    }
+
+    public long getLastTimeFired() {
+        return mLastTimeFired;
+    }
+
+    public void setLastTimeFired(long lastTimeFired) {
+        this.mLastTimeFired = lastTimeFired;
+    }
+
+    public void fire(int targetX, int targetY) {
+        Bullet bullet = new Bullet(getBoundingRectangle().centerX(), getBoundingRectangle().centerY(), (int) (32 * mRatioWidth), (int) (32 * mRatioHeight));
+        bullet.setDir(targetX, targetY);
+        bullet.setSprite(mBulletSprite);
+        mBulletList.add(bullet);
+    }
+
+    public void removeBullet(Bullet bullet) {
+        mBulletList.remove(bullet);
+    }
 }

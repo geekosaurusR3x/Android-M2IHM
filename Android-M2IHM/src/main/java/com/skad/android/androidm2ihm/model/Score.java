@@ -28,6 +28,8 @@ public class Score extends Observable {
 
     public void reset() {
         mCollisions = 0;
+        setChanged();
+        notifyObservers();
     }
 
     public void nextLevel() {

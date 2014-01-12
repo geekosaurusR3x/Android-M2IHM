@@ -9,8 +9,6 @@
     <string name="title_activity_level">LevelActivity</string>
 
     <string name="pref_cat_ui">UI</string>
-    <string name="pref_hide_actionbar">ActionBar verstecken</string>
-    <string name="pref_hide_actionbar_summ">ActionBar verstecken</string>
     <string name="pref_key_highscore">highscore_%1$d</string>
 
     <string name="txt_label_greeting">Levelauswahl</string>
@@ -40,6 +38,9 @@
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
 
     <string name="score">Score: %1$d</string>
+    <string name="pref_cat_audio">Ton</string>
+    <string name="pref_mute">Sound abschalten</string>
+    <string name="pref_mute_summ">Stumm schalten</string>
 
 
 </resources>

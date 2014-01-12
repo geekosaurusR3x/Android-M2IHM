@@ -2,15 +2,14 @@ package com.skad.android.androidm2ihm.model;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  * Created by pschmitt on 1/9/14.
  */
-public class Level {
+public class Level extends Observable {
     public static final int LEVEL_COUNT = 3;
-
-    public static enum COLLISION {COLLISION_WALL, COLLISION_BULLET}
-
+    private static Level mInstance;
     ;
     // Business objects
     private int mLevelNumber;
@@ -18,9 +17,7 @@ public class Level {
     private Hole mEnd;
     private List<Wall> mWallList = new ArrayList<Wall>();
     private List<Hole> mHoleList = new ArrayList<Hole>();
-    private List<Bullet> mBulletList = new ArrayList<Bullet>();
     private List<Gun> mGunList = new ArrayList<Gun>();
-    private static Level mInstance;
 
     private Level() {
     }
@@ -42,18 +39,9 @@ public class Level {
         mGunList = gunList;
     }
 
-    /*public Level(int levelNumber, Ball ball, Hole end, List<Wall> wallList, List<Gun> gunList) {
-        mLevelNumber = levelNumber;
-        mBall = ball;
-        mEnd = end;
-        mWallList = wallList;
-        mGunList = gunList;
-    }*/
-
     public void reset() {
         mWallList.clear();
         mGunList.clear();
-        mBulletList.clear();
         mHoleList.clear();
         mEnd = null;
         mBall = null;
@@ -64,7 +52,7 @@ public class Level {
     }
 
     public void setBall(Ball ball) {
-        this.mBall = mBall;
+        mBall = ball;
     }
 
     public Hole getEnd() {
@@ -72,7 +60,7 @@ public class Level {
     }
 
     public void setEnd(Hole end) {
-        this.mEnd = end;
+        mEnd = end;
     }
 
     public List<Wall> getWallList() {
@@ -80,7 +68,7 @@ public class Level {
     }
 
     public void setWallList(List<Wall> wallList) {
-        this.mWallList = wallList;
+        mWallList = wallList;
     }
 
     public List<Hole> getHoleList() {
@@ -88,15 +76,7 @@ public class Level {
     }
 
     public void setHoleList(List<Hole> holeList) {
-        this.mHoleList = holeList;
-    }
-
-    public List<Bullet> getBulletList() {
-        return mBulletList;
-    }
-
-    public void setBulletList(List<Bullet> bulletList) {
-        this.mBulletList = bulletList;
+        mHoleList = holeList;
     }
 
     public boolean containsGuns() {
@@ -108,7 +88,7 @@ public class Level {
     }
 
     public void setGunList(List<Gun> gunList) {
-        this.mGunList = gunList;
+        mGunList = gunList;
     }
 
     public int getLevelNumber() {
@@ -116,7 +96,86 @@ public class Level {
     }
 
     public void setLevelNumber(int levelNumber) {
-        this.mLevelNumber = levelNumber;
+        mLevelNumber = levelNumber;
+    }
+
+    public boolean playerReachedEnd() {
+        return mEnd.intoHole(mBall);
+    }
+
+    public boolean playerFellIntoHole() {
+        for (final Hole hole : mHoleList) {
+            if (hole.intoHole(mBall)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean playerHitWall() {
+        for (final Wall wall : mWallList) {
+            if (mBall.intersects(wall)) {
+                // mLevelListener.onCollisionDetected(Level.COLLISION.COLLISION_WALL);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Bullet playerWasHitByBullet(Gun gun) {
+        for (final Bullet bullet : gun.getBulletList()) {
+            if (mBall.intersects(bullet)) {
+                // mLevelListener.onCollisionDetected(Level.COLLISION.COLLISION_BULLET);
+                return bullet;
+            }
+        }
+        return null;
+    }
+
+    public void updatePlayerPosition(float forceX, float forceY) {
+        if (mBall == null) {
+            return;
+        }
+        int lastX = (int) mBall.getXPos();
+        int lastY = (int) mBall.getYPos();
+
+        mBall.setDir(forceX, forceY);
+        mBall.forward();
+        //mBall.setPosition(new Vector2D(mBall.getXPos() + mBall.getVelocity() * forceX, mBall.getYPos() + mBall.getVelocity() * forceY));
+
+        if (playerHitWall()) { // Player hit a wall
+            mBall.setXPos(lastX);
+            mBall.setYPos(lastY);
+            mBall.setShowAlternateSprite(true);
+            // TODO bounce
+            // ball.setDir(-ball.getDirX(), ball.getDirY());
+            setChanged();
+            notifyObservers(EVENT.COLLISION_WALL);
+        } else {
+            mBall.setShowAlternateSprite(false);
+        }
+        for (final Gun gun : mGunList) {
+            Bullet bullet = playerWasHitByBullet(gun);
+            if (bullet != null) { // Player got hit by a bullet
+                // TODO bounce
+                mBall.setShowAlternateSprite(true);
+                gun.removeBullet(bullet);
+                setChanged();
+                notifyObservers(EVENT.COLLISION_BULLET);
+            } else {
+                mBall.setShowAlternateSprite(false);
+            }
+        }
+        if (playerReachedEnd()) { // Epic win
+            //mLevelListener.onLevelCompleted();
+            setChanged();
+            notifyObservers(EVENT.GAME_SUCCESS);
+        }
+        if (playerFellIntoHole()) { // Game over
+            //mLevelListener.onLevelFailed();
+            setChanged();
+            notifyObservers(EVENT.GAME_OVER);
+        }
     }
 
     /**
@@ -128,13 +187,19 @@ public class Level {
     public List<SpriteObject> getAllSprites() {
         List<SpriteObject> spriteList = new ArrayList<SpriteObject>();
 
-        spriteList.addAll(mBulletList);
+        //spriteList.addAll(mBulletList);
+        for (final Gun gun : mGunList) {
+            spriteList.addAll(gun.getBulletList());
+        }
         spriteList.addAll(mHoleList);
         spriteList.addAll(mGunList);
         spriteList.addAll(mWallList);
         spriteList.add(mEnd);
         spriteList.add(mBall);
 
+
         return spriteList;
     }
+
+    public static enum EVENT {GAME_OVER, GAME_SUCCESS, COLLISION_WALL, COLLISION_BULLET}
 }

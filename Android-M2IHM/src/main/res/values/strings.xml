@@ -36,6 +36,9 @@
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
 
     <string name="score">Score: %1$d</string>
+    <string name="pref_cat_audio">Audio</string>
+    <string name="pref_mute">Mute</string>
+    <string name="pref_mute_summ">Mute sound if enabled</string>
 
 
 </resources>

@@ -11,8 +11,8 @@ public class Hole extends SpriteObject {
     }
 
     public boolean intoHole(SpriteObject balle) {
-        int tierSize = this.width / 3;
-        Rect hole_rect = new Rect(getBoundingRectangle().centerX() - tierSize, getBoundingRectangle().centerY() - tierSize, getBoundingRectangle().centerX() + tierSize, getBoundingRectangle().centerY() +tierSize);
-        return hole_rect.contains(balle.getBoundingRectangle().centerX(), balle.getBoundingRectangle().centerY());
+        int tierSize = this.mWidth / 3;
+        Rect holeRect = new Rect(getBoundingRectangle().centerX() - tierSize, getBoundingRectangle().centerY() - tierSize, getBoundingRectangle().centerX() + tierSize, getBoundingRectangle().centerY() + tierSize);
+        return holeRect.contains(balle.getBoundingRectangle().centerX(), balle.getBoundingRectangle().centerY());
     }
 }

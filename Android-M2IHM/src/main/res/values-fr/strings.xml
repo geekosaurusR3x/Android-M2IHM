@@ -10,8 +10,6 @@
     <string name="title_activity_level">LevelActivity</string>
 
     <string name="pref_cat_ui">UI</string>
-    <string name="pref_hide_actionbar">Cacher ActionBar</string>
-    <string name="pref_hide_actionbar_summ">Cache l\'ActionBar si activé</string>
     <string name="pref_key_highscore">highscore_%1$d</string>
 
     <string name="txt_label_greeting">Quel Niveau?</string>
@@ -45,6 +43,9 @@
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
 
     <string name="score">Score: %1$d</string>
+    <string name="pref_cat_audio">Sons</string>
+    <string name="pref_mute">Surdine</string>
+    <string name="pref_mute_summ">Désactiver le son</string>
 
 
 </resources>

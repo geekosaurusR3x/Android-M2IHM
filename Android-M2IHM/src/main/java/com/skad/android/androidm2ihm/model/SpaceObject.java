@@ -3,7 +3,7 @@ package com.skad.android.androidm2ihm.model;
 /**
  * Created by skad on 09/01/14.
  */
-public class SpaceObject  extends SpriteObject{
+public class SpaceObject extends SpriteObject {
     public SpaceObject() {
         super();
     }
