@@ -65,7 +65,6 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
 
         // Init score
         mScore = new Score(mLevelNumber);
-        mScore.addObserver(this);
 
         // Init task
         // mGameTask = new GameTask(this);
@@ -158,11 +157,20 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     private void drawLevel() {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mLevel = LevelParser.getLevelFromFile(this, mLevelNumber, metrics.widthPixels, metrics.heightPixels);
-        mLevel.addObserver(this);
         if (!mMute) {
             startBackgroundMusicPlayback();
         }
         startGame();
+    }
+
+    private void unregisterObserver() {
+        mLevel.deleteObserver(this);
+        mScore.deleteObserver(this);
+    }
+
+    private void registerObserver() {
+        mLevel.addObserver(this);
+        mScore.addObserver(this);
     }
 
     @Override
@@ -172,6 +180,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         // Sound preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mMute = sharedPrefs.getBoolean(getString(R.string.pref_key_mute), false);
+        registerObserver();
     }
 
     @Override
@@ -179,7 +188,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         super.onPause();
         mSensorManager.unregisterListener(this);
         stopBackgroundMusicPlayback();
-        mLevel.deleteObserver(this);
+        unregisterObserver();
     }
 
     @Override

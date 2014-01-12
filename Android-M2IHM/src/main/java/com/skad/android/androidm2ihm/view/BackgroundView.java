@@ -9,7 +9,7 @@ import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.SpaceObject;
 import com.skad.android.androidm2ihm.model.Vector2D;
-import com.skad.android.androidm2ihm.utils.Functions;
+import com.skad.android.androidm2ihm.utils.MathUtils;
 
 import java.util.ArrayList;
 
@@ -50,9 +50,9 @@ public class BackgroundView extends View {
             mSpaceObject.forward();
         }
         if (currentTimeMillis() - mLastTimeSpaceObject > 10000) {
-            Vector2D pos = Functions.GenerateAleaXY(mScreenHeight, mScreenWidth);
-            Vector2D target = Functions.GenerateAleaXY(mScreenHeight, mScreenWidth);
-            double scaleFactor = Functions.randomDouble(2);
+            Vector2D pos = MathUtils.randomVector(mScreenHeight, mScreenWidth);
+            Vector2D target = MathUtils.randomVector(mScreenHeight, mScreenWidth);
+            double scaleFactor = MathUtils.randomDouble(2);
             SpaceObject spaceObject = new SpaceObject(pos, (int) (128 * mRatioWidth * scaleFactor), (int) (128 * mRatioHeight * scaleFactor));
             spaceObject.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ship1));
             spaceObject.setDir(target);

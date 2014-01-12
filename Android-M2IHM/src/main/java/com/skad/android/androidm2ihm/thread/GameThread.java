@@ -1,10 +1,9 @@
 package com.skad.android.androidm2ihm.thread;
 
 import android.util.Log;
-import com.skad.android.androidm2ihm.model.Ball;
-import com.skad.android.androidm2ihm.model.Bullet;
-import com.skad.android.androidm2ihm.model.Gun;
-import com.skad.android.androidm2ihm.model.Level;
+import com.skad.android.androidm2ihm.model.*;
+
+import java.util.Iterator;
 
 /**
  * Created by pschmitt on 1/12/14.
@@ -33,9 +32,16 @@ public class GameThread extends Thread {
                         gun.setLastTimeFired(currentTimeMs);
                         Log.d(TAG, "Fired bullet #" + gun.getBulletList().size());
                     }
-                    for (final Bullet bullet : gun.getBulletList()) {
+                    Iterator<Bullet> bulletIterator = gun.getBulletList().iterator();
+                    while (bulletIterator.hasNext()) {
+                        Bullet bullet = bulletIterator.next();
                         bullet.forward();
                         //bullet.decreaseVelocity();
+                        for (final Wall wall : mLevel.getWallList()) {
+                            if (bullet.intersects(wall)) {
+                                bulletIterator.remove();
+                            }
+                        }
                     }
                 }
             }

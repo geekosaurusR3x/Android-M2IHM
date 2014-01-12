@@ -4,8 +4,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import com.skad.android.androidm2ihm.utils.Functions;
-import com.skad.android.androidm2ihm.utils.Helper;
+import com.skad.android.androidm2ihm.utils.MathUtils;
 
 /**
  * Created by skad on 19/12/13.
@@ -111,12 +110,12 @@ abstract public class SpriteObject {
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
                     int deltaX1 = i - (int) mPosition.getX(), deltaY1 = j - (int) mPosition.getY();
-                    deltaX1 = Helper.maxOrZero(deltaX1, mScaledSprite.getWidth());
-                    deltaY1 = Helper.maxOrZero(deltaY1, mScaledSprite.getHeight());
+                    deltaX1 = MathUtils.maxOrZero(deltaX1, mScaledSprite.getWidth());
+                    deltaY1 = MathUtils.maxOrZero(deltaY1, mScaledSprite.getHeight());
                     int bitmap1Pixel = mScaledSprite.getPixel(deltaX1, deltaY1);
                     int deltaX2 = i - (int) object.getXPos(), deltaY2 = j - (int) object.getYPos();
-                    deltaX2 = Helper.maxOrZero(deltaX2, object.getScaledSprite().getWidth());
-                    deltaY2 = Helper.maxOrZero(deltaY2, object.getScaledSprite().getHeight());
+                    deltaX2 = MathUtils.maxOrZero(deltaX2, object.getScaledSprite().getWidth());
+                    deltaY2 = MathUtils.maxOrZero(deltaY2, object.getScaledSprite().getHeight());
                     int bitmap2Pixel = object.getScaledSprite().getPixel(deltaX2, deltaY2);
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return true;
@@ -144,7 +143,7 @@ abstract public class SpriteObject {
     }
 
     public void setDir(double targetX, double targetY) {
-        Vector2D temp = Functions.vectorFromPoint(getXPos(), getYPos(), targetX, targetY);
+        Vector2D temp = MathUtils.vectorFromPoint(getXPos(), getYPos(), targetX, targetY);
         mDir = temp;
         rotate((int) targetX, (int) targetY);
     }

@@ -1,5 +1,7 @@
 package com.skad.android.androidm2ihm.model;
 
+import com.skad.android.androidm2ihm.utils.MathUtils;
+
 /**
  * Created by pschmitt on 1/11/14.
  */
@@ -25,6 +27,36 @@ public class Vector2D {
             normY = mY / len;
         }
         return new Vector2D(normX, normY);
+    }
+
+    public void add(Vector2D vector) {
+        mX += vector.getX();
+        mY += vector.getY();
+    }
+
+    public void sub(Vector2D vector) {
+        mX -= vector.getX();
+        mY -= vector.getY();
+    }
+
+    public void mult(Vector2D vector) {
+        mX *= vector.getX();
+        mY *= vector.getY();
+    }
+
+    public void div(Vector2D vector) {
+        mX /= vector.getX();
+        mY /= vector.getY();
+    }
+
+    public Vector2D invert() {
+        return new Vector2D(-mX, -mY);
+    }
+
+    public float angle() {
+        float angle = (float) Math.atan2(mY, mX) * MathUtils.radiansToDegrees;
+        if (angle < 0) angle += 360;
+        return angle;
     }
 
     public double getX() {

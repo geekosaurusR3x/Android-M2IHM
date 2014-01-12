@@ -187,16 +187,14 @@ public class Level extends Observable {
     public List<SpriteObject> getAllSprites() {
         List<SpriteObject> spriteList = new ArrayList<SpriteObject>();
 
-        //spriteList.addAll(mBulletList);
+        spriteList.addAll(mHoleList);
         for (final Gun gun : mGunList) {
             spriteList.addAll(gun.getBulletList());
         }
-        spriteList.addAll(mHoleList);
         spriteList.addAll(mGunList);
         spriteList.addAll(mWallList);
         spriteList.add(mEnd);
         spriteList.add(mBall);
-
 
         return spriteList;
     }
