@@ -1,5 +1,7 @@
 package com.skad.android.androidm2ihm.utils;
 
+import com.skad.android.androidm2ihm.model.Vector2D;
+
 /**
  * Created by skad on 09/01/14.
  */
@@ -7,10 +9,9 @@ public class Functions {
     private Functions() {
     }
 
-    public static int[] GenerateAleaXY(int xMax, int yMax) {
-        int lower = 0;
-        int[] temp = {(int) (Math.random() * (xMax - lower)) + lower, (int) (Math.random() * (yMax - lower)) + lower};
-        return temp;
+    public static Vector2D GenerateAleaXY(int xMax, int yMax) {
+        int lower = 0; // ??
+        return new Vector2D((int) (Math.random() * (xMax - lower)) + lower, (int) (Math.random() * (yMax - lower)) + lower);
     }
 
     public static double randomDouble(int xMax) {
@@ -23,16 +24,8 @@ public class Functions {
         return (int) ((Math.random() * (xMax - lower)) + lower);
     }
 
-    public static double[] vectorFromPoint(double X1, double Y1, double X2, double Y2) {
-        double x = X2 - X1;
-        double y = Y2 - Y1;
-        return normalVectorFromVector(x, y);
+    public static Vector2D vectorFromPoint(double X1, double Y1, double X2, double Y2) {
+        Vector2D vector = new Vector2D(X2 - X1, Y2 - Y1);
+        return vector.normalize();
     }
-
-    public static double[] normalVectorFromVector(double X, double Y) {
-        double r = Math.sqrt((X * X) + (Y * Y));
-        double[] temp = {X / r, Y / r};
-        return temp;
-    }
-
 }

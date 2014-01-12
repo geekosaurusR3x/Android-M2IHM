@@ -34,6 +34,12 @@ abstract public class SpriteObject {
         mHeight = height;
     }
 
+    protected SpriteObject(Vector2D pos, int width, int height) {
+        mPosition = pos;
+        mWidth = width;
+        mHeight = height;
+    }
+
     public Vector2D getPosition() {
         return mPosition;
     }
@@ -133,13 +139,13 @@ abstract public class SpriteObject {
         return pixel != Color.TRANSPARENT;
     }
 
+    public void setDir(Vector2D vector) {
+        setDir(vector.getX(), vector.getY());
+    }
+
     public void setDir(double targetX, double targetY) {
-        double[] temp = Functions.vectorFromPoint(getXPos(), getYPos(), targetX, targetY);
-        if (mDir != null) {
-            mDir.setXandY(temp[0], temp[1]);
-        } else {
-            mDir = new Vector2D(temp[0], temp[1]);
-        }
+        Vector2D temp = Functions.vectorFromPoint(getXPos(), getYPos(), targetX, targetY);
+        mDir = temp;
         rotate((int) targetX, (int) targetY);
     }
 
