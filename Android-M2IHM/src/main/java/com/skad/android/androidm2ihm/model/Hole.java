@@ -16,4 +16,5 @@ public class Hole extends SpriteObject {
         Rect holeRect = new Rect(getBoundingRectangle().centerX() - tierSize, getBoundingRectangle().centerY() - tierSize, getBoundingRectangle().centerX() + tierSize, getBoundingRectangle().centerY() + tierSize);
         return holeRect.contains(balle.getBoundingRectangle().centerX(), balle.getBoundingRectangle().centerY());
     }
+
 }

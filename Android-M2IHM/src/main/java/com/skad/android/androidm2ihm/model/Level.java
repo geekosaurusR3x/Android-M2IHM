@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
-import android.util.Log;
 
 /**
  * Created by pschmitt on 1/9/14.
@@ -15,11 +14,11 @@ public class Level extends Observable {
 
     public static final int LEVEL_COUNT = 3;
     private static Level mInstance;
-    ;
+
     // Business objects
     private int mLevelNumber;
     private Ball mBall;
-    private Hole mEnd;
+    private Target mTarget;
     private List<Wall> mWallList = new ArrayList<Wall>();
     private List<Hole> mHoleList = new ArrayList<Hole>();
     private List<Gun> mGunList = new ArrayList<Gun>();
@@ -36,9 +35,9 @@ public class Level extends Observable {
         return mInstance;
     }
 
-    public void setComponents(Ball ball, Hole end, List<Wall> wallList, List<Hole> holeList, List<Gun> gunList) {
+    public void setComponents(Ball ball, Target end, List<Wall> wallList, List<Hole> holeList, List<Gun> gunList) {
         mBall = ball;
-        mEnd = end;
+        mTarget = end;
         mWallList = wallList;
         mHoleList = holeList;
         mGunList = gunList;
@@ -48,7 +47,7 @@ public class Level extends Observable {
         mWallList.clear();
         mGunList.clear();
         mHoleList.clear();
-        mEnd = null;
+        mTarget = null;
         mBall = null;
     }
 
@@ -60,12 +59,12 @@ public class Level extends Observable {
         mBall = ball;
     }
 
-    public Hole getEnd() {
-        return mEnd;
+    public Target getEnd() {
+        return mTarget;
     }
 
-    public void setEnd(Hole end) {
-        mEnd = end;
+    public void setEnd(Target end) {
+        mTarget = end;
     }
 
     public List<Wall> getWallList() {
@@ -105,7 +104,7 @@ public class Level extends Observable {
     }
 
     public boolean playerReachedEnd() {
-        return mEnd.intoHole(mBall);
+        return mTarget.intoHole(mBall);
     }
 
     public boolean playerFellIntoHole() {
@@ -258,7 +257,7 @@ public class Level extends Observable {
         }
         spriteList.addAll(mGunList);
         spriteList.addAll(mWallList);
-        spriteList.add(mEnd);
+        spriteList.add(mTarget);
         spriteList.add(mBall);
 
         return spriteList;

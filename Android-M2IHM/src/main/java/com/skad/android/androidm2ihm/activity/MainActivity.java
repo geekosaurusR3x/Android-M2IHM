@@ -69,16 +69,13 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
     @Override
     public void onClick(View view) {
         int numtag = Integer.parseInt(view.getTag().toString());
-        Intent gameIntent = null;
-        if(numtag == 0)
-        {
+        Intent gameIntent;
+        if (numtag == 0) {
             gameIntent = new Intent(this, EditeurActivity.class);
-        }
-        else
-        {
+        } else {
             gameIntent = new Intent(this, LevelActivity.class);
+            gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
         }
-        gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
         startActivity(gameIntent);
     }
 

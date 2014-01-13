@@ -39,7 +39,7 @@ public class LevelParser {
         BufferedReader reader = new BufferedReader(new InputStreamReader(fileLevelStream));
         String line;
         Ball ball = null;
-        Hole end = null;
+        Target end = null;
         List<Hole> holeList = new ArrayList<Hole>();
         List<Wall> wallList = new ArrayList<Wall>();
         List<Gun> gunList = new ArrayList<Gun>();
@@ -78,7 +78,7 @@ public class LevelParser {
                         gun.setRatioWidth(ratioWidth);
                         gunList.add(gun);
                     } else if (objectType.equals("e")) {
-                        end = new Hole(xPos, yPos, width, height);
+                        end = new Target(xPos, yPos, width, height);
                         end.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.cible));
                     } else if (objectType.equals("h")) { // hole
                         Hole hole = new Hole(xPos, yPos, width, height);
@@ -88,14 +88,19 @@ public class LevelParser {
                         Wall wall = new Wall(xPos, yPos, width, height);
                         int drawableResID = 0;
                         if (objectType.equals("w")) { // wall (straight)
+                            wall = new Wall(xPos, yPos, width, height);
                             drawableResID = R.drawable.wall_grey_texture;
                         } else if (objectType.equals("abl")) { // wall (curved - bottom left)
+                            wall = new WallArcBottomLeft(xPos, yPos, width, height);
                             drawableResID = R.drawable.arcwall_bottom_left;
                         } else if (objectType.equals("abr")) { // wall (curved - bottom right)
+                            wall = new WallArcBottomRight(xPos, yPos, width, height);
                             drawableResID = R.drawable.arcwall_bottom_right;
                         } else if (objectType.equals("atl")) { // wall (curved - top left)
+                            wall = new WallArcTopLeft(xPos, yPos, width, height);
                             drawableResID = R.drawable.arcwall_top_left;
                         } else if (objectType.equals("atr")) { // wall (curved - top right)
+                            wall = new WallArcTopRight(xPos, yPos, width, height);
                             drawableResID = R.drawable.arcwall_top_right;
                         }
                         wall.setSprite(BitmapFactory.decodeResource(context.getResources(), drawableResID));
