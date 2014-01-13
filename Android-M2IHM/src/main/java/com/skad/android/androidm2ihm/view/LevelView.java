@@ -6,8 +6,10 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import com.skad.android.androidm2ihm.model.Bullet;
 import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.model.SpriteObject;
 import com.skad.android.androidm2ihm.thread.GameThread;
@@ -60,7 +62,7 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback/*im
         mGameThread.interrupt();
     }
 
-    public void restart() {
+    public void startNewThread() {
         mGameThread = new GameThread(mHolder, getContext(), this);
         mGameThread.setRunning(true);
         mGameThread.start();

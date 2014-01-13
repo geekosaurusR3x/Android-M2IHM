@@ -4,11 +4,15 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Observable;
+import android.util.Log;
 
 /**
  * Created by pschmitt on 1/9/14.
  */
 public class Level extends Observable {
+
+    private static final String TAG = "Level,";
+
     public static final int LEVEL_COUNT = 3;
     private static Level mInstance;
     ;
@@ -180,8 +184,8 @@ public class Level extends Observable {
     }
 
     public void updateBullets() {
+        long currentTimeMs = System.currentTimeMillis();
         for (Gun gun : mGunList) {
-            long currentTimeMs = System.currentTimeMillis();
             gun.rotate((int) mBall.getXPos(), (int) mBall.getYPos());
             if (currentTimeMs - gun.getLastTimeFired() > gun.getFireRate()) {
                 gun.fire((int) mBall.getXPos(), (int) mBall.getYPos());

@@ -57,6 +57,7 @@ public class Gun extends SpriteObject {
         Bullet bullet = new Bullet(getBoundingRectangle().centerX(), getBoundingRectangle().centerY(), (int) (32 * mRatioWidth), (int) (32 * mRatioHeight));
         bullet.setDir(targetX, targetY);
         bullet.setSprite(mBulletSprite);
+        bullet.setVelocity(50);
         mBulletList.add(bullet);
     }
 

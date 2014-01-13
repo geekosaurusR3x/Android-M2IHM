@@ -6,7 +6,6 @@ package com.skad.android.androidm2ihm.model;
 public class Bullet extends SpriteObject {
     private double mDirX;
     private double mDirY;
-    private int mVelocity = 50;
 
     public Bullet(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -18,10 +17,6 @@ public class Bullet extends SpriteObject {
 
     public void setDirY(double mDirY) {
         this.mDirY = mDirY;
-    }
-
-    public void setVelocity(int velocity) {
-        this.mVelocity = velocity;
     }
 
     public void decreaseVelocity() {

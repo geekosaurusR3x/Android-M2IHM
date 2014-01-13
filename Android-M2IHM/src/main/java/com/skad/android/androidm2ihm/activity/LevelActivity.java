@@ -97,7 +97,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
 */
         mScore.reset();
-        mLevelView.restart();
+        mLevelView.startNewThread();
         drawLevel();
     }
 
@@ -109,7 +109,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
             mLevelNumber++;
             mScore.setLevel(mLevelNumber);
             mScore.reset();
-            mLevelView.restart();
+            mLevelView.startNewThread();
             drawLevel();
         } else {
             // Player completed last level, exit
