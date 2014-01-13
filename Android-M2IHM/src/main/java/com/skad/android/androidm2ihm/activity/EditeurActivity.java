@@ -24,7 +24,7 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
 
     // Views
     private EditeurView mEditeurView;
-    private int mTagCourent;
+    private int mCurrentTag;
     private float mXTouch;
     private float mYTouch;
     private int mIdSelected;
@@ -52,7 +52,7 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
 
         setContentView(R.layout.activity_editeur);
 
-        mTagCourent = 0;
+        mCurrentTag = 0;
         mIdSelected = -1;
 
         mEditeurView = (EditeurView) findViewById(R.id.editeur_lvl);
@@ -187,7 +187,7 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
 
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
-                mTagCourent = menuItem.getItemId();
+                mCurrentTag = menuItem.getItemId();
                 Toast.makeText(EditeurActivity.this, String.format(getString(R.string.editeur_item_select), menuItem.getItemId()), Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -218,10 +218,10 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
     public boolean onTouch(View view, MotionEvent motionEvent) {
         if (view.equals(mEditeurView)) {
             if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                if (mTagCourent != 0) {
-                    Toast.makeText(EditeurActivity.this, String.format("Placer %d a x: %s y: %s", mTagCourent, motionEvent.getX(), motionEvent.getY()), Toast.LENGTH_LONG).show();
-                    mEditeurView.addElement(mTagCourent, motionEvent.getX(), motionEvent.getY());
-                    mTagCourent = 0;
+                if (mCurrentTag != 0) {
+                    Toast.makeText(EditeurActivity.this, String.format("Placer %d a x: %s y: %s", mCurrentTag, motionEvent.getX(), motionEvent.getY()), Toast.LENGTH_LONG).show();
+                    mEditeurView.addElement(mCurrentTag, motionEvent.getX(), motionEvent.getY());
+                    mCurrentTag = 0;
                 } else if (mIdSelected == -1) {
                     mXTouch = motionEvent.getX();
                     mYTouch = motionEvent.getY();
