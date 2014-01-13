@@ -1,13 +1,8 @@
 package com.skad.android.androidm2ihm.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
@@ -21,7 +16,6 @@ import android.widget.TextView;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.model.Score;
-import com.skad.android.androidm2ihm.thread.GameThread;
 import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.view.LevelView;
 
@@ -31,7 +25,7 @@ import java.util.Observer;
 /**
  * Created by pschmitt on 12/19/13.
  */
-public class LevelActivity extends ActionBarActivity implements SensorEventListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener, Observer/*, GameTask.OnGameEventListener*//*, LevelView.OnGameEventListener*/ {
+public class LevelActivity extends ActionBarActivity implements/* SensorEventListener,*/ DialogInterface.OnClickListener, DialogInterface.OnCancelListener, Observer/*, GameTask.OnGameEventListener*//*, LevelView.OnGameEventListener*/ {
     private static final String TAG = "LevelActivity";
     // private final Handler mHandler = new Handler();
     // Views
@@ -50,10 +44,13 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     private int mIdSoundWin;
     // Thread
     // private GameTask mGameTask;
+/*
     private boolean mBound = false;
-    private GameThread mGameThread;
+*/
     // Sensors
+/*
     private SensorManager mSensorManager;
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +75,9 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
 
         // Setup sensors
+/*
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+*/
 
         // Audio
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
@@ -94,17 +93,23 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     }
 
     private void restartLevel() {
+/*
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+*/
         mScore.reset();
+        mLevelView.restart();
         drawLevel();
     }
 
     private void nextLevel() {
+/*
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+*/
         if (mLevelNumber < Level.LEVEL_COUNT) {
             mLevelNumber++;
             mScore.setLevel(mLevelNumber);
             mScore.reset();
+            mLevelView.restart();
             drawLevel();
         } else {
             // Player completed last level, exit
@@ -112,33 +117,12 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         }
     }
 
-    private void startGame() {
-        synchronized (this) {
-            if (mBound) {
-                return;
-            }
-            mBound = true;
-            mGameThread = new GameThread();
-            mGameThread.start();
-/*
-            mGameTask.execute();
-*/
-        }
-       /* new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (mBound) {
-                    mLevel.update();
-                }
-            }
-        }).start();*/
-    }
-
     private void pauseGame() {
-        mBound = false;
-        mGameThread.pause();
+        // mGameThread.setRunning(false);
         stopBackgroundMusicPlayback();
+/*
         mSensorManager.unregisterListener(this);
+*/
     }
 
     private void startBackgroundMusicPlayback() {
@@ -160,7 +144,6 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         if (!mMute) {
             startBackgroundMusicPlayback();
         }
-        startGame();
     }
 
     private void unregisterObserver() {
@@ -176,7 +159,9 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     @Override
     protected void onResume() {
         super.onResume();
+/*
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+*/
         // Sound preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         mMute = sharedPrefs.getBoolean(getString(R.string.pref_key_mute), false);
@@ -186,7 +171,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
+        /*mSensorManager.unregisterListener(this);*/
         stopBackgroundMusicPlayback();
         unregisterObserver();
     }
@@ -204,7 +189,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-    @Override
+    /*@Override
     public void onSensorChanged(SensorEvent event) {
         float xValue = event.values[1];
         float yValue = event.values[0];
@@ -215,7 +200,7 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     @Override
     public void onAccuracyChanged(Sensor sensor, int i) {
 
-    }
+    }*/
 
     private void saveHighScore() {
         int highscore = mScore.getHighScore(this);

@@ -2,69 +2,65 @@ package com.skad.android.androidm2ihm.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PixelFormat;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.view.View;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.model.SpriteObject;
+import com.skad.android.androidm2ihm.thread.GameThread;
 
 /**
  * Created by skad on 19/12/13.
  */
-public class LevelView extends View /*implements Observer*/ {
+public class LevelView extends SurfaceView implements SurfaceHolder.Callback/*implements Observer*/ {
 
     private static final String TAG = "LevelView";
     private Level mLevel;
-/*
-    private OnGameEventListener mLevelListener;
-*/
+    private GameThread mGameThread;
+    private SurfaceHolder mHolder;
 
     public LevelView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-       /* try {
-            mLevelListener = (OnGameEventListener) context;
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement OnLevelEventListener");
-        }*/
         mLevel = Level.getInstance();
-/*
-        mLevel.addObserver(this);
-*/
+        SurfaceHolder holder = getHolder();
+        holder.addCallback(this);
+        // Make transparent so that we can see our background
+        setZOrderOnTop(true);
+        holder.setFormat(PixelFormat.TRANSPARENT);
     }
 
-    @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
+    public void drawGameElements(Canvas canvas) {
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         for (final SpriteObject sprite : Level.getInstance().getAllSprites()) {
             canvas.drawBitmap(sprite.getScaledSprite(), (int) sprite.getXPos(), (int) sprite.getYPos(), null);
         }
-        // Immediately request update
-        invalidate();
     }
 
-    /*@Override
-    public void update(Observable observable, Object data) {
-        if (data instanceof Level.EVENT) {
-            switch ((Level.EVENT) data) {
-                case GAME_OVER:
-                    mLevelListener.onLevelFailed();
-                    break;
-                case GAME_SUCCESS:
-                    mLevelListener.onLevelCompleted();
-                    break;
-                case COLLISION_BULLET:
-                    mLevelListener.onCollisionDetected(Level.EVENT.COLLISION_BULLET);
-                case COLLISION_WALL:
-                    mLevelListener.onCollisionDetected(Level.EVENT.COLLISION_WALL);
-                    break;
-            }
-        }
-    }*/
+    @Override
+    public void surfaceCreated(SurfaceHolder holder) {
+        mHolder = holder;
+        mGameThread = new GameThread(holder, getContext(), this);
+        mGameThread.setRunning(true);
+        mGameThread.start();
+    }
 
-   /*public interface OnGameEventListener {
-        void onCollisionDetected(Level.EVENT eventType);
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+        // TODO ?
+    }
 
-        void onLevelCompleted();
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        mGameThread.setRunning(false);
+        mGameThread.interrupt();
+    }
 
-        void onLevelFailed();
-    }*/
+    public void restart() {
+        mGameThread = new GameThread(mHolder, getContext(), this);
+        mGameThread.setRunning(true);
+        mGameThread.start();
+    }
 }

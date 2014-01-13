@@ -203,6 +203,7 @@ public class Level extends Observable {
     }
 
     public void update() {
+        updateBullets();
         /*if (playerHitWall()) { // Player hit a wall
             mBall.setXPos(lastX);
             mBall.setYPos(lastY);

@@ -16,7 +16,7 @@ abstract public class SpriteObject {
     protected int mHeight;
     protected double mRatioWidth;
     protected double mRatioHeight;
-    protected double mVelocity = 1.0;
+    protected double mVelocity;
     private Bitmap mScaledSprite;
     private Bitmap mAlternateSprite;
     private Bitmap mOriginalSprite;

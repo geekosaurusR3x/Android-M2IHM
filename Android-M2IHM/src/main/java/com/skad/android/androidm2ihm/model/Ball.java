@@ -16,6 +16,7 @@ public class Ball extends SpriteObject {
 
     public Ball(int x, int y, int width, int height) {
         super(x, y, width, height);
+        mVelocity = 2.0;
     }
 
     @Override
