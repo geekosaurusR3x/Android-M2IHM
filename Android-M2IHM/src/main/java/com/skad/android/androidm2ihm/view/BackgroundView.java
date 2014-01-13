@@ -1,65 +1,63 @@
 package com.skad.android.androidm2ihm.view;
 
 import android.content.Context;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
-import android.view.View;
-import com.skad.android.androidm2ihm.R;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import com.skad.android.androidm2ihm.model.SpaceObject;
-import com.skad.android.androidm2ihm.model.Vector2D;
-import com.skad.android.androidm2ihm.utils.MathUtils;
+import com.skad.android.androidm2ihm.thread.SpaceShipThread;
 
 import java.util.ArrayList;
-
-import static java.lang.System.currentTimeMillis;
+import java.util.List;
 
 /**
  * Created by skad on 09/01/14.
  */
-public class BackgroundView extends View {
-    private ArrayList<SpaceObject> mListSpaceObject = new ArrayList<SpaceObject>();
+public class BackgroundView extends SurfaceView implements SurfaceHolder.Callback {
+
+    private List<SpaceObject> mSpaceObjectList = new ArrayList<SpaceObject>();
     private long mLastTimeSpaceObject;
-    private double mRatioWidth = 1;
-    private double mRatioHeight = 1;
-    private int mScreenWidth = 1;
-    private int mScreenHeight = 1;
+    private SpaceShipThread mSpaceShipThread;
 
     public BackgroundView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        mScreenWidth = metrics.widthPixels;
-        mScreenHeight = metrics.heightPixels;
+        SurfaceHolder holder = getHolder();
+        holder.addCallback(this);
+    }
+
+    public void drawSpaceShips(Canvas canvas) {
+        canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
+        for (final SpaceObject spaceObject : mSpaceObjectList) {
+            canvas.drawBitmap(spaceObject.getScaledSprite(), (int) spaceObject.getXPos(), (int) spaceObject.getYPos(), null);
+        }
+    }
+
+    public List<SpaceObject> getSpaceObjectList() {
+        return mSpaceObjectList;
+    }
+
+    public void addSpaceShip(SpaceObject spaceObject) {
+        mSpaceObjectList.add(spaceObject);
     }
 
     @Override
-    protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-        update();
-
-        for (final SpaceObject spaceObject : mListSpaceObject) {
-            canvas.drawBitmap(spaceObject.getScaledSprite(), (int) spaceObject.getXPos(), (int) spaceObject.getYPos(), null);
-        }
-
-        invalidate();
+    public void surfaceCreated(SurfaceHolder holder) {
+        mSpaceShipThread = new SpaceShipThread(holder, getContext(), this);
+        mSpaceShipThread.setRunning(true);
+        mSpaceShipThread.start();
     }
 
-    protected void update() {
-        for (final SpaceObject mSpaceObject : mListSpaceObject) {
-            mSpaceObject.forward();
-        }
-        if (currentTimeMillis() - mLastTimeSpaceObject > 10000) {
-            Vector2D pos = MathUtils.randomVector(mScreenHeight, mScreenWidth);
-            Vector2D target = MathUtils.randomVector(mScreenHeight, mScreenWidth);
-            double scaleFactor = MathUtils.randomDouble(2);
-            SpaceObject spaceObject = new SpaceObject(pos, (int) (128 * mRatioWidth * scaleFactor), (int) (128 * mRatioHeight * scaleFactor));
-            spaceObject.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.ship1));
-            spaceObject.setDir(target);
-            spaceObject.setVelocity(10);
-            mListSpaceObject.add(spaceObject);
-            mLastTimeSpaceObject = currentTimeMillis();
-        }
+    @Override
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
     }
 
+    @Override
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        mSpaceShipThread.setRunning(false);
+        mSpaceShipThread.interrupt();
+    }
 }
