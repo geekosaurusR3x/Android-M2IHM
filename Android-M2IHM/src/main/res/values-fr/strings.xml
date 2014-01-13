@@ -6,6 +6,7 @@
     <string name="btn_label_level_1">Niveau 1</string>
     <string name="btn_label_level_2">Niveau 2</string>
     <string name="btn_label_level_3">Niveau 3</string>
+    <string name="btn_label_editeur">Ajouter un Niveau</string>
 
     <string name="title_activity_level">LevelActivity</string>
 
@@ -15,7 +16,7 @@
     <string name="pref_key_highscore">highscore_%1$d</string>
 
     <string name="txt_label_greeting">Quel Niveau?</string>
-    <string name="img_desc_wooden_background">Fond d\'écran spacial</string>
+    <string name="img_desc_glass_background">Fond d\'écran spacial</string>
 
     <integer name="btn_tag_level_1">1</integer>
     <integer name="btn_tag_level_3">3</integer>
@@ -45,6 +46,7 @@
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
 
     <string name="score">Score: %1$d</string>
+    <string name="editeur_start">Start</string>
 
 
 </resources>

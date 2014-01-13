@@ -64,13 +64,13 @@ public class LevelView extends View implements Observer {
         mIdSoundWall = mSoundPool.load(context, R.raw.wall_hit, 1);
         mIdSoundGameOver = mSoundPool.load(context, R.raw.gameover, 1);
         mIdSoundWin = mSoundPool.load(context, R.raw.fins_level_completed, 1);
+        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
+        mScreenWidth = metrics.widthPixels;
+        mScreenHeight = metrics.heightPixels;
         loadLevel();
     }
 
     private void loadLevel() {
-        DisplayMetrics metrics = super.getContext().getResources().getDisplayMetrics();
-        mScreenWidth = metrics.widthPixels;
-        mScreenHeight = metrics.heightPixels;
         InputStream filelevelstream = getResources().openRawResource(this.mLevelResId);
         BufferedReader reader = new BufferedReader(new InputStreamReader(filelevelstream));
         String line;

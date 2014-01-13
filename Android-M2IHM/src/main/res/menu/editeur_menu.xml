@@ -1,0 +1,18 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:compatLib="http://schemas.android.com/apk/res-auto">
+
+    <group android:id="@+id/group_popupmenu">
+        <item android:id="@+id/editeur_start"
+              android:title="@string/editeur_start"
+              android:icon="@drawable/playership"/>
+        <item android:id="@+id/editeur_end"
+              android:title="@string/editeur_end"
+              android:icon="@drawable/cible"/>
+        <item android:id="@+id/editeur_hole"
+              android:title="@string/editeur_hole"
+                android:icon="@drawable/hole"/>
+        <item android:id="@+id/editeur_wall"
+              android:icon="@drawable/wall_grey_texture"
+              android:title="@string/editeur_wall" />
+    </group>
+</menu>

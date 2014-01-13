@@ -25,6 +25,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         findViewById(R.id.button_level_1).setOnClickListener(this);
         findViewById(R.id.button_level_3).setOnClickListener(this);
         findViewById(R.id.button_level_2).setOnClickListener(this);
+        findViewById(R.id.button_editeur).setOnClickListener(this);
     }
 
     @Override
@@ -67,8 +68,17 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
 
     @Override
     public void onClick(View view) {
-        Intent gameIntent = new Intent(this, LevelActivity.class);
-        gameIntent.putExtra(getString(R.string.extra_key_level), Integer.parseInt(view.getTag().toString()));
+        int numtag = Integer.parseInt(view.getTag().toString());
+        Intent gameIntent = null;
+        if(numtag == 0)
+        {
+            gameIntent = new Intent(this, EditeurActivity.class);
+        }
+        else
+        {
+            gameIntent = new Intent(this, LevelActivity.class);
+        }
+        gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
         startActivity(gameIntent);
     }
 

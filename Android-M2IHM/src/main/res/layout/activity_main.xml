@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:id="@+id/imageView"
         android:layout_gravity="center"
-        android:contentDescription="@string/img_desc_wooden_background"
+        android:contentDescription="@string/img_desc_glass_background"
         android:background="@drawable/background" />
 
     <LinearLayout
@@ -59,6 +59,14 @@
                 android:id="@+id/button_level_3"
                 android:tag="@integer/btn_tag_level_3"
                 android:layout_marginTop="20dp" />
+
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_label_editeur"
+                    android:id="@+id/button_editeur"
+                    android:tag="@integer/btn_tag_editeur"
+                    android:layout_gravity="right" />
         </LinearLayout>
 
     </LinearLayout>

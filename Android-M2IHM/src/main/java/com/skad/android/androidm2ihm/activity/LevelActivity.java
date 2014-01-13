@@ -120,7 +120,6 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "destroy");
         if (mBackgroundMusic != null) {
             mBackgroundMusic.release();
             mBackgroundMusic = null;

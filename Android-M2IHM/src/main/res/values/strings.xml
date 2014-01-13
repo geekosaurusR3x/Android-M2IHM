@@ -6,11 +6,12 @@
     <string name="btn_label_level_1">Level 1</string>
     <string name="btn_label_level_2">Level 2</string>
     <string name="btn_label_level_3">Level 3</string>
+    <string name="btn_label_editeur">Add a Level</string>
 
     <string name="title_activity_level">LevelActivity</string>
 
     <string name="txt_label_greeting">Watcha want to do?</string>
-    <string name="img_desc_wooden_background">Wooden Background</string>
+    <string name="img_desc_glass_background">Glass Background</string>
 
     <string name="extra_key_level">Level_ID</string>
     <string name="dialog_success_title">Success!</string>
@@ -36,6 +37,12 @@
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
 
     <string name="score">Score: %1$d</string>
+    <string name="editeur_start">Player</string>
+    <string name="editeur_end">Cible</string>
+    <string name="editeur_hole">Hole</string>
+    <string name="editeur_wall">Wall</string>
+    <string name="editeur_item_select">Item : %d selected</string>
+    <string name="editeur_view_add">Add</string>
 
 
 </resources>

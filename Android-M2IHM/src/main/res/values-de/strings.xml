@@ -14,7 +14,7 @@
     <string name="pref_key_highscore">highscore_%1$d</string>
 
     <string name="txt_label_greeting">Levelauswahl</string>
-    <string name="img_desc_wooden_background">Hintergrundbild - Sternenhimmel</string>
+    <string name="img_desc_glass_background">Hintergrundbild - Sternenhimmel</string>
 
     <string name="extra_key_level">Level_ID</string>
     <string name="dialog_success_title">Gewonnen!</string>
@@ -40,6 +40,7 @@
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
 
     <string name="score">Score: %1$d</string>
+    <string name="editeur_start">Start</string>
 
 
 </resources>

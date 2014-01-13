@@ -23,6 +23,8 @@ abstract public class SpriteObject {
     protected double mDirY;
     private double mVelocity;
 
+    private int mId;
+
     public SpriteObject() {
         this(0, 0, 64, 64);
     }
@@ -57,6 +59,26 @@ abstract public class SpriteObject {
 
     public void setHeight(int height) {
         this.height = height;
+        }
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int mId) {
+        this.mId = mId;
+    }
+
+    public boolean isInto(int x, int y)
+    {
+        return getBoundingRectangle().contains(x,y);
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
     }
 
     public Bitmap getSprite() {
@@ -72,8 +94,14 @@ abstract public class SpriteObject {
     }
 
     public void setSprite(Bitmap sprite) {
-        Sprite = Bitmap.createScaledBitmap(sprite, width, height, false);
-        OriginalSprite = Sprite;
+
+        OriginalSprite = sprite;
+        reSize();
+    }
+
+    public void reSize()
+    {
+        Sprite = Bitmap.createScaledBitmap(OriginalSprite, width, height, false);
     }
 
     public Rect getBoundingRectangle() {
@@ -121,8 +149,8 @@ abstract public class SpriteObject {
 
             Matrix matrix = new Matrix();
             matrix.postRotate(angle);
-            Bitmap scaledBitmap = Bitmap.createScaledBitmap(this.OriginalSprite,this.OriginalSprite.getWidth(),this.OriginalSprite.getHeight(), true);
-            this.Sprite = Bitmap.createBitmap(scaledBitmap, 0, 0, width, height, matrix, true);
+            reSize();
+            this.Sprite = Bitmap.createBitmap(this.Sprite, 0, 0, width, height, matrix, true);
         }
     }
       
