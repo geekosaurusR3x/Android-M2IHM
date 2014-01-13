@@ -3,23 +3,14 @@ package com.skad.android.androidm2ihm.view;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.media.AudioManager;
-import android.media.SoundPool;
+import android.util.AttributeSet;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
-import com.skad.android.androidm2ihm.model.*;
+import com.skad.android.androidm2ihm.model.Ball;
+import com.skad.android.androidm2ihm.model.SpriteObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Observable;
-import java.util.Observer;
-
-import static java.lang.System.currentTimeMillis;
 
 /**
  * Created by skad on 19/12/13.
@@ -34,8 +25,8 @@ public class EditeurView extends View {
     private int mScreenHeight = 1;
     private ArrayList<SpriteObject> mListObject = new ArrayList<SpriteObject>();
 
-    public EditeurView(Context context) {
-        super(context);
+    public EditeurView(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         mScreenWidth = metrics.widthPixels;
         mScreenHeight = metrics.heightPixels;
@@ -89,17 +80,17 @@ public class EditeurView extends View {
 
     public void moveRight(int id)
     {
-        mListObject.get(id).setX(mListObject.get(id).getX()+1);
+        mListObject.get(id).setX(mListObject.get(id).getX() + 1);
     }
 
     public void moveUp(int id)
     {
-        mListObject.get(id).setY(mListObject.get(id).getY()-1);
+        mListObject.get(id).setY(mListObject.get(id).getY() - 1);
     }
 
     public void moveDown(int id)
     {
-        mListObject.get(id).setY(mListObject.get(id).getY()+1);
+        mListObject.get(id).setY(mListObject.get(id).getY() + 1);
     }
 
     public void widthPlus(int id)

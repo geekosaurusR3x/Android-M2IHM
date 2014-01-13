@@ -2,24 +2,19 @@ package com.skad.android.androidm2ihm.activity;
 
 
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Vibrator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
-import com.skad.android.androidm2ihm.view.BackgroundView;
 import com.skad.android.androidm2ihm.view.EditeurView;
-import com.skad.android.androidm2ihm.view.LevelView;
 
 /**
  * Created by skad on 09/01/14.
@@ -33,45 +28,89 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
     private float mXTouch;
     private float mYTouch;
     private int mIdSelected;
+    private Handler repeatUpdateHandler = new Handler();
+    private boolean mButtonRepeatLock = false;
+
+    private class RepeatingUpdater implements Runnable {
+        private int mAction;
+
+        public RepeatingUpdater(int action) {
+            mAction = action;
+        }
+
+        public void run() {
+            if (mButtonRepeatLock) {
+                performAction(mAction);
+                repeatUpdateHandler.postDelayed(new RepeatingUpdater(mAction), 10);
+            }
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        mEditeurView = new EditeurView(this);
         setContentView(R.layout.activity_editeur);
 
         mTagCourent = 0;
         mIdSelected = -1;
 
-        findViewById(R.id.editeur_lvl).setOnTouchListener(this);
-        findViewById(R.id.editeur_lvl).setOnLongClickListener(this);
+        mEditeurView = (EditeurView) findViewById(R.id.editeur_lvl);
+        mEditeurView.setOnTouchListener(this);
+        mEditeurView.setOnLongClickListener(this);
 
-        findViewById(R.id.editeur_add_button).setOnClickListener(new Button.OnClickListener()
-        {
+        findViewById(R.id.editeur_add_button).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
                 showPopupMenu(view);
             }
         });
 
-        findViewById(R.id.editeur_left_button).setOnClickListener(this);
-        findViewById(R.id.editeur_right_button).setOnClickListener(this);
-        findViewById(R.id.editeur_up_button).setOnClickListener(this);
-        findViewById(R.id.editeur_down_button).setOnClickListener(this);
-        findViewById(R.id.editeur_widthminus_button).setOnClickListener(this);
-        findViewById(R.id.editeur_widthplus_button).setOnClickListener(this);
-        findViewById(R.id.editeur_heightminus_button).setOnClickListener(this);
-        findViewById(R.id.editeur_heightplus_button).setOnClickListener(this);
+        Button leftButton = (Button) findViewById(R.id.editeur_left_button);
+        leftButton.setOnClickListener(this);
+        leftButton.setOnLongClickListener(this);
+        leftButton.setOnTouchListener(this);
+
+        Button rightButton = (Button) findViewById(R.id.editeur_right_button);
+        rightButton.setOnClickListener(this);
+        rightButton.setOnLongClickListener(this);
+        rightButton.setOnTouchListener(this);
+
+        Button upButton = (Button) findViewById(R.id.editeur_up_button);
+        upButton.setOnClickListener(this);
+        upButton.setOnLongClickListener(this);
+        upButton.setOnTouchListener(this);
+
+        Button downButton = (Button) findViewById(R.id.editeur_down_button);
+        downButton.setOnClickListener(this);
+        downButton.setOnLongClickListener(this);
+        downButton.setOnTouchListener(this);
+
+        Button widthMinusButton = (Button) findViewById(R.id.editeur_widthminus_button);
+        widthMinusButton.setOnClickListener(this);
+        widthMinusButton.setOnLongClickListener(this);
+        widthMinusButton.setOnTouchListener(this);
+
+        Button widthPlusButton = (Button) findViewById(R.id.editeur_widthplus_button);
+        widthPlusButton.setOnClickListener(this);
+        widthPlusButton.setOnLongClickListener(this);
+        widthPlusButton.setOnTouchListener(this);
+
+        Button heightMinusButton = (Button) findViewById(R.id.editeur_heightminus_button);
+        heightMinusButton.setOnClickListener(this);
+        heightMinusButton.setOnLongClickListener(this);
+        heightMinusButton.setOnTouchListener(this);
+
+        Button heightPlusButton = (Button) findViewById(R.id.editeur_heightplus_button);
+        heightPlusButton.setOnClickListener(this);
+        heightPlusButton.setOnLongClickListener(this);
+        heightPlusButton.setOnTouchListener(this);
 
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
-
-        View containerLvl = findViewById(R.id.editeur_lvl);
-        ((ViewGroup) containerLvl).addView(mEditeurView);
     }
 
     @Override
@@ -88,7 +127,6 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
     protected void onDestroy() {
         super.onDestroy();
     }
-
 
 
     @Override
@@ -109,8 +147,11 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
 
     @Override
     public void onClick(View view) {
-        switch(view.getId())
-        {
+        performAction(view.getId());
+    }
+
+    private void performAction(int action) {
+        switch (action) {
             case R.id.editeur_left_button:
                 mEditeurView.moveLeft(mIdSelected);
                 break;
@@ -138,7 +179,7 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
         }
     }
 
-    private void showPopupMenu(View v){
+    private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.getMenuInflater().inflate(R.menu.editeur_menu, popupMenu.getMenu());
 
@@ -157,42 +198,49 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
 
     @Override
     public boolean onLongClick(View view) {
-        mIdSelected = mEditeurView.getIdElement(mXTouch,mYTouch);
-        if (mIdSelected != -1)
-        {
-            Toast.makeText(EditeurActivity.this, "Item Selected "+mIdSelected, Toast.LENGTH_LONG).show();
-            Vibrator v = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
-            v.vibrate(50);
-            findViewById(R.id.editeur_frame_button).setVisibility(View.VISIBLE);
+        if (view.equals(mEditeurView)) {
+            mIdSelected = mEditeurView.getIdElement(mXTouch, mYTouch);
+            if (mIdSelected != -1) {
+                Toast.makeText(EditeurActivity.this, "Item Selected " + mIdSelected, Toast.LENGTH_LONG).show();
+                Vibrator v = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
+                v.vibrate(50);
+                findViewById(R.id.editeur_frame_button).setVisibility(View.VISIBLE);
+            }
+            return false;
+        } else {
+            mButtonRepeatLock = true;
+            repeatUpdateHandler.post(new RepeatingUpdater(view.getId()));
+            return false;
         }
-        return false;
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-            if (mTagCourent != 0)
-            {
-                Toast.makeText(EditeurActivity.this, String.format("Placer %d a x: %s y: %s", mTagCourent, motionEvent.getX(), motionEvent.getY()), Toast.LENGTH_LONG).show();
-                mEditeurView.addElement(mTagCourent,motionEvent.getX(),motionEvent.getY());
-                mTagCourent = 0;
-            }
-            else if(mIdSelected == -1)
-            {
-                mXTouch = motionEvent.getX();
-                mYTouch = motionEvent.getY();
-            }
-            else {
-                mIdSelected = -1;
-                findViewById(R.id.editeur_frame_button).setVisibility(View.INVISIBLE);
-            }
+        if (view.equals(mEditeurView)) {
+            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
+                if (mTagCourent != 0) {
+                    Toast.makeText(EditeurActivity.this, String.format("Placer %d a x: %s y: %s", mTagCourent, motionEvent.getX(), motionEvent.getY()), Toast.LENGTH_LONG).show();
+                    mEditeurView.addElement(mTagCourent, motionEvent.getX(), motionEvent.getY());
+                    mTagCourent = 0;
+                } else if (mIdSelected == -1) {
+                    mXTouch = motionEvent.getX();
+                    mYTouch = motionEvent.getY();
+                } else {
+                    mIdSelected = -1;
+                    findViewById(R.id.editeur_frame_button).setVisibility(View.INVISIBLE);
+                }
 
-        }
-        if (motionEvent.getAction() == MotionEvent.ACTION_MOVE)
-        {
-            if (mIdSelected != -1)
-            {
-                mEditeurView.moveElementById(mIdSelected,motionEvent.getX(),motionEvent.getY());
+            }
+            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
+                if (mIdSelected != -1) {
+                    mEditeurView.moveElementById(mIdSelected, motionEvent.getX(), motionEvent.getY());
+                }
+            }
+            return false;
+        } else {
+            if ((motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL)
+                    && mButtonRepeatLock) {
+                mButtonRepeatLock = false;
             }
         }
         return false;
