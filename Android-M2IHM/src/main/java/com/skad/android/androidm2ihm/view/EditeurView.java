@@ -61,6 +61,11 @@ public class EditeurView extends View {
         invalidate();
 
     }
+
+    public void removeElement(int id) {
+        mListObject.remove(mListObject.get(id));
+    }
+
     public int getIdElement(float x, float y)
     {
         for (final SpriteObject mSpriteObject : mListObject)

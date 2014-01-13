@@ -40,9 +40,9 @@
 
         android:visibility="visible"/>
 
-    <Button
+    <ImageButton
         android:id="@+id/editeur_add_button"
-        style="?android:attr/buttonStyleSmall"
+        android:src="@drawable/ic_action_new"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="left|top"
@@ -53,6 +53,14 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:visibility="invisible">
+
+        <ImageButton
+            android:id="@+id/editeur_remove_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_action_remove"
+            android:layout_gravity="right|top"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"

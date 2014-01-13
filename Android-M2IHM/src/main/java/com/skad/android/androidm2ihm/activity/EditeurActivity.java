@@ -66,6 +66,13 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
             }
         });
 
+        findViewById(R.id.editeur_remove_button).setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mEditeurView.removeElement(mIdSelected);
+            }
+        });
+
         Button leftButton = (Button) findViewById(R.id.editeur_left_button);
         leftButton.setOnClickListener(this);
         leftButton.setOnLongClickListener(this);
