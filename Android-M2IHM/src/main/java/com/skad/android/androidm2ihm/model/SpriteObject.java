@@ -4,24 +4,24 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Rect;
-import android.util.Log;
-import com.skad.android.androidm2ihm.utils.Functions;
+import com.skad.android.androidm2ihm.utils.MathUtils;
 
 /**
  * Created by skad on 19/12/13.
  */
 abstract public class SpriteObject {
-    private Bitmap Sprite;
-    private Bitmap OriginalSprite;
-    protected int x;
-    protected int y;
-    protected int width;
-    protected int height;
-    protected double ratioWidth;
-    protected double ratioHeight;
-    protected double mDirX;
-    protected double mDirY;
-    private double mVelocity;
+    protected Vector2D mPosition;
+    protected Vector2D mDir;
+    protected int mWidth;
+    protected int mHeight;
+    protected double mRatioWidth;
+    protected double mRatioHeight;
+    protected double mVelocity;
+    private Bitmap mScaledSprite;
+    private Bitmap mAlternateSprite;
+    private Bitmap mOriginalSprite;
+    private Bitmap mOriginalAlternateSprite;
+    private boolean mShowAlternateSprite = false;
 
     private int mId;
 
@@ -30,40 +30,59 @@ abstract public class SpriteObject {
     }
 
     protected SpriteObject(int x, int y, int width, int height) {
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
-        this.setVelocity(1);
+        mPosition = new Vector2D(x, y);
+        mWidth = width;
+        mHeight = height;
     }
 
-    public int getX() {
-        return x;
+    protected SpriteObject(Vector2D pos, int width, int height) {
+        mPosition = pos;
+        mWidth = width;
+        mHeight = height;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public Vector2D getPosition() {
+        return mPosition;
     }
 
-    public int getY() {
-        return y;
+    public void setPosition(Vector2D position) {
+        mPosition = position;
     }
 
-    public void setY(int y) {
-        this.y = y;
+    public double getXPos() {
+        return mPosition.getX();
+    }
+
+    public void setXPos(int xPos) {
+        mPosition.setX(xPos);
+    }
+
+    public double getYPos() {
+        return mPosition.getY();
+    }
+
+    public void setYPos(int yPos) {
+        mPosition.setY(yPos);
     }
 
     public void setWidth(int width) {
-        this.width = width;
+        mWidth = width;
     }
 
     public void setHeight(int height) {
-        this.height = height;
-        }
+        mHeight = height;
+    }
+
     public int getId() {
         return mId;
     }
-
+    
+    public Bitmap getScaledSprite() {
+        if (mAlternateSprite != null) {
+            return mShowAlternateSprite ? mAlternateSprite : mScaledSprite;
+        }
+        return mScaledSprite;
+    }
     public void setId(int mId) {
         this.mId = mId;
     }
@@ -74,47 +93,57 @@ abstract public class SpriteObject {
     }
 
     public int getWidth() {
-        return width;
+        return mWidth;
     }
 
     public int getHeight() {
-        return height;
-    }
-
-    public Bitmap getSprite() {
-        return Sprite;
-    }
-
-    public void setRatioWidth(double ratioWidth) {
-        this.ratioWidth = ratioWidth;
-    }
-
-    public void setRatioHeight(double ratioHeight) {
-        this.ratioHeight = ratioHeight;
+        return mHeight;
     }
 
     public void setSprite(Bitmap sprite) {
-
-        OriginalSprite = sprite;
+        mOriginalSprite = sprite;
         reSize();
+    }
+
+    public void setAlternateSprite(Bitmap sprite) {
+        mAlternateSprite = Bitmap.createScaledBitmap(sprite, mWidth, mHeight, false);
+        mOriginalAlternateSprite = sprite;
+    }
+
+    public void setShowAlternateSprite(boolean alternativeSprite) {
+        mShowAlternateSprite = alternativeSprite;
+    }
+
+    public void setRatioWidth(double ratioWidth) {
+        mRatioWidth = ratioWidth;
+    }
+
+    public void setRatioHeight(double ratioHeight) {
+        mRatioHeight = ratioHeight;
     }
 
     public void reSize()
     {
-        Sprite = Bitmap.createScaledBitmap(OriginalSprite, width, height, false);
+        mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(),getHeight(), false);
     }
 
     public Rect getBoundingRectangle() {
-        return new Rect(x, y, x + width, y + height);
+        return new Rect((int) mPosition.getX(), (int) mPosition.getY(), (int) mPosition.getX() + mWidth, (int) mPosition.getY() + mHeight);
     }
 
-    public boolean intersects(SpriteObject wall) {
-        if (Rect.intersects(getBoundingRectangle(), wall.getBoundingRectangle())) {
-            Rect collisionBounds = getCollisionBounds(getBoundingRectangle(), wall.getBoundingRectangle());
+    public boolean intersects(SpriteObject object) {
+        if (Rect.intersects(getBoundingRectangle(), object.getBoundingRectangle())) {
+            Rect collisionBounds = getCollisionBounds(getBoundingRectangle(), object.getBoundingRectangle());
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
-                    int bitmap1Pixel = Sprite.getPixel(i - x, j - y);
-                    int bitmap2Pixel = wall.getSprite().getPixel(i - wall.getX(), j - wall.getY());
+                    int deltaX1 = i - (int) mPosition.getX(), deltaY1 = j - (int) mPosition.getY();
+                    deltaX1 = MathUtils.maxOrZero(deltaX1, mScaledSprite.getWidth());
+                    deltaY1 = MathUtils.maxOrZero(deltaY1, mScaledSprite.getHeight());
+                    int bitmap1Pixel = mScaledSprite.getPixel(deltaX1, deltaY1);
+                    int deltaX2 = i - (int) object.getXPos(), deltaY2 = j - (int) object.getYPos();
+                    deltaX2 = MathUtils.maxOrZero(deltaX2, object.getScaledSprite().getWidth());
+                    deltaY2 = MathUtils.maxOrZero(deltaY2, object.getScaledSprite().getHeight());
+                    int bitmap2Pixel = object.getScaledSprite().getPixel(deltaX2, deltaY2);
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return true;
                     }
@@ -136,48 +165,52 @@ abstract public class SpriteObject {
         return pixel != Color.TRANSPARENT;
     }
 
-    public void rotate(int CibleX, int CibleY)
-    {
-        if( this.OriginalSprite != null)
-        {
-            double dx =     CibleX - this.getBoundingRectangle().centerX();
-            double dy =     CibleY - this.getBoundingRectangle().centerY();
-            float angle = (float) Math.toDegrees(Math.atan2( dy,dx));
-            if(angle < 0){
-                angle += 360;
-            }
-
-            Matrix matrix = new Matrix();
-            matrix.postRotate(angle);
-            reSize();
-            this.Sprite = Bitmap.createBitmap(this.Sprite, 0, 0, width, height, matrix, true);
-        }
+    public void setDir(Vector2D vector) {
+        setDir(vector.getX(), vector.getY());
     }
-      
-    public void setDir(double CibleX, double CibleY) {
-        Object[] temp = Functions.GetVectorFromPoint(getX(), getY(), CibleX, CibleY);
-        this.mDirX = (Double)temp[0];
-        this.mDirY = (Double)temp[1];
-        this.rotate((int)CibleX,(int)CibleY);
+
+    public void setDir(double targetX, double targetY) {
+        Vector2D temp = MathUtils.vectorFromPoint(getXPos(), getYPos(), targetX, targetY);
+        mDir = temp;
+        rotate((int) targetX, (int) targetY);
+    }
+
+    public double getVelocity() {
+        return mVelocity;
     }
 
     public void setVelocity(int velocity) {
-        this.mVelocity = velocity;
+        mVelocity = velocity;
     }
 
     public void forward() {
-        x += mVelocity * mDirX;
-        y += mVelocity * mDirY;
+        // TODO Better collision handling
+        mPosition.setX(mPosition.getX() + mVelocity * mDir.getX());
+        mPosition.setY(mPosition.getY() + mVelocity * mDir.getY());
     }
 
+    public void rotate(int targetX, int targetY) {
+        if (mOriginalSprite == null) {
+            return;
+        }
+        double dx = targetX - getBoundingRectangle().centerX();
+        double dy = targetY - getBoundingRectangle().centerY();
+        float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+        if (angle < 0) {
+            angle += 360;
+        }
 
-
-    public void backward() {
-        x -= mVelocity * mDirX;
-        y -= mVelocity * mDirY;
+        Matrix matrix = new Matrix();
+        matrix.postRotate(angle);
+        reSize();
+        mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
     }
 
-    public void decreseVelocity() {
-        if(mVelocity>0) { mVelocity--;}
+    public double getDirX() {
+        return mDir.getX();
+    }
+
+    public double getDirY() {
+        return mDir.getY();
     }
 }

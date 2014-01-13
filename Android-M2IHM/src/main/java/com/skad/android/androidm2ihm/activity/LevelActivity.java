@@ -1,40 +1,56 @@
 package com.skad.android.androidm2ihm.activity;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
+import android.content.SharedPreferences;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.util.DisplayMetrics;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
 import android.widget.TextView;
 import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.model.Score;
-import com.skad.android.androidm2ihm.view.BackgroundView;
+import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.view.LevelView;
+
+import java.util.Observable;
+import java.util.Observer;
 
 /**
  * Created by pschmitt on 12/19/13.
  */
-public class LevelActivity extends ActionBarActivity implements SensorEventListener, LevelView.onLevelEventListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
+public class LevelActivity extends ActionBarActivity implements/* SensorEventListener,*/ DialogInterface.OnClickListener, DialogInterface.OnCancelListener, Observer/*, GameTask.OnGameEventListener*//*, LevelView.OnGameEventListener*/ {
     private static final String TAG = "LevelActivity";
-
+    // private final Handler mHandler = new Handler();
     // Views
     private TextView mScoreView;
-
-    private MediaPlayer mBackgroundMusic;
-    private int mLevelId;
     private LevelView mLevelView;
-    private BackgroundView mBackgroundView;
-    private SensorManager mSensorManager;
     private boolean mPlayerFailed = false;
+    private Score mScore;
+    private int mLevelNumber;
+    private Level mLevel;
+    // Audio
+    private boolean mMute;
+    private MediaPlayer mBackgroundMusic;
+    private SoundPool mSoundPool;
+    private int mIdSoundWall;
+    private int mIdSoundGameOver;
+    private int mIdSoundWin;
+    // Thread
+    // private GameTask mGameTask;
+/*
+    private boolean mBound = false;
+*/
+    // Sensors
+/*
+    private SensorManager mSensorManager;
+*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,15 +58,32 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         setContentView(R.layout.activity_level);
 
         // Determine which level should be loaded
-        mLevelId = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
+        mLevelNumber = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
+
+        // Init score
+        mScore = new Score(mLevelNumber);
+
+        // Init task
+        // mGameTask = new GameTask(this);
+
+        // Show level view
         drawLevel();
 
         // Retain views
+        mLevelView = (LevelView) findViewById(R.id.level_view);
         mScoreView = (TextView) findViewById(R.id.txt_score);
-        mScoreView.setText(String.format(getString(R.string.score), mLevelView.getScore().getTotalScore()));
+        mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
 
         // Setup sensors
+/*
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+*/
+
+        // Audio
+        mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
+        mIdSoundWall = mSoundPool.load(this, R.raw.wall_hit, 1);
+        mIdSoundGameOver = mSoundPool.load(this, R.raw.gameover, 1);
+        mIdSoundWin = mSoundPool.load(this, R.raw.fins_level_completed, 1);
 
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -60,15 +93,23 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
     }
 
     private void restartLevel() {
+/*
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-        mLevelView.resume();
+*/
+        mScore.reset();
+        mLevelView.startNewThread();
         drawLevel();
     }
 
     private void nextLevel() {
+/*
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-        if (mLevelId < 3) {
-            mLevelId++;
+*/
+        if (mLevelNumber < Level.LEVEL_COUNT) {
+            mLevelNumber++;
+            mScore.setLevel(mLevelNumber);
+            mScore.reset();
+            mLevelView.startNewThread();
             drawLevel();
         } else {
             // Player completed last level, exit
@@ -76,65 +117,70 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         }
     }
 
-    private void drawLevel() {
-        this.mBackgroundMusic = MediaPlayer.create(this,  R.raw.background_music);
-        this.mBackgroundMusic.setLooping(true);
-        this.mBackgroundMusic.start();
-        int levelResId = R.raw.lvl1;
-        switch (mLevelId) {
-            case 1:
-                levelResId = R.raw.lvl1;
-                break;
-            case 2:
-                levelResId = R.raw.lvl2;
-                break;
-            case 3:
-                levelResId = R.raw.lvl3;
-                break;
-        }
-        mLevelView = new LevelView(this, levelResId, mLevelId);
-        mBackgroundView = new BackgroundView(this);
-        View containerLvl = findViewById(R.id.view_lvl);
-        ((ViewGroup) containerLvl).addView(mLevelView);
-        View containerBackground = findViewById(R.id.view_background);
-        ((ViewGroup) containerBackground).addView(mBackgroundView);
+    private void pauseGame() {
+        // mGameThread.setRunning(false);
+        stopBackgroundMusicPlayback();
+/*
+        mSensorManager.unregisterListener(this);
+*/
+    }
 
+    private void startBackgroundMusicPlayback() {
+        mBackgroundMusic = MediaPlayer.create(this, R.raw.background_music);
+        mBackgroundMusic.setLooping(true);
+        mBackgroundMusic.start();
+    }
+
+    private void stopBackgroundMusicPlayback() {
+        if (mBackgroundMusic != null) {
+            mBackgroundMusic.release();
+            mBackgroundMusic = null;
+        }
+    }
+
+    private void drawLevel() {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
+        mLevel = LevelParser.getLevelFromFile(this, mLevelNumber, metrics.widthPixels, metrics.heightPixels);
+        if (!mMute) {
+            startBackgroundMusicPlayback();
+        }
+    }
+
+    private void unregisterObserver() {
+        mLevel.deleteObserver(this);
+        mScore.deleteObserver(this);
+    }
+
+    private void registerObserver() {
+        mLevel.addObserver(this);
+        mScore.addObserver(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+/*
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+*/
+        // Sound preferences
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mMute = sharedPrefs.getBoolean(getString(R.string.pref_key_mute), false);
+        registerObserver();
     }
 
     @Override
     protected void onPause() {
         super.onPause();
-        mSensorManager.unregisterListener(this);
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.release();
-            mBackgroundMusic = null;
-        }
+        /*mSensorManager.unregisterListener(this);*/
+        stopBackgroundMusicPlayback();
+        unregisterObserver();
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (mBackgroundMusic != null) {
-            mBackgroundMusic.release();
-            mBackgroundMusic = null;
-        }
-    }
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-        float xValue = event.values[1];
-        float yValue = event.values[0];
-        mLevelView.setForce(xValue, yValue);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
+        Log.d(TAG, "destroy");
+        stopBackgroundMusicPlayback();
     }
 
     @Override
@@ -143,43 +189,44 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-    private void pauseGame() {
-        mBackgroundMusic.stop();
-        mSensorManager.unregisterListener(this);
-        mLevelView.pause();
+    /*@Override
+    public void onSensorChanged(SensorEvent event) {
+        float xValue = event.values[1];
+        float yValue = event.values[0];
+        //mLevelView.setForce(xValue, yValue);
+        mLevel.updatePlayerPosition(xValue, yValue);
     }
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int i) {
+
+    }*/
 
     private void saveHighScore() {
-        Score score = mLevelView.getScore();
-        int highscore = score.getHighScore(this);
-        if (score.getTotalScore() > highscore) {
-            score.saveHighScore(this);
+        int highscore = mScore.getHighScore(this);
+        if (mScore.getTotalScore() > highscore) {
+            mScore.saveHighScore(this);
         }
     }
 
-    @Override
-    public void onLevelCompleted() {
-        pauseGame();
-        saveHighScore();
-        mPlayerFailed = false;
-        AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
-        successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
-        String msg = "";
-        if (mLevelId < 3) {
-            msg = String.format(getString(R.string.dialog_success_msg), mLevelId, mLevelView.getScore().getTotalScore(), mLevelView.getScore().getHighScore(this), (mLevelId + 1));
-        } else {
-            msg = getString(R.string.dialog_success_msg_alt);
+    // @Override
+    public void onCollisionDetected(Level.EVENT collisionType) {
+        mScore.collided();
+        switch (collisionType) {
+            case COLLISION_BULLET:
+                Log.d(TAG, "Player got hit by a bullet!");
+                // TODO
+                break;
+            case COLLISION_WALL:
+                mScore.collided();
+                if (!mMute) {
+                    mSoundPool.play(mIdSoundWall, 1, 1, 0, 0, 1);
+                }
+                break;
         }
-        successDialogBuilder.setMessage(msg);
-        successDialogBuilder.setPositiveButton(android.R.string.ok, this);
-        successDialogBuilder.setNeutralButton(R.string.dialog_success_restart, this);
-        successDialogBuilder.create().show();
     }
 
-    @Override
-    public void onLevelFailed() {
-        pauseGame();
-        mPlayerFailed = true;
+    private void showFailureDialog() {
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
         successDialogBuilder.setTitle(getString(R.string.dialog_failure_title));
         successDialogBuilder.setMessage(getString(R.string.dialog_failure_msg));
@@ -187,6 +234,47 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
         successDialogBuilder.setCancelable(true);
         successDialogBuilder.setOnCancelListener(this);
         successDialogBuilder.create().show();
+        mPlayerFailed = true;
+    }
+
+    private void showSuccessDialog() {
+        AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
+        successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
+        String msg;
+        if (mLevelNumber < Level.LEVEL_COUNT) {
+            msg = String.format(getString(R.string.dialog_success_msg), mLevelNumber, mScore.getTotalScore(), mScore.getHighScore(this), (mLevelNumber + 1));
+        } else {
+            msg = getString(R.string.dialog_success_msg_alt);
+        }
+        successDialogBuilder.setMessage(msg);
+        successDialogBuilder.setPositiveButton(android.R.string.ok, this);
+        successDialogBuilder.setNeutralButton(R.string.dialog_success_restart, this);
+        successDialogBuilder.create().show();
+        mPlayerFailed = false;
+    }
+
+    // @Override
+    public void onLevelCompleted() {
+        // Play sound
+        if (!mMute) {
+            mSoundPool.play(mIdSoundWin, 1, 1, 0, 0, 1);
+        }
+        // Pause
+        pauseGame();
+        saveHighScore();
+        showSuccessDialog();
+    }
+
+    // @Override
+    public void onLevelFailed() {
+        // Play sound
+        if (!mMute) {
+            mSoundPool.play(mIdSoundGameOver, 1, 1, 0, 0, 1);
+        }
+        // Pause
+        pauseGame();
+        mPlayerFailed = true;
+        showFailureDialog();
     }
 
     @Override
@@ -205,11 +293,57 @@ public class LevelActivity extends ActionBarActivity implements SensorEventListe
 
     @Override
     public void onCancel(DialogInterface dialog) {
+        // User cancelled dialog, restart game
         restartLevel();
     }
 
     @Override
-    public void onScoreUpdated() {
-        mScoreView.setText(String.format(getString(R.string.score), mLevelView.getScore().getTotalScore()));
+    public void update(Observable observable, Object data) {
+        /*Runnable action = null;*/
+        if (observable instanceof Score) {
+           /* action = new Runnable() {
+                @Override
+                public void run() {*/
+            mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
+                /*}
+            };*/
+        } else if (observable instanceof Level) {
+            if (data instanceof Level.EVENT) {
+                switch ((Level.EVENT) data) {
+                    case GAME_OVER:
+                        /*action = new Runnable() {
+                            @Override
+                            public void run() {*/
+                        onLevelFailed();
+                            /*}
+                        };*/
+                        break;
+                    case GAME_SUCCESS:
+                        /*action = new Runnable() {
+                            @Override
+                            public void run() {*/
+                        onLevelCompleted();
+                            /*}
+                        };*/
+                        break;
+                    case COLLISION_BULLET:
+                        /*action = new Runnable() {
+                            @Override
+                            public void run() {*/
+                        onCollisionDetected(Level.EVENT.COLLISION_BULLET);
+                            /*}
+                        };*/
+                    case COLLISION_WALL:
+                        /*action = new Runnable() {
+                            @Override
+                            public void run() {*/
+                        onCollisionDetected(Level.EVENT.COLLISION_WALL);
+                            /*}
+                        };*/
+                        break;
+                }
+            }
+        }
+        /*mHandler.post(action);*/
     }
 }

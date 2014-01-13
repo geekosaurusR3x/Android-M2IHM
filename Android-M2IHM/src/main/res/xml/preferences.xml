@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-    <PreferenceCategory android:title="@string/pref_cat_ui">
+    <PreferenceCategory android:title="@string/pref_cat_audio">
         <CheckBoxPreference
-            android:key="@string/pref_key_hide_actionbar"
-            android:title="@string/pref_hide_actionbar"
-            android:summary="@string/pref_hide_actionbar_summ"
-            android:defaultValue="false" />
+            android:key="@string/pref_key_mute"
+            android:title="@string/pref_mute"
+            android:summary="@string/pref_mute_summ"
+            android:defaultValue="false"/>
     </PreferenceCategory>
 </PreferenceScreen>

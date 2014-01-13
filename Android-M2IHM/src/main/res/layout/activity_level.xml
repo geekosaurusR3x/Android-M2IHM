@@ -1,10 +1,17 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/container"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="com.skad.android.androidm2ihm.activity.LevelActivity"
-    tools:ignore="MergeRootFrame" >
+             xmlns:tools="http://schemas.android.com/tools"
+             android:id="@+id/container"
+             android:layout_width="match_parent"
+             android:layout_height="match_parent"
+             tools:context="com.skad.android.androidm2ihm.activity.LevelActivity"
+             tools:ignore="MergeRootFrame">
+
+    <com.skad.android.androidm2ihm.view.BackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/view_background"
+        android:layout_gravity="center"
+        />
 
     <ImageView
         android:layout_width="match_parent"
@@ -12,39 +19,30 @@
         android:id="@+id/img_background"
         android:layout_gravity="center"
         android:contentDescription="@string/img_desc_glass_background"
-        android:background="@drawable/background" />
-    <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/view_background"
-            android:layout_gravity="center"
+        android:background="@drawable/glass"/>
 
-            />
-    <ImageView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/img_background"
-            android:layout_gravity="center"
-            android:contentDescription="@string/img_desc_glass_background"
-            android:background="@drawable/glass" />
-    <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/view_lvl"
-            android:layout_gravity="center"
+    <com.skad.android.androidm2ihm.view.LevelView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent"
+        android:id="@+id/level_view"
+        android:layout_gravity="center"
+        />
 
-             />
     <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content" android:layout_gravity="center_horizontal|top"
-            android:gravity="center">
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal|top"
+        android:gravity="center">
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="0"
+            android:text="@string/score_default"
             android:id="@+id/txt_score"
-            android:layout_gravity="right|top" android:gravity="center"/>
+            android:layout_gravity="right|top"
+            android:gravity="center"/>
     </LinearLayout>
 
 </FrameLayout>

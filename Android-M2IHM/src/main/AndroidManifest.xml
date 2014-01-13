@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.skad.android.androidm2ihm"
-          android:versionCode="1"
-          android:versionName="1.0">
+<manifest
+    package="com.skad.android.androidm2ihm"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:versionCode="1"
+    android:versionName="1.0">
 
     <uses-sdk
         android:minSdkVersion="10"
@@ -34,6 +35,7 @@
         </activity>
         <activity
             android:name=".activity.LevelActivity"
+            android:hardwareAccelerated="true"
             android:parentActivityName="com.skad.android.androidm2ihm.activity.MainActivity"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.AppCompat">

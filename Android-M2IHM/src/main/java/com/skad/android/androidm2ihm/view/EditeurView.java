@@ -49,7 +49,7 @@ public class EditeurView extends View {
         }
 
         for (final SpriteObject mObject : mListObject) {
-            canvas.drawBitmap(mObject.getSprite(), mObject.getX(), mObject.getY(), null);
+            canvas.drawBitmap(mObject.getScaledSprite(), (int)(mObject.getXPos()), (int)(mObject.getYPos()), null);
         }
         invalidate();
     }
@@ -84,22 +84,22 @@ public class EditeurView extends View {
 
     public void moveLeft(int id)
     {
-        mListObject.get(id).setX(mListObject.get(id).getX()-1);
+        mListObject.get(id).setXPos((int) (mListObject.get(id).getXPos()-1));
     }
 
     public void moveRight(int id)
     {
-        mListObject.get(id).setX(mListObject.get(id).getX()+1);
+        mListObject.get(id).setXPos((int) (mListObject.get(id).getXPos() + 1));
     }
 
     public void moveUp(int id)
     {
-        mListObject.get(id).setY(mListObject.get(id).getY()-1);
+        mListObject.get(id).setYPos((int) (mListObject.get(id).getYPos()-1));
     }
 
     public void moveDown(int id)
     {
-        mListObject.get(id).setY(mListObject.get(id).getY()+1);
+        mListObject.get(id).setYPos((int) (mListObject.get(id).getYPos()+1));
     }
 
     public void widthPlus(int id)
@@ -125,8 +125,8 @@ public class EditeurView extends View {
     public void moveElementById(int id,float x, float y)
     {   int X =(int)x-(mListObject.get(id).getWidth()/2);
         int Y =(int)y-(mListObject.get(id).getHeight()/2);
-        mListObject.get(id).setX(X);
-        mListObject.get(id).setY(Y);
+        mListObject.get(id).setXPos(X);
+        mListObject.get(id).setYPos(Y);
     }
 
     public void pause() {

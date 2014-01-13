@@ -11,6 +11,7 @@
     <string name="title_activity_level">LevelActivity</string>
 
     <string name="txt_label_greeting">Watcha want to do?</string>
+    <string name="img_desc_background">Background</string>
     <string name="img_desc_glass_background">Glass Background</string>
 
     <string name="extra_key_level">Level_ID</string>
@@ -37,6 +38,12 @@
     <string name="about_authors_content">Vincent Lamouroux, Philipp Schmitt</string>
 
     <string name="score">Score: %1$d</string>
+    <string name="pref_cat_audio">Audio</string>
+    <string name="pref_mute">Mute</string>
+    <string name="pref_mute_summ">Mute sound if enabled</string>
+    <string name="about_sound_win">Winning sound: fins</string>
+    <string name="about_music_background">Background Music: mecha-world</string>
+    <string name="score_default"/>
     <string name="editeur_start">Player</string>
     <string name="editeur_end">Cible</string>
     <string name="editeur_hole">Hole</string>
