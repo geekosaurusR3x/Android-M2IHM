@@ -6,5 +6,6 @@ package com.skad.android.androidm2ihm.model;
 public class Wall extends SpriteObject {
     public Wall(int x, int y, int width, int height) {
         super(x, y, width, height);
+        this.mType = "w";
     }
 }

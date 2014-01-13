@@ -1,6 +1,8 @@
 package com.skad.android.androidm2ihm.activity;
 
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -8,13 +10,18 @@ import android.os.Vibrator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.view.EditeurView;
+
+import java.io.*;
 
 /**
  * Created by skad on 09/01/14.
@@ -65,7 +72,12 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
                 showPopupMenu(view);
             }
         });
-
+        findViewById(R.id.editeur_sup_button).setOnClickListener(new Button.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SaveDialog();
+            }
+        });
         findViewById(R.id.editeur_remove_button).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -251,5 +263,47 @@ public class EditeurActivity extends ActionBarActivity implements View.OnTouchLi
             }
         }
         return false;
+    }
+
+    public void SaveDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        // Get the layout inflater
+        LayoutInflater inflater = getLayoutInflater();
+
+        // Inflate and set the layout for the dialog
+        // Pass null as the parent view because its going in the dialog layout
+        builder.setView(inflater.inflate(R.layout.activity_editeur_save, null))
+                // Add action buttons
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        Save(((EditText)((AlertDialog)dialog).findViewById(R.id.editeur_filename)).getText().toString());
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null);
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+    public void Save(String filename)
+    {
+        if(FileUtils.isExternalStorageWritable())
+        {
+            File file = new File(getExternalFilesDir(null),filename+".txt");
+            try {
+                OutputStream os = new FileOutputStream(file);
+                os.write(mEditeurView.toString().getBytes());
+                os.close();
+            } catch (IOException e) {
+                Toast.makeText(EditeurActivity.this, String.format(getString(R.string.editeur_save_error_file), filename, e.toString()), Toast.LENGTH_LONG).show();
+            }
+            Toast.makeText(EditeurActivity.this, getString(R.string.editeur_save_succes_file, filename), Toast.LENGTH_LONG).show();
+        }
+        else
+        {
+            Toast.makeText(EditeurActivity.this, String.format(getString(R.string.editeur_save_error_file), filename, getString(R.string.editeur_save_error_sdcard_file)), Toast.LENGTH_LONG).show();
+        }
+
+
     }
 }

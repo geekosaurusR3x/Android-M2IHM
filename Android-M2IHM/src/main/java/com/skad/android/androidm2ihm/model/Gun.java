@@ -19,6 +19,7 @@ public class Gun extends SpriteObject {
         super(x, y, width, height);
         mBulletList = new ArrayList<Bullet>();
         mFireRate = fireRate;
+        this.mType = "g";
     }
 
     public int getFireRate() {

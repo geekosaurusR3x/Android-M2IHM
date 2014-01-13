@@ -138,4 +138,17 @@ public class EditeurView extends View {
     public void resume() {
         mPaused = false;
     }
+
+    @Override
+    public String toString()
+    {
+        String temp = getContext().getString(R.string.editeur_file_first_line);
+        temp +="screen/0/0/"+mScreenWidth+"/"+mScreenHeight+"\n";
+        for (final SpriteObject mSpriteObject : mListObject)
+        {
+            temp+=mSpriteObject+"\n";
+        }
+
+       return temp;
+    }
 }

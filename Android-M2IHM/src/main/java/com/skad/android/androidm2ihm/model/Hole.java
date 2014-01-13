@@ -8,6 +8,7 @@ import android.graphics.Rect;
 public class Hole extends SpriteObject {
     public Hole(int x, int y, int width, int height) {
         super(x, y, width, height);
+        this.mType = "h";
     }
 
     public boolean intoHole(SpriteObject balle) {

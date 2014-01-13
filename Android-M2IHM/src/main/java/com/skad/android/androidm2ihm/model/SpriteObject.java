@@ -24,6 +24,7 @@ abstract public class SpriteObject {
     private boolean mShowAlternateSprite = false;
 
     private int mId;
+    protected String mType;
 
     public SpriteObject() {
         this(0, 0, 64, 64);
@@ -212,5 +213,11 @@ abstract public class SpriteObject {
 
     public double getDirY() {
         return mDir.getY();
+    }
+
+    @Override
+    public String toString()
+    {
+        return mType+"/"+(int)getXPos()+"/"+(int)getYPos()+"/"+getWidth()+"/"+getHeight();
     }
 }

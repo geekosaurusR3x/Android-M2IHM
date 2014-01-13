@@ -50,6 +50,11 @@
     <string name="editeur_wall">Wall</string>
     <string name="editeur_item_select">Item : %d selected</string>
     <string name="editeur_view_add">Add</string>
+    <string name="editeur_save_name_file">FileName</string>
+    <string name="editeur_save_error_file">Saving level into : %1$s Error : %2$s</string>
+    <string name="editeur_save_succes_file">Saving level into : %1$s Succes</string>
+    <string name="editeur_save_error_sdcard_file">is your SDCARD mount ?</string>
+    <string name="editeur_file_first_line">#lvl design type/x/y/width/height\n#type : p(player)/h(hole)/w(wall)/abl(arc bottom left)/abr(arc bottom right)/atl(arc top left)/atr(arc top right)/g(gun)/screen(screensize)\n#first line need to be the screen size of the dev devices.\n</string>
 
 
 </resources>
