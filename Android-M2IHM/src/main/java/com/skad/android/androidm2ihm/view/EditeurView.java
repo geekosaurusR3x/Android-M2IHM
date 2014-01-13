@@ -100,8 +100,11 @@ public class EditeurView extends View {
     }
     public void widthMinus(int id)
     {
-        mListObject.get(id).setWidth(mListObject.get(id).getWidth()-1);
-        mListObject.get(id).reSize();
+        SpriteObject object = mListObject.get(id);
+        if (object.getWidth() - 1 > 0) {
+            object.setWidth(object.getWidth() - 1);
+            object.reSize();
+        }
     }
     public void heightPlus(int id)
     {
@@ -110,8 +113,11 @@ public class EditeurView extends View {
     }
     public void heightMinus(int id)
     {
-        mListObject.get(id).setHeight(mListObject.get(id).getHeight()-1);
-        mListObject.get(id).reSize();
+        SpriteObject object = mListObject.get(id);
+        if (object.getHeight() - 1 > 0) {
+            object.setHeight(object.getHeight() - 1);
+            object.reSize();
+        }
     }
     public void moveElementById(int id,float x, float y)
     {   int X =(int)x-(mListObject.get(id).getWidth()/2);
