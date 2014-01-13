@@ -3,6 +3,7 @@ package com.skad.android.androidm2ihm.activity;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -29,9 +30,8 @@ import java.io.OutputStream;
 /**
  * Created by skad on 09/01/14.
  */
-public class EditorActivity extends ActionBarActivity implements View.OnTouchListener, View.OnLongClickListener, View.OnClickListener, DialogInterface.OnClickListener, DialogInterface.OnCancelListener {
+public class EditorActivity extends ActionBarActivity implements View.OnTouchListener, View.OnLongClickListener, View.OnClickListener {
     private static final String TAG = "EditeurActivity";
-
     // Views
     private EditorView mEditeurView;
     private int mCurrentTag;
@@ -40,21 +40,6 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     private int mIdSelected;
     private Handler repeatUpdateHandler = new Handler();
     private boolean mButtonRepeatLock = false;
-
-    private class RepeatingUpdater implements Runnable {
-        private int mAction;
-
-        public RepeatingUpdater(int action) {
-            mAction = action;
-        }
-
-        public void run() {
-            if (mButtonRepeatLock) {
-                performAction(mAction);
-                repeatUpdateHandler.postDelayed(new RepeatingUpdater(mAction), 10);
-            }
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +63,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         findViewById(R.id.editeur_sup_button).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                SaveDialog();
+                showSaveDialog();
             }
         });
         findViewById(R.id.editeur_remove_button).setOnClickListener(new Button.OnClickListener() {
@@ -136,35 +121,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
-
-
-    @Override
     public void onBackPressed() {
         super.onBackPressed();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-    }
-
-    @Override
-    public void onCancel(DialogInterface dialogInterface) {
-
-    }
-
-    @Override
-    public void onClick(DialogInterface dialogInterface, int i) {
-
     }
 
     @Override
@@ -206,7 +165,6 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         popupMenu.getMenuInflater().inflate(R.menu.editeur_menu, popupMenu.getMenu());
 
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 mCurrentTag = menuItem.getItemId();
@@ -221,46 +179,50 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     @Override
     public boolean onLongClick(View view) {
         if (view.equals(mEditeurView)) {
-            mIdSelected = mEditeurView.getIdElement(mXTouch, mYTouch);
+            mIdSelected = mEditeurView.getElementId(mXTouch, mYTouch);
             if (mIdSelected != -1) {
                 Toast.makeText(EditorActivity.this, "Item Selected " + mIdSelected, Toast.LENGTH_LONG).show();
-                Vibrator v = (Vibrator) getSystemService(this.VIBRATOR_SERVICE);
+                Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(50);
                 findViewById(R.id.editeur_frame_button).setVisibility(View.VISIBLE);
             }
+
             return false;
         } else {
             mButtonRepeatLock = true;
             repeatUpdateHandler.post(new RepeatingUpdater(view.getId()));
+
             return false;
         }
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
+        int action = motionEvent.getAction();
         if (view.equals(mEditeurView)) {
-            if (motionEvent.getAction() == MotionEvent.ACTION_DOWN) {
-                if (mCurrentTag != 0) {
-                    Toast.makeText(EditorActivity.this, String.format("Placer %d a x: %s y: %s", mCurrentTag, motionEvent.getX(), motionEvent.getY()), Toast.LENGTH_LONG).show();
-                    mEditeurView.addElement(mCurrentTag, motionEvent.getX(), motionEvent.getY());
-                    mCurrentTag = 0;
-                } else if (mIdSelected == -1) {
-                    mXTouch = motionEvent.getX();
-                    mYTouch = motionEvent.getY();
-                } else {
-                    mIdSelected = -1;
-                    findViewById(R.id.editeur_frame_button).setVisibility(View.INVISIBLE);
-                }
-
-            }
-            if (motionEvent.getAction() == MotionEvent.ACTION_MOVE) {
-                if (mIdSelected != -1) {
-                    mEditeurView.moveElementById(mIdSelected, motionEvent.getX(), motionEvent.getY());
-                }
+            switch (action) {
+                case MotionEvent.ACTION_DOWN:
+                    if (mCurrentTag != 0) {
+                        Toast.makeText(EditorActivity.this, String.format("Placer %d a x: %s y: %s", mCurrentTag, motionEvent.getX(), motionEvent.getY()), Toast.LENGTH_LONG).show();
+                        mEditeurView.addElement(mCurrentTag, motionEvent.getX(), motionEvent.getY());
+                        mCurrentTag = 0;
+                    } else if (mIdSelected == -1) {
+                        mXTouch = motionEvent.getX();
+                        mYTouch = motionEvent.getY();
+                    } else {
+                        mIdSelected = -1;
+                        findViewById(R.id.editeur_frame_button).setVisibility(View.INVISIBLE);
+                    }
+                    break;
+                case MotionEvent.ACTION_MOVE:
+                    if (mIdSelected != -1) {
+                        mEditeurView.moveElementById(mIdSelected, motionEvent.getX(), motionEvent.getY());
+                    }
+                    break;
             }
             return false;
         } else {
-            if ((motionEvent.getAction() == MotionEvent.ACTION_UP || motionEvent.getAction() == MotionEvent.ACTION_CANCEL)
+            if ((action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_CANCEL)
                     && mButtonRepeatLock) {
                 mButtonRepeatLock = false;
             }
@@ -268,7 +230,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         return false;
     }
 
-    public void SaveDialog() {
+    public void showSaveDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         // Get the layout inflater
         LayoutInflater inflater = getLayoutInflater();
@@ -280,7 +242,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        Save(((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString());
+                        save(((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString());
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null);
@@ -288,7 +250,8 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         dialog.show();
     }
 
-    public void Save(String filename) {
+    public void save(String filename) {
+        String toastMsg = null;
         if (FileUtils.isExternalStorageWritable()) {
             File file = new File(getExternalFilesDir(null), filename + ".txt");
             try {
@@ -296,13 +259,27 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 os.write(mEditeurView.toString().getBytes());
                 os.close();
             } catch (IOException e) {
-                Toast.makeText(EditorActivity.this, String.format(getString(R.string.editeur_save_error_file), filename, e.toString()), Toast.LENGTH_LONG).show();
+                toastMsg = String.format(getString(R.string.editeur_save_error_file), filename, e.toString());
             }
-            Toast.makeText(EditorActivity.this, getString(R.string.editeur_save_succes_file, filename), Toast.LENGTH_LONG).show();
+            toastMsg = getString(R.string.editeur_save_succes_file, filename);
         } else {
-            Toast.makeText(EditorActivity.this, String.format(getString(R.string.editeur_save_error_file), filename, getString(R.string.editeur_save_error_sdcard_file)), Toast.LENGTH_LONG).show();
+            toastMsg = String.format(getString(R.string.editeur_save_error_file), filename, getString(R.string.editeur_save_error_sdcard_file));
+        }
+        Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
+    }
+
+    private class RepeatingUpdater implements Runnable {
+        private int mAction;
+
+        public RepeatingUpdater(int action) {
+            mAction = action;
         }
 
-
+        public void run() {
+            if (mButtonRepeatLock) {
+                performAction(mAction);
+                repeatUpdateHandler.postDelayed(new RepeatingUpdater(mAction), 10);
+            }
+        }
     }
 }

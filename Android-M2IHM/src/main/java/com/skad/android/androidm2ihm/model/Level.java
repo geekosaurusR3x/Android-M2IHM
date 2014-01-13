@@ -10,11 +10,9 @@ import java.util.Observable;
  */
 public class Level extends Observable {
 
-    private static final String TAG = "Level,";
-
     public static final int LEVEL_COUNT = 3;
+    private static final String TAG = "Level,";
     private static Level mInstance;
-
     // Business objects
     private int mLevelNumber;
     private Ball mBall;
@@ -51,6 +49,34 @@ public class Level extends Observable {
         mBall = null;
     }
 
+    public void remove(SpriteObject objectToRemove) {
+        if (objectToRemove instanceof Ball) {
+            mBall = null;
+        } else if (objectToRemove instanceof Target) {
+            mTarget = null;
+        } else if (objectToRemove instanceof Wall) {
+            mWallList.remove(objectToRemove);
+        } else if (objectToRemove instanceof Gun) {
+            mGunList.remove(objectToRemove);
+        } else if (objectToRemove instanceof Hole) {
+            mHoleList.remove(objectToRemove);
+        }
+    }
+
+    public void add(SpriteObject newObject) {
+        if (newObject instanceof Ball) {
+            mBall = (Ball) newObject;
+        } else if (newObject instanceof Target) {
+            mTarget = (Target) newObject;
+        } else if (newObject instanceof Wall) {
+            mWallList.add((Wall) newObject);
+        } else if (newObject instanceof Gun) {
+            mGunList.add((Gun) newObject);
+        } else if (newObject instanceof Hole) {
+            mHoleList.add((Hole) newObject);
+        }
+    }
+
     public Ball getBall() {
         return mBall;
     }
@@ -59,11 +85,11 @@ public class Level extends Observable {
         mBall = ball;
     }
 
-    public Target getEnd() {
+    public Target getTarget() {
         return mTarget;
     }
 
-    public void setEnd(Target end) {
+    public void setTarget(Target end) {
         mTarget = end;
     }
 
@@ -251,16 +277,36 @@ public class Level extends Observable {
     public List<SpriteObject> getAllSprites() {
         List<SpriteObject> spriteList = new ArrayList<SpriteObject>();
 
-        spriteList.addAll(mHoleList);
-        for (final Gun gun : mGunList) {
-            spriteList.addAll(gun.getBulletList());
+        if (!mHoleList.isEmpty()) {
+            spriteList.addAll(mHoleList);
         }
-        spriteList.addAll(mGunList);
-        spriteList.addAll(mWallList);
-        spriteList.add(mTarget);
-        spriteList.add(mBall);
+        if (!mGunList.isEmpty()) {
+            for (final Gun gun : mGunList) {
+                spriteList.addAll(gun.getBulletList());
+            }
+            spriteList.addAll(mGunList);
+        }
+        if (!mWallList.isEmpty()) {
+            spriteList.addAll(mWallList);
+        }
+        if (mTarget != null) {
+            spriteList.add(mTarget);
+        }
+        if (mBall != null) {
+            spriteList.add(mBall);
+        }
 
         return spriteList;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (final SpriteObject mSpriteObject : getAllSprites()) {
+            sb.append(mSpriteObject + "\n");
+        }
+
+        return sb.toString();
     }
 
     public static enum EVENT {GAME_OVER, GAME_SUCCESS, COLLISION_WALL, COLLISION_BULLET}
