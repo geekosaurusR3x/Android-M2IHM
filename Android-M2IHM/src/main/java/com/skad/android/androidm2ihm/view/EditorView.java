@@ -15,7 +15,7 @@ import java.util.ArrayList;
 /**
  * Created by skad on 19/12/13.
  */
-public class EditeurView extends View {
+public class EditorView extends View {
 
     // Bitmap background;
     private boolean mPaused = false;
@@ -25,7 +25,7 @@ public class EditeurView extends View {
     private int mScreenHeight = 1;
     private ArrayList<SpriteObject> mListObject = new ArrayList<SpriteObject>();
 
-    public EditeurView(Context context, AttributeSet attributeSet) {
+    public EditorView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         DisplayMetrics metrics = context.getResources().getDisplayMetrics();
         mScreenWidth = metrics.widthPixels;
@@ -40,18 +40,16 @@ public class EditeurView extends View {
         }
 
         for (final SpriteObject mObject : mListObject) {
-            canvas.drawBitmap(mObject.getScaledSprite(), (int)(mObject.getXPos()), (int)(mObject.getYPos()), null);
+            canvas.drawBitmap(mObject.getScaledSprite(), (int) (mObject.getXPos()), (int) (mObject.getYPos()), null);
         }
         invalidate();
     }
 
 
-    public void addElement(int tag,float x, float y)
-    {
-        switch(tag)
-        {
+    public void addElement(int tag, float x, float y) {
+        switch (tag) {
             case R.id.editeur_start:
-                Ball mBall = new Ball((int)x,(int)y,128,128);
+                Ball mBall = new Ball((int) x, (int) y, 128, 128);
                 mBall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.playership));
                 mBall.setId(tag);
                 mListObject.add(mBall);
@@ -66,67 +64,60 @@ public class EditeurView extends View {
         mListObject.remove(mListObject.get(id));
     }
 
-    public int getIdElement(float x, float y)
-    {
-        for (final SpriteObject mSpriteObject : mListObject)
-        {
-            if(mSpriteObject.isInto((int)x,(int)y))
-            {
+    public int getIdElement(float x, float y) {
+        for (final SpriteObject mSpriteObject : mListObject) {
+            if (mSpriteObject.isInto((int) x, (int) y)) {
                 return mListObject.indexOf(mSpriteObject);
             }
         }
         return -1;
     }
 
-    public void moveLeft(int id)
-    {
-        mListObject.get(id).setXPos((int) (mListObject.get(id).getXPos()-1));
+    public void moveLeft(int id) {
+        mListObject.get(id).setXPos((int) (mListObject.get(id).getXPos() - 1));
     }
 
-    public void moveRight(int id)
-    {
+    public void moveRight(int id) {
         mListObject.get(id).setXPos((int) (mListObject.get(id).getXPos() + 1));
     }
 
-    public void moveUp(int id)
-    {
-        mListObject.get(id).setYPos((int) (mListObject.get(id).getYPos()-1));
+    public void moveUp(int id) {
+        mListObject.get(id).setYPos((int) (mListObject.get(id).getYPos() - 1));
     }
 
-    public void moveDown(int id)
-    {
-        mListObject.get(id).setYPos((int) (mListObject.get(id).getYPos()+1));
+    public void moveDown(int id) {
+        mListObject.get(id).setYPos((int) (mListObject.get(id).getYPos() + 1));
     }
 
-    public void widthPlus(int id)
-    {
+    public void widthPlus(int id) {
         mListObject.get(id).setWidth(mListObject.get(id).getWidth() + 1);
         mListObject.get(id).reSize();
     }
-    public void widthMinus(int id)
-    {
+
+    public void widthMinus(int id) {
         SpriteObject object = mListObject.get(id);
         if (object.getWidth() - 1 > 0) {
             object.setWidth(object.getWidth() - 1);
             object.reSize();
         }
     }
-    public void heightPlus(int id)
-    {
-        mListObject.get(id).setHeight(mListObject.get(id).getHeight()+1);
+
+    public void heightPlus(int id) {
+        mListObject.get(id).setHeight(mListObject.get(id).getHeight() + 1);
         mListObject.get(id).reSize();
     }
-    public void heightMinus(int id)
-    {
+
+    public void heightMinus(int id) {
         SpriteObject object = mListObject.get(id);
         if (object.getHeight() - 1 > 0) {
             object.setHeight(object.getHeight() - 1);
             object.reSize();
         }
     }
-    public void moveElementById(int id,float x, float y)
-    {   int X =(int)x-(mListObject.get(id).getWidth()/2);
-        int Y =(int)y-(mListObject.get(id).getHeight()/2);
+
+    public void moveElementById(int id, float x, float y) {
+        int X = (int) x - (mListObject.get(id).getWidth() / 2);
+        int Y = (int) y - (mListObject.get(id).getHeight() / 2);
         mListObject.get(id).setXPos(X);
         mListObject.get(id).setYPos(Y);
     }
@@ -140,15 +131,13 @@ public class EditeurView extends View {
     }
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         String temp = getContext().getString(R.string.editeur_file_first_line);
-        temp +="screen/0/0/"+mScreenWidth+"/"+mScreenHeight+"\n";
-        for (final SpriteObject mSpriteObject : mListObject)
-        {
-            temp+=mSpriteObject+"\n";
+        temp += "screen/0/0/" + mScreenWidth + "/" + mScreenHeight + "\n";
+        for (final SpriteObject mSpriteObject : mListObject) {
+            temp += mSpriteObject + "\n";
         }
 
-       return temp;
+        return temp;
     }
 }

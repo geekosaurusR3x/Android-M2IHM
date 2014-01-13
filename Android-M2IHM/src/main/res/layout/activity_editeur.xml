@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.skad.android.androidm2ihm.activity.EditeurActivity"
+    tools:context="com.skad.android.androidm2ihm.activity.EditorActivity"
     tools:ignore="MergeRootFrame">
 
     <ImageView
@@ -31,7 +31,7 @@
         android:background="@drawable/glass"
         android:contentDescription="@string/img_desc_glass_background"/>
 
-    <com.skad.android.androidm2ihm.view.EditeurView
+    <com.skad.android.androidm2ihm.view.EditorView
         android:id="@+id/editeur_lvl"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,9 +41,11 @@
         android:visibility="visible"/>
 
     <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" android:layout_gravity="left|top">
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="left|top">
+
         <ImageButton
             android:id="@+id/editeur_add_button"
             android:src="@drawable/ic_action_new"
@@ -51,13 +53,14 @@
             android:layout_height="wrap_content"
             android:layout_gravity="left|top"
             android:text="@string/editeur_view_add"/>
+
         <ImageButton
-                android:id="@+id/editeur_sup_button"
-                android:src="@drawable/ic_action_save"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="left|top"
-                android:text="@string/editeur_view_add"/>
+            android:id="@+id/editeur_sup_button"
+            android:src="@drawable/ic_action_save"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left|top"
+            android:text="@string/editeur_view_add"/>
     </LinearLayout>
 
     <FrameLayout

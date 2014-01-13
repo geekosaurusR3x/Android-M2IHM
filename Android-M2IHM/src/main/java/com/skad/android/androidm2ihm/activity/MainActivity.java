@@ -71,7 +71,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         int numtag = Integer.parseInt(view.getTag().toString());
         Intent gameIntent;
         if (numtag == 0) {
-            gameIntent = new Intent(this, EditeurActivity.class);
+            gameIntent = new Intent(this, EditorActivity.class);
         } else {
             gameIntent = new Intent(this, LevelActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
