@@ -39,6 +39,9 @@
     <string name="pref_cat_audio">Audio</string>
     <string name="pref_mute">Mute</string>
     <string name="pref_mute_summ">Mute sound if enabled</string>
+    <string name="about_sound_win">Winning sound: fins</string>
+    <string name="about_music_background">Background Music: mecha-world</string>
+    <string name="score_default"/>
 
 
 </resources>

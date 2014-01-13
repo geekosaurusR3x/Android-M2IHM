@@ -26,7 +26,9 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback/*im
         super(context, attributeSet);
         mLevel = Level.getInstance();
         SurfaceHolder holder = getHolder();
-        holder.addCallback(this);
+        if (holder != null) {
+            holder.addCallback(this);
+        }
         // Make transparent so that we can see our background
         setZOrderOnTop(true);
         holder.setFormat(PixelFormat.TRANSPARENT);

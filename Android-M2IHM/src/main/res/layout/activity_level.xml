@@ -39,7 +39,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="0"
+            android:text="@string/score_default"
             android:id="@+id/txt_score"
             android:layout_gravity="right|top"
             android:gravity="center"/>

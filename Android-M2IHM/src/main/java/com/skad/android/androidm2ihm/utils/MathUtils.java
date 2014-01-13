@@ -19,7 +19,7 @@ public class MathUtils {
      *
      * @param number   Input number
      * @param maxValue Maximum value
-     * @return
+     * @return Either 0, max - 1 or input
      */
     public static int maxOrZero(int number, int maxValue) {
         if (number < 0) {
@@ -61,8 +61,8 @@ public class MathUtils {
         double C1 = (ly2 - ly1) * lx1 + (lx1 - lx2) * ly1;
         double C2 = -B1 * x0 + A1 * y0;
         double det = A1 * A1 - -B1 * B1;
-        double cx = 0;
-        double cy = 0;
+        double cx;
+        double cy;
         if (det != 0) {
             cx = (float) ((A1 * C1 - B1 * C2) / det);
             cy = (float) ((A1 * C2 - -B1 * C1) / det);

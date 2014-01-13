@@ -9,13 +9,14 @@ import android.view.Surface;
  * Created by pschmitt on 12/21/13.
  */
 public class ScreenOrientation {
-    private ScreenOrientation() {}
+    private ScreenOrientation() {
+    }
 
     /**
+     * @param activity Context
+     * @return ActivityInfo.$ScreenOrientation
      * @author: Uma sankar pradhan
      * Source: http://stackoverflow.com/a/15613855/1872036
-     * @param activity Context
-     * @return
      */
     public static int getOrientation(Activity activity) {
         int rotation = activity.getWindowManager().getDefaultDisplay().getRotation();

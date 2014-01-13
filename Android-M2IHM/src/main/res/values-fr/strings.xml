@@ -9,7 +9,6 @@
 
     <string name="title_activity_level">LevelActivity</string>
 
-    <string name="pref_cat_ui">UI</string>
     <string name="pref_key_highscore">highscore_%1$d</string>
 
     <string name="txt_label_greeting">Quel Niveau?</string>
@@ -46,6 +45,9 @@
     <string name="pref_cat_audio">Sons</string>
     <string name="pref_mute">Surdine</string>
     <string name="pref_mute_summ">Désactiver le son</string>
+    <string name="about_sound_win">Winning sound: fins</string>
+    <string name="about_music_background">Background Music: mecha-world</string>
+    <string name="score_default"/>
 
 
 </resources>

@@ -25,7 +25,9 @@ public class BackgroundView extends SurfaceView implements SurfaceHolder.Callbac
     public BackgroundView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         SurfaceHolder holder = getHolder();
-        holder.addCallback(this);
+        if (holder != null) {
+            holder.addCallback(this);
+        }
     }
 
     public void drawSpaceShips(Canvas canvas) {
