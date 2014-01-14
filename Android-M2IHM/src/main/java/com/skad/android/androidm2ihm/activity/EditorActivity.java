@@ -117,6 +117,8 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
 
         Button rotateButton = (Button) findViewById(R.id.editeur_rotate);
         rotateButton.setOnClickListener(this);
+        rotateButton.setOnLongClickListener(this);
+        rotateButton.setOnTouchListener(this);
 
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
