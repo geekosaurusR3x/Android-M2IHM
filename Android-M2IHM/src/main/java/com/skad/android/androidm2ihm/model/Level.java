@@ -231,43 +231,6 @@ public class Level extends Observable {
         }
     }
 
-    public void update() {
-        updateBullets();
-        /*if (playerHitWall()) { // Player hit a wall
-            mBall.setXPos(lastX);
-            mBall.setYPos(lastY);
-            mBall.setShowAlternateSprite(true);
-            // TODO bounce
-            // ball.setDir(-ball.getDirX(), ball.getDirY());
-            setChanged();
-            notifyObservers(EVENT.COLLISION_WALL);
-        } else {
-            mBall.setShowAlternateSprite(false);
-        }
-        for (final Gun gun : mGunList) {
-            Bullet bullet = playerWasHitByBullet(gun);
-            if (bullet != null) { // Player got hit by a bullet
-                // TODO bounce
-                mBall.setShowAlternateSprite(true);
-                gun.removeBullet(bullet);
-                setChanged();
-                notifyObservers(EVENT.COLLISION_BULLET);
-            } else {
-                mBall.setShowAlternateSprite(false);
-            }
-        }
-        if (playerReachedEnd()) { // Epic win
-            //mLevelListener.onLevelCompleted();
-            setChanged();
-            notifyObservers(EVENT.GAME_SUCCESS);
-        }
-        if (playerFellIntoHole()) { // Game over
-            //mLevelListener.onLevelFailed();
-            setChanged();
-            notifyObservers(EVENT.GAME_OVER);
-        }*/
-    }
-
     /**
      * Retrieve all the sprites!
      * Note: The order matters as the first object is drawn first (followers will be "above")

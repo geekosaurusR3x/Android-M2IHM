@@ -22,6 +22,7 @@ abstract public class SpriteObject {
     private Bitmap mOriginalSprite;
     private Bitmap mOriginalAlternateSprite;
     private boolean mShowAlternateSprite = false;
+    private float mAngle;
 
     private int mId;
     protected String mType;
@@ -203,6 +204,14 @@ abstract public class SpriteObject {
 
         Matrix matrix = new Matrix();
         matrix.postRotate(angle);
+        reSize();
+        mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
+    }
+
+    public void rotate(float angle) {
+        Matrix matrix = new Matrix();
+        mAngle = mAngle + angle;
+        matrix.postRotate(mAngle);
         reSize();
         mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
     }

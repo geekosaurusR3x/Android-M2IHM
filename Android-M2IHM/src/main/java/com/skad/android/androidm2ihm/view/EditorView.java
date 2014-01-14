@@ -110,6 +110,10 @@ public class EditorView extends View {
         mLevel.getAllSprites().get(id).reSize();
     }
 
+    public void rotate(int id) {
+        mLevel.getAllSprites().get(id).rotate(90);
+    }
+
     public void heightMinus(int id) {
         SpriteObject object = mLevel.getAllSprites().get(id);
         if (object.getHeight() - 1 > 0) {

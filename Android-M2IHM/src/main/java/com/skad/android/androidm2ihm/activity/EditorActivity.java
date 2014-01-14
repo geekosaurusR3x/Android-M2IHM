@@ -33,7 +33,7 @@ import java.io.OutputStream;
  * Created by skad on 09/01/14.
  */
 public class EditorActivity extends ActionBarActivity implements View.OnTouchListener, View.OnLongClickListener, View.OnClickListener {
-    private static final String TAG = "EditeurActivity";
+    private static final String TAG = "EditorActivity";
     // Views
     private EditorView mEditeurView;
     private int mCurrentTag;
@@ -115,6 +115,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         heightPlusButton.setOnLongClickListener(this);
         heightPlusButton.setOnTouchListener(this);
 
+        Button rotateButton = (Button) findViewById(R.id.editeur_rotate);
+        rotateButton.setOnClickListener(this);
+
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -158,6 +161,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 break;
             case R.id.editeur_heightplus_button:
                 mEditeurView.heightPlus(mIdSelected);
+                break;
+            case R.id.editeur_rotate:
+                mEditeurView.rotate(mIdSelected);
                 break;
         }
     }
