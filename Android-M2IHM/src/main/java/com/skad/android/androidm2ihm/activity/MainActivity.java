@@ -3,14 +3,18 @@ package com.skad.android.androidm2ihm.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
+import com.skad.android.androidm2ihm.task.MoveSdCard;
 
 public class MainActivity extends ActionBarActivity implements Button.OnClickListener, DialogInterface.OnClickListener {
 
@@ -20,14 +24,33 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        boolean firstlaunch = sharedPreferences.getBoolean("Content Moved", false);
 
-        // Setup button click listener
+        if(!firstlaunch)
+        {
+            MoveSdCard movetosd = new MoveSdCard(this);
+            movetosd.execute(null);
+        }
+
+    }
+
+    public void fecthLevel()
+    {
+        findViewById(R.id.button_level_1).setVisibility(View.VISIBLE);
+        findViewById(R.id.button_level_2).setVisibility(View.VISIBLE);
+        findViewById(R.id.button_level_3).setVisibility(View.VISIBLE);
+        findViewById(R.id.button_editeur).setVisibility(View.VISIBLE);
+
         findViewById(R.id.button_level_1).setOnClickListener(this);
         findViewById(R.id.button_level_3).setOnClickListener(this);
         findViewById(R.id.button_level_2).setOnClickListener(this);
         findViewById(R.id.button_editeur).setOnClickListener(this);
-    }
 
+        //SharedPreferences.Editor editor = sharedPreferences.edit();
+        //editor.putBoolean("Content Moved", true);
+        //editor.commit();
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
