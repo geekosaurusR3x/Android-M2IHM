@@ -7,9 +7,7 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
-import com.skad.android.androidm2ihm.model.Ball;
-import com.skad.android.androidm2ihm.model.Level;
-import com.skad.android.androidm2ihm.model.SpriteObject;
+import com.skad.android.androidm2ihm.model.*;
 
 /**
  * Created by skad on 19/12/13.
@@ -44,10 +42,28 @@ public class EditorView extends View {
     public void addElement(int tag, float x, float y) {
         switch (tag) {
             case R.id.editeur_start:
-                Ball ball = new Ball((int) x, (int) y, 128, 128);
+                Ball ball = new Ball((int) x, (int) y, 92, 92);
                 ball.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.playership));
                 ball.setId(tag);
                 mLevel.add(ball);
+                break;
+            case R.id.editeur_end:
+                Target target = new Target((int) x, (int) y, 128, 128);
+                target.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.cible));
+                target.setId(tag);
+                mLevel.add(target);
+                break;
+            case R.id.editeur_hole:
+                Hole hole = new Hole((int) x, (int) y, 92, 92);
+                hole.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.hole));
+                hole.setId(tag);
+                mLevel.add(hole);
+                break;
+            case R.id.editeur_wall:
+                Wall wall = new Wall((int) x, (int) y, 64, 32);
+                wall.setSprite(BitmapFactory.decodeResource(getResources(), R.drawable.wall_grey_texture));
+                wall.setId(tag);
+                mLevel.add(wall);
                 break;
         }
 
