@@ -53,9 +53,12 @@ public class LevelParser {
                     int yPos = Integer.parseInt(temp[2]);
                     int width = Integer.parseInt(temp[3]);
                     int height = Integer.parseInt(temp[4]);
-                    int fireRate = 1000; // Default fire rate
+                    float angle = 0; //Default angle
                     if (temp.length > 5)
-                        fireRate = Integer.parseInt(temp[5]);
+                            Float.parseFloat(temp[5]);
+                    int fireRate = 1000; // Default fire rate
+                    if (temp.length > 6)
+                        fireRate = Integer.parseInt(temp[6]);
 
                     // Ajusting for the screen size
                     xPos = (int) (xPos * ratioHeight);
@@ -70,19 +73,23 @@ public class LevelParser {
                         ball = new Ball(xPos, yPos, width, height);
                         ball.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded));
                         ball.setAlternateSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded_red));
+                        ball.setmAngle(angle);
                     } else if (objectType.equals("g")) { // gun
                         Gun gun = new Gun(xPos, yPos, width, height, fireRate);
                         gun.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.gun));
                         gun.setBulletSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
                         gun.setRatioHeight(ratioHeight);
                         gun.setRatioWidth(ratioWidth);
+                        gun.setmAngle(angle);
                         gunList.add(gun);
                     } else if (objectType.equals("e")) {
                         end = new Target(xPos, yPos, width, height);
                         end.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.cible));
+                        end.setmAngle(angle);
                     } else if (objectType.equals("h")) { // hole
                         Hole hole = new Hole(xPos, yPos, width, height);
                         hole.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.hole));
+                        hole.setmAngle(angle);
                         holeList.add(hole);
                     } else { // Walls
                         Wall wall = new Wall(xPos, yPos, width, height);
@@ -103,6 +110,7 @@ public class LevelParser {
                             wall = new WallArcTopRight(xPos, yPos, width, height);
                             drawableResID = R.drawable.arcwall_top_right;
                         }
+                        wall.setmAngle(angle);
                         wall.setSprite(BitmapFactory.decodeResource(context.getResources(), drawableResID));
                         wallList.add(wall);
                     }

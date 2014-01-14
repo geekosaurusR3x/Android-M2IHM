@@ -111,7 +111,8 @@ public class EditorView extends View {
     }
 
     public void rotate(int id) {
-        mLevel.getAllSprites().get(id).rotate(90);
+        float angle = mLevel.getAllSprites().get(id).getmAngle()+1;
+        mLevel.getAllSprites().get(id).rotate(angle);
     }
 
     public void heightMinus(int id) {

@@ -65,4 +65,9 @@ public class Gun extends SpriteObject {
     public void removeBullet(Bullet bullet) {
         mBulletList.remove(bullet);
     }
+
+    @Override
+    public String toString(){
+        return super.toString()+"/"+getFireRate();
+    }
 }

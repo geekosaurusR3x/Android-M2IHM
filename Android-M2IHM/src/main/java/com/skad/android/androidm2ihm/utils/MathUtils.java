@@ -32,7 +32,7 @@ public class MathUtils {
     }
 
     public static Vector2D randomVector(int xMax, int yMax) {
-        int lower = 0; // ??
+        int lower = 0; // retourne 1 point de point entre : [lower , xMax]
         return new Vector2D((int) (Math.random() * (xMax - lower)) + lower, (int) (Math.random() * (yMax - lower)) + lower);
     }
 

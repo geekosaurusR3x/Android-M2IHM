@@ -102,6 +102,14 @@ abstract public class SpriteObject {
         return mHeight;
     }
 
+    public float getmAngle() {
+        return mAngle;
+    }
+
+    public void setmAngle(float mAngle) {
+        this.mAngle = mAngle;
+    }
+
     public void setSprite(Bitmap sprite) {
         mOriginalSprite = sprite;
         reSize();
@@ -202,15 +210,12 @@ abstract public class SpriteObject {
             angle += 360;
         }
 
-        Matrix matrix = new Matrix();
-        matrix.postRotate(angle);
-        reSize();
-        mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
+        rotate(angle);
     }
 
     public void rotate(float angle) {
         Matrix matrix = new Matrix();
-        mAngle = mAngle + angle;
+        mAngle = angle;
         matrix.postRotate(mAngle);
         reSize();
         mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
@@ -227,6 +232,6 @@ abstract public class SpriteObject {
     @Override
     public String toString()
     {
-        return mType+"/"+(int)getXPos()+"/"+(int)getYPos()+"/"+getWidth()+"/"+getHeight();
+        return mType+"/"+(int)getXPos()+"/"+(int)getYPos()+"/"+getWidth()+"/"+getHeight()+"/"+getmAngle();
     }
 }
