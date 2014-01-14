@@ -240,13 +240,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
 
     public void showSaveDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Get the layout inflater
-        LayoutInflater inflater = getLayoutInflater();
 
-        // Inflate and set the layout for the dialog
-        // Pass null as the parent view because its going in the dialog layout
+        LayoutInflater inflater = getLayoutInflater();
         builder.setView(inflater.inflate(R.layout.activity_editeur_save, null))
-                // Add action buttons
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
@@ -261,7 +257,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     public void save(String filename) {
         String toastMsg = null;
         if (FileUtils.isExternalStorageWritable()) {
-            File file = new File(getExternalFilesDir(null), filename + ".txt");
+            String Path = getExternalFilesDir(null)+File.separator+filename;
+            FileUtils.makeDir(Path);
+            File file = new File(Path, "level.txt");
             DisplayMetrics metrics = getResources().getDisplayMetrics();
             try {
                 OutputStream os = new FileOutputStream(file);

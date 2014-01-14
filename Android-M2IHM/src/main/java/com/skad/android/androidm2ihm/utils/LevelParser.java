@@ -1,14 +1,13 @@
 package com.skad.android.androidm2ihm.utils;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.util.Log;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,23 +18,21 @@ public class LevelParser {
     private LevelParser() {
     }
 
-    public static Level getLevelFromFile(Context context, int levelNumber, int screenWidth, int screenHeight) {
+    public static Level getLevelFromFile(Context context, String levelDir,int levelNum, int screenWidth, int screenHeight) {
         double ratioWidth = 1;
         double ratioHeight = 1;
         // Determine correct level resource file
-        int levelResId = R.raw.lvl1;
-        switch (levelNumber) {
-            case 1:
-                levelResId = R.raw.lvl1;
-                break;
-            case 2:
-                levelResId = R.raw.lvl2;
-                break;
-            case 3:
-                levelResId = R.raw.lvl3;
-                break;
+
+        String Path = context.getExternalFilesDir(null)+File.separator+levelDir ;
+        File file = new File(Path, "level.txt");
+        InputStream fileLevelStream = null;
+
+        try {
+            fileLevelStream = new FileInputStream(file);
+            Log.d("tag", file.toString());
+        } catch (FileNotFoundException e) {
         }
-        InputStream fileLevelStream = context.getResources().openRawResource(levelResId);
+
         BufferedReader reader = new BufferedReader(new InputStreamReader(fileLevelStream));
         String line;
         Ball ball = null;
@@ -71,53 +68,53 @@ public class LevelParser {
                         ratioHeight = (double) screenHeight / height;
                     } else if (objectType.equals("p")) { // player (ball)
                         ball = new Ball(xPos, yPos, width, height);
-                        ball.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded));
-                        ball.setAlternateSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.playership_shielded_red));
+                        ball.setSprite(getBitmapOrStandar(context, Path, "playership_shielded.png"));
+                        ball.setSprite(getBitmapOrStandar(context,Path,"playership_shielded_red.png"));
                         ball.setmAngle(angle);
                     } else if (objectType.equals("g")) { // gun
                         Gun gun = new Gun(xPos, yPos, width, height, fireRate);
-                        gun.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.gun));
-                        gun.setBulletSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.bullet));
+                        gun.setSprite(getBitmapOrStandar(context,Path,"gun.png"));
+                        gun.setBulletSprite(getBitmapOrStandar(context, Path, "bullet.png"));
                         gun.setRatioHeight(ratioHeight);
                         gun.setRatioWidth(ratioWidth);
                         gun.setmAngle(angle);
                         gunList.add(gun);
                     } else if (objectType.equals("e")) {
                         end = new Target(xPos, yPos, width, height);
-                        end.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.cible));
+                        end.setSprite(getBitmapOrStandar(context, Path, "cible.png"));
                         end.setmAngle(angle);
                     } else if (objectType.equals("h")) { // hole
                         Hole hole = new Hole(xPos, yPos, width, height);
-                        hole.setSprite(BitmapFactory.decodeResource(context.getResources(), R.drawable.hole));
+                        hole.setSprite(getBitmapOrStandar(context, Path, "hole.png"));
                         hole.setmAngle(angle);
                         holeList.add(hole);
                     } else { // Walls
                         Wall wall = new Wall(xPos, yPos, width, height);
-                        int drawableResID = 0;
+                        String drawableResName = "";
                         if (objectType.equals("w")) { // wall (straight)
                             wall = new Wall(xPos, yPos, width, height);
-                            drawableResID = R.drawable.wall_grey_texture;
+                            drawableResName = "wall_grey_texture";
                         } else if (objectType.equals("abl")) { // wall (curved - bottom left)
                             wall = new WallArcBottomLeft(xPos, yPos, width, height);
-                            drawableResID = R.drawable.arcwall_bottom_left;
+                            drawableResName = "arcwall_bottom_left";
                         } else if (objectType.equals("abr")) { // wall (curved - bottom right)
                             wall = new WallArcBottomRight(xPos, yPos, width, height);
-                            drawableResID = R.drawable.arcwall_bottom_right;
+                            drawableResName = "arcwall_bottom_right";
                         } else if (objectType.equals("atl")) { // wall (curved - top left)
                             wall = new WallArcTopLeft(xPos, yPos, width, height);
-                            drawableResID = R.drawable.arcwall_top_left;
+                            drawableResName = "arcwall_top_left";
                         } else if (objectType.equals("atr")) { // wall (curved - top right)
                             wall = new WallArcTopRight(xPos, yPos, width, height);
-                            drawableResID = R.drawable.arcwall_top_right;
+                            drawableResName = "arcwall_top_right";
                         }
                         wall.setmAngle(angle);
-                        wall.setSprite(BitmapFactory.decodeResource(context.getResources(), drawableResID));
+                        wall.setSprite(getBitmapOrStandar(context, Path, drawableResName + ".png"));
                         wallList.add(wall);
                     }
                 }
             }
             level.setComponents(ball, end, wallList, holeList, gunList);
-            level.setLevelNumber(levelNumber);
+            level.setLevelNumber(levelNum);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {
@@ -130,4 +127,14 @@ public class LevelParser {
         return level;
     }
 
+    public static Bitmap getBitmapOrStandar(Context context,String path, String fileName)
+    {
+        Bitmap temp = BitmapFactory.decodeFile(path+File.separator+fileName);
+        if (temp == null)
+        {
+            temp =  BitmapFactory.decodeFile(context.getExternalFilesDir(null)+File.separator+"default"+File.separator+fileName);
+        }
+
+        return temp;
+    }
 }

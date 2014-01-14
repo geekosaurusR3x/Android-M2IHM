@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.media.SoundPool;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.ActionBar;
@@ -19,6 +20,7 @@ import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.view.LevelView;
 
+import java.io.File;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -34,7 +36,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     private boolean mPlayerFailed = false;
     private Score mScore;
     private int mLevelNumber;
+    private String mLevelDir;
     private Level mLevel;
+    private String mAudioPath;
     // Audio
     private boolean mMute;
     private MediaPlayer mBackgroundMusic;
@@ -59,7 +63,8 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
 
         // Determine which level should be loaded
         mLevelNumber = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
-
+        mLevelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
+        mAudioPath = this.getExternalFilesDir(null)+ File.separator+"default"+File.separator;
         // Init score
         mScore = new Score(mLevelNumber);
 
@@ -81,9 +86,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
 
         // Audio
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-        mIdSoundWall = mSoundPool.load(this, R.raw.wall_hit, 1);
-        mIdSoundGameOver = mSoundPool.load(this, R.raw.gameover, 1);
-        mIdSoundWin = mSoundPool.load(this, R.raw.fins_level_completed, 1);
+        mIdSoundWall = mSoundPool.load(mAudioPath+"wall_hit.wav", 1);
+        mIdSoundGameOver = mSoundPool.load(mAudioPath+"gameover.wav", 1);
+        mIdSoundWin = mSoundPool.load(mAudioPath+"fins_level_completed.wav", 1);
 
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -126,7 +131,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     }
 
     private void startBackgroundMusicPlayback() {
-        mBackgroundMusic = MediaPlayer.create(this, R.raw.background_music);
+        mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(mAudioPath+"background_music.wav")));
         mBackgroundMusic.setLooping(true);
         mBackgroundMusic.start();
     }
@@ -140,7 +145,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
 
     private void drawLevel() {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
-        mLevel = LevelParser.getLevelFromFile(this, mLevelNumber, metrics.widthPixels, metrics.heightPixels);
+        mLevel = LevelParser.getLevelFromFile(this,mLevelDir ,mLevelNumber, metrics.widthPixels, metrics.heightPixels);
         if (!mMute) {
             startBackgroundMusicPlayback();
         }

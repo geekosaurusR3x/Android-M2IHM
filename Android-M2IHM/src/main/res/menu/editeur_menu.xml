@@ -3,16 +3,12 @@
 
     <group android:id="@+id/group_popupmenu">
         <item android:id="@+id/editeur_start"
-              android:title="@string/editeur_start"
-              android:icon="@drawable/playership"/>
+              android:title="@string/editeur_start" />
         <item android:id="@+id/editeur_end"
-              android:title="@string/editeur_end"
-              android:icon="@drawable/cible"/>
+              android:title="@string/editeur_end" />
         <item android:id="@+id/editeur_hole"
-              android:title="@string/editeur_hole"
-                android:icon="@drawable/hole"/>
+              android:title="@string/editeur_hole" />
         <item android:id="@+id/editeur_wall"
-              android:icon="@drawable/wall_grey_texture"
               android:title="@string/editeur_wall" />
     </group>
 </menu>

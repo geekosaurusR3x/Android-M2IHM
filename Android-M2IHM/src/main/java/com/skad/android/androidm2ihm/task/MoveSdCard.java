@@ -2,12 +2,14 @@ package com.skad.android.androidm2ihm.task;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.activity.MainActivity;
+import com.skad.android.androidm2ihm.utils.FileUtils;
 
+import java.io.*;
 import java.net.URL;
 
 /**
@@ -17,6 +19,7 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
 
     private Context mContext;
     private ProgressDialog progress;
+    private int mProgresPrecent;
 
     public MoveSdCard(Context c)
     {
@@ -35,17 +38,58 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
     }
 
     protected Long doInBackground(URL... urls) {
-        int progres;
-        for (progres=0;progres<=100;progres++)
+        mProgresPrecent = 0;
+        parsingAsset();
+        return null;
+    }
+
+    protected void parsingAsset()
+    {
+        AssetManager assetManager = mContext.getAssets();
+        String[] dirs = null;
+        String[] sousdirs = null;
+
+        try {
+            dirs = assetManager.list("");
+        } catch (IOException e) {
+            Log.e("tag", "Failed to get asset file list.", e);
+        }
+        Log.d("tag","nb files "+dirs.length);
+        for(String dir : dirs)
         {
             try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
+                sousdirs = assetManager.list(dir);
+            } catch (IOException e) {
+                Log.e("tag", "Failed to get asset file list.", e);
             }
-            publishProgress(progres);
+            Log.d("tag","Dir "+dir);
+            FileUtils.makeDir(mContext.getExternalFilesDir(null)+File.separator+dir);
+            for(String filename : sousdirs)
+            {
+                copyAssets(dir + File.separator + filename);
+                mProgresPrecent++;
+                publishProgress(mProgresPrecent);
+            }
         }
-        return null;
+    }
+    protected void copyAssets(String filename)
+    {
+        Log.d("tag","File : "+filename);
+        AssetManager assetManager = mContext.getAssets();
+        InputStream in = null;
+        OutputStream out = null;
+        try {
+            in = assetManager.open(filename);
+            out = new FileOutputStream(new File(mContext.getExternalFilesDir(null), filename));
+            FileUtils.copyFile(in, out);
+            in.close();
+            in = null;
+            out.flush();
+            out.close();
+            out = null;
+        } catch(IOException e) {
+            Log.e("tag", "Failed to copy asset file: " + filename, e);
+        }
     }
 
     protected void onProgressUpdate(Integer... progres) {
@@ -55,6 +99,6 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
 
     protected void onPostExecute(Long result) {
          progress.dismiss();
-        ((MainActivity)mContext).fecthLevel();
+        ((MainActivity)mContext).onFinishMoveFile();
     }
 }

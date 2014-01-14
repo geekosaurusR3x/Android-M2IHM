@@ -6,8 +6,10 @@ import android.graphics.Canvas;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.model.SpaceObject;
 import com.skad.android.androidm2ihm.model.Vector2D;
+import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.utils.MathUtils;
 import com.skad.android.androidm2ihm.view.BackgroundView;
 
@@ -56,7 +58,7 @@ public class SpaceShipThread extends Thread {
                     Vector2D target = MathUtils.randomVector(mScreenHeight, mScreenWidth);
                     double scaleFactor = MathUtils.randomDouble(2);
                     SpaceObject spaceObject = new SpaceObject(pos, (int) (128 * mRatioWidth * scaleFactor), (int) (128 * mRatioHeight * scaleFactor));
-                    spaceObject.setSprite(BitmapFactory.decodeResource(mContext.getResources(), R.drawable.ship1));
+                    spaceObject.setSprite(LevelParser.getBitmapOrStandar(mContext,"default", "ship1.png"));
                     spaceObject.setDir(target);
                     spaceObject.setVelocity(10);
                     mBackgroundView.addSpaceShip(spaceObject);

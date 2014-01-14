@@ -32,10 +32,14 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             MoveSdCard movetosd = new MoveSdCard(this);
             movetosd.execute(null);
         }
+        else
+        {
+            fecthLvl();
+        }
 
     }
 
-    public void fecthLevel()
+    public void fecthLvl()
     {
         findViewById(R.id.button_level_1).setVisibility(View.VISIBLE);
         findViewById(R.id.button_level_2).setVisibility(View.VISIBLE);
@@ -46,10 +50,14 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         findViewById(R.id.button_level_3).setOnClickListener(this);
         findViewById(R.id.button_level_2).setOnClickListener(this);
         findViewById(R.id.button_editeur).setOnClickListener(this);
-
-        //SharedPreferences.Editor editor = sharedPreferences.edit();
-        //editor.putBoolean("Content Moved", true);
-        //editor.commit();
+    }
+    public void onFinishMoveFile()
+    {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean("Content Moved", true);
+        editor.commit();
+        fecthLvl();
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -92,12 +100,15 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
     @Override
     public void onClick(View view) {
         int numtag = Integer.parseInt(view.getTag().toString());
+        String dirtag = "lvl"+numtag;
+
         Intent gameIntent;
         if (numtag == 0) {
             gameIntent = new Intent(this, EditorActivity.class);
         } else {
             gameIntent = new Intent(this, LevelActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
+            gameIntent.putExtra(getString(R.string.extra_key_level_dir), dirtag);
         }
         startActivity(gameIntent);
     }
