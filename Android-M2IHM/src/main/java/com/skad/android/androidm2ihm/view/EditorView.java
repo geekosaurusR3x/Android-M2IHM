@@ -4,7 +4,6 @@ import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
-import android.util.DisplayMetrics;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
@@ -15,17 +14,10 @@ import com.skad.android.androidm2ihm.model.*;
 public class EditorView extends View {
 
     // Bitmap background;
-    private double mRatioWidth = 1;
-    private double mRatioHeight = 1;
-    private int mScreenWidth = 1;
-    private int mScreenHeight = 1;
     private Level mLevel;
 
     public EditorView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        DisplayMetrics metrics = context.getResources().getDisplayMetrics();
-        mScreenWidth = metrics.widthPixels;
-        mScreenHeight = metrics.heightPixels;
         mLevel = Level.getInstance();
     }
 
@@ -131,16 +123,5 @@ public class EditorView extends View {
         int Y = (int) y - (mLevel.getAllSprites().get(id).getHeight() / 2);
         mLevel.getAllSprites().get(id).setXPos(X);
         mLevel.getAllSprites().get(id).setYPos(Y);
-    }
-
-    @Override
-    public String toString() {
-        String temp = getContext().getString(R.string.editeur_file_first_line);
-        temp += "screen/0/0/" + mScreenWidth + "/" + mScreenHeight + "\n";
-        for (final SpriteObject mSpriteObject : mLevel.getAllSprites()) {
-            temp += mSpriteObject + "\n";
-        }
-
-        return temp;
     }
 }

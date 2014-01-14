@@ -11,6 +11,7 @@ import android.os.Vibrator;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.widget.PopupMenu;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -19,6 +20,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
+import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.view.EditorView;
 
@@ -254,14 +256,21 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         String toastMsg = null;
         if (FileUtils.isExternalStorageWritable()) {
             File file = new File(getExternalFilesDir(null), filename + ".txt");
+            DisplayMetrics metrics = getResources().getDisplayMetrics();
             try {
                 OutputStream os = new FileOutputStream(file);
-                os.write(mEditeurView.toString().getBytes());
+                // First line (explains syntax)
+                os.write(getString(R.string.editeur_file_first_line).getBytes());
+                // Screen info
+                os.write(String.format(getString(R.string.editeur_file_screen_info), metrics.widthPixels, metrics.heightPixels).getBytes());
+                // Level
+                os.write(Level.getInstance().toString().getBytes());
                 os.close();
+
+                toastMsg = getString(R.string.editeur_save_succes_file, filename);
             } catch (IOException e) {
                 toastMsg = String.format(getString(R.string.editeur_save_error_file), filename, e.toString());
             }
-            toastMsg = getString(R.string.editeur_save_succes_file, filename);
         } else {
             toastMsg = String.format(getString(R.string.editeur_save_error_file), filename, getString(R.string.editeur_save_error_sdcard_file));
         }
