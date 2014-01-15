@@ -1,6 +1,7 @@
 package com.skad.android.androidm2ihm.activity;
 
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -40,7 +41,6 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     private int mIdSelected;
     private Handler repeatUpdateHandler = new Handler();
     private boolean mButtonRepeatLock = false;
-    private String mLevelDir = null;
     private Level mLevel;
     DisplayMetrics mMetrics;
 
@@ -53,7 +53,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         mCurrentTag = 0;
         mIdSelected = -1;
 
-        mLevelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
+        String levelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
 
         mMetrics = getResources().getDisplayMetrics();
 
@@ -130,8 +130,8 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         if (actionBar != null) {
             actionBar.hide();
         }
-        mLevel = LevelParser.getLevelFromFile(this, mLevelDir, 0, mMetrics.widthPixels, mMetrics.heightPixels);
-        showSaveDialog(mLevelDir);
+        mLevel = LevelParser.getLevelFromFile(this, levelDir, 0, mMetrics.widthPixels, mMetrics.heightPixels);
+        showSaveDialog(levelDir);
     }
 
     @Override
@@ -260,7 +260,8 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        mLevelDir = ((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString();
+                        String LevelDir = ((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString();
+                        mLevel.setmPath( getApplicationContext() ,LevelDir);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -273,7 +274,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     public void save() {
         String toastMsg = null;
         if (FileUtils.isExternalStorageWritable()) {
-            String Path = getExternalFilesDir(null)+File.separator+mLevelDir;
+            String Path = mLevel.getmPath();
             FileUtils.makeDir(Path);
 
             try {
@@ -285,12 +286,12 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 temp += mLevel.toString();
                 InputStream in = new ByteArrayInputStream(temp.getBytes());
                 FileUtils.writeFile(in,mLevel.getmPath(),"level.txt");
-                toastMsg = getString(R.string.editeur_save_succes_file, mLevelDir);
+                toastMsg = getString(R.string.editeur_save_succes_file, "");
             } catch (IOException e) {
-                toastMsg = String.format(getString(R.string.editeur_save_error_file), mLevelDir, e.toString());
+                toastMsg = String.format(getString(R.string.editeur_save_error_file), "", e.toString());
             }
         } else {
-            toastMsg = String.format(getString(R.string.editeur_save_error_file), mLevelDir, getString(R.string.editeur_save_error_sdcard_file));
+            toastMsg = String.format(getString(R.string.editeur_save_error_file), "", getString(R.string.editeur_save_error_sdcard_file));
         }
         Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
     }

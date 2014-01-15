@@ -3,6 +3,7 @@ package com.skad.android.androidm2ihm.thread;
 import android.content.Context;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.PixelFormat;
 import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import com.skad.android.androidm2ihm.R;

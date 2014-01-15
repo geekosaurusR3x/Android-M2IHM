@@ -21,9 +21,11 @@ public class LevelParser {
     public static Level getLevelFromFile(Context context, String levelDir,int levelNum, int screenWidth, int screenHeight) {
         double ratioWidth = 1;
         double ratioHeight = 1;
-        // Determine correct level resource file
+        Level level = Level.getInstance();
 
-        String Path = context.getExternalFilesDir(null)+File.separator+levelDir ;
+        // Determine correct level resource file
+        level.setmPath(context,levelDir);
+        String Path = level.getmPath();
         File file = new File(FileUtils.getfileordefault(context,Path,"level.txt"));
         InputStream fileLevelStream = null;
 
@@ -39,7 +41,7 @@ public class LevelParser {
         List<Hole> holeList = new ArrayList<Hole>();
         List<Wall> wallList = new ArrayList<Wall>();
         List<Gun> gunList = new ArrayList<Gun>();
-        Level level = Level.getInstance();
+
         try {
             while ((line = reader.readLine()) != null) {
                 if (!line.substring(0, 1).matches("#")) {
@@ -93,7 +95,7 @@ public class LevelParser {
                         if (objectType.equals("w")) { // wall (straight)
                             wall = new Wall(xPos, yPos, width, height);
                             drawableResName = "wall_grey_texture";
-                        } else if (objectType.equals("wa")) { // wall (curved - bottom left)
+                        } else if (objectType.equals("wa")) { // wall (curved)
                             wall = new WallArc(xPos, yPos, width, height);
                             drawableResName = "wall_arc";
                         }
@@ -105,7 +107,6 @@ public class LevelParser {
             }
             level.setComponents(ball, end, wallList, holeList, gunList);
             level.setLevelNumber(levelNum);
-            level.setmPath(Path);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

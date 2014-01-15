@@ -1,5 +1,10 @@
 package com.skad.android.androidm2ihm.model;
 
+import android.app.Application;
+import android.content.Context;
+import android.os.Environment;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -118,8 +123,10 @@ public class Level extends Observable {
         return mPath;
     }
 
-    public void setmPath(String mPath) {
-        this.mPath = mPath;
+    public void setmPath(Context context,String mPath) {
+
+
+        this.mPath = context.getExternalFilesDir(null)+ File.separator+mPath ;
     }
 
     public boolean containsGuns() {

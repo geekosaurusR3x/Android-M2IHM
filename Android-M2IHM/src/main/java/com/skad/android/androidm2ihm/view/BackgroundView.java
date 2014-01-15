@@ -3,6 +3,7 @@ package com.skad.android.androidm2ihm.view;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
@@ -28,6 +29,9 @@ public class BackgroundView extends SurfaceView implements SurfaceHolder.Callbac
         if (holder != null) {
             holder.addCallback(this);
         }
+        // Make transparent so that we can see our background
+        setZOrderOnTop(true);
+        holder.setFormat(PixelFormat.TRANSPARENT);
     }
 
     public void drawSpaceShips(Canvas canvas) {

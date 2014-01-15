@@ -150,6 +150,12 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        fecthLvl();
+    }
+
+    @Override
     public void onClick(View view) {
         int numtag = Integer.parseInt(view.getTag(R.id.main_lvl_num_tag).toString());
         String dirtag = view.getTag(R.id.main_lvl_dir_tag).toString();

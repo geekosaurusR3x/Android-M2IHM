@@ -55,7 +55,7 @@
     <string name="editeur_save_error_file">Saving level into : %1$s Error : %2$s</string>
     <string name="editeur_save_succes_file">Saving level into : %1$s Succes</string>
     <string name="editeur_save_error_sdcard_file">is your SDCARD mount ?</string>
-    <string name="editeur_file_first_line">#lvl design type/x/y/width/height/angle\firerate\n#type : p(player)/h(hole)/w(wall)/wa(wall arc)/g(gun)/screen(screensize)\n#first line need to be the screen size of the dev devices.\n</string>
+    <string name="editeur_file_first_line">#lvl design type/x/y/width/height/angle/firerate\n#type : p(player)/h(hole)/w(wall)/wa(wall arc)/g(gun)/screen(screensize)\n#first line need to be the screen size of the dev devices.\n</string>
     <string name="editeur_file_screen_info">screen/0/0/%1$d/%2$d\n</string>
     <string name="moving_content_sdcard">Moving content to the SDCARD</string>
     <string name="extra_key_level_dir">Level_Dir</string>
