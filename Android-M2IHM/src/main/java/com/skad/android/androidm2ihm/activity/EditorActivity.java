@@ -58,6 +58,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         mMetrics = getResources().getDisplayMetrics();
 
         mEditeurView = (EditorView) findViewById(R.id.editeur_lvl);
+        mEditeurView.setmLevelDir(mLevelDir);
         mEditeurView.setOnTouchListener(this);
         mEditeurView.setOnLongClickListener(this);
 
@@ -130,10 +131,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         if (actionBar != null) {
             actionBar.hide();
         }
-        if (!mLevelDir.matches(""))
-        {
-            mLevel = LevelParser.getLevelFromFile(this, mLevelDir, 0, mMetrics.widthPixels, mMetrics.heightPixels);
-        }
+        mLevel = LevelParser.getLevelFromFile(this, mLevelDir, 0, mMetrics.widthPixels, mMetrics.heightPixels);
         showSaveDialog(mLevelDir);
     }
 

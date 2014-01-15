@@ -98,4 +98,14 @@ public class FileUtils {
         }
         dir.delete();
     }
+
+    public static String getfileordefault(Context context, String path,String fileName)
+    {
+        String file = path+File.separator+fileName;
+        if(!FileUtils.fileExist(file))
+        {
+            file = context.getExternalFilesDir(null)+File.separator+"default"+File.separator+fileName;
+        }
+        return file;
+    }
 }

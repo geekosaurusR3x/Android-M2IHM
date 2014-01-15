@@ -1,12 +1,16 @@
 package com.skad.android.androidm2ihm.view;
 
 import android.content.Context;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
 import android.view.View;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
+import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.utils.LevelParser;
+
+import java.io.File;
 
 /**
  * Created by skad on 19/12/13.
@@ -15,12 +19,17 @@ public class EditorView extends View {
 
     // Bitmap background;
     private Level mLevel;
+    private String mLevelDir;
 
     public EditorView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
         mLevel = Level.getInstance();
         // Reset level so that if the user played a level, it does not show on the editor
         mLevel.reset();
+    }
+
+    public void setmLevelDir(String levelDir) {
+        this.mLevelDir = super.getContext().getExternalFilesDir(null)+ File.separator+levelDir ;
     }
 
     @Override
@@ -37,25 +46,25 @@ public class EditorView extends View {
         switch (tag) {
             case R.id.editeur_start:
                 Ball ball = new Ball((int) x, (int) y, 92, 92);
-                ball.setSprite(LevelParser.getBitmapOrStandar(getContext(), "default", "playership.png"));
+                ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevelDir , "playership.png")));
                 ball.setId(tag);
                 mLevel.add(ball);
                 break;
             case R.id.editeur_end:
                 Target target = new Target((int) x, (int) y, 128, 128);
-                target.setSprite(LevelParser.getBitmapOrStandar(getContext(), "default", "cible.png"));
+                target.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevelDir, "cible.png")));
                 target.setId(tag);
                 mLevel.add(target);
                 break;
             case R.id.editeur_hole:
                 Hole hole = new Hole((int) x, (int) y, 92, 92);
-                hole.setSprite(LevelParser.getBitmapOrStandar(getContext(), "default", "hole.png"));
+                hole.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevelDir, "hole.png")));
                 hole.setId(tag);
                 mLevel.add(hole);
                 break;
             case R.id.editeur_wall:
                 Wall wall = new Wall((int) x, (int) y, 64, 32);
-                wall.setSprite(LevelParser.getBitmapOrStandar(getContext(), "default", "wall_grey_texture.png"));
+                wall.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevelDir, "wall_grey_texture.png")));
                 wall.setId(tag);
                 mLevel.add(wall);
                 break;

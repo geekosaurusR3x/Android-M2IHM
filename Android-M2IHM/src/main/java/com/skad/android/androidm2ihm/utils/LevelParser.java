@@ -24,12 +24,12 @@ public class LevelParser {
         // Determine correct level resource file
 
         String Path = context.getExternalFilesDir(null)+File.separator+levelDir ;
-        File file = new File(Path, "level.txt");
+        Log.d("toto",Path);
+        File file = new File(FileUtils.getfileordefault(context,Path,"level.txt"));
         InputStream fileLevelStream = null;
 
         try {
             fileLevelStream = new FileInputStream(file);
-            Log.d("tag", file.toString());
         } catch (FileNotFoundException e) {
         }
 
@@ -68,24 +68,24 @@ public class LevelParser {
                         ratioHeight = (double) screenHeight / height;
                     } else if (objectType.equals("p")) { // player (ball)
                         ball = new Ball(xPos, yPos, width, height);
-                        ball.setSprite(getBitmapOrStandar(context, Path, "playership_shielded.png"));
-                        ball.setSprite(getBitmapOrStandar(context,Path,"playership_shielded_red.png"));
+                        ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded.png")));
+                        ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded_red.png")));
                         ball.setmAngle(angle);
                     } else if (objectType.equals("g")) { // gun
                         Gun gun = new Gun(xPos, yPos, width, height, fireRate);
-                        gun.setSprite(getBitmapOrStandar(context,Path,"gun.png"));
-                        gun.setBulletSprite(getBitmapOrStandar(context, Path, "bullet.png"));
+                        gun.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "gun.png")));
+                        gun.setBulletSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "bullet.png")));
                         gun.setRatioHeight(ratioHeight);
                         gun.setRatioWidth(ratioWidth);
                         gun.setmAngle(angle);
                         gunList.add(gun);
                     } else if (objectType.equals("e")) {
                         end = new Target(xPos, yPos, width, height);
-                        end.setSprite(getBitmapOrStandar(context, Path, "cible.png"));
+                        end.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "cible.png")));
                         end.setmAngle(angle);
                     } else if (objectType.equals("h")) { // hole
                         Hole hole = new Hole(xPos, yPos, width, height);
-                        hole.setSprite(getBitmapOrStandar(context, Path, "hole.png"));
+                        hole.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "hole.png")));
                         hole.setmAngle(angle);
                         holeList.add(hole);
                     } else { // Walls
@@ -108,7 +108,7 @@ public class LevelParser {
                             drawableResName = "arcwall_top_right";
                         }
                         wall.setmAngle(angle);
-                        wall.setSprite(getBitmapOrStandar(context, Path, drawableResName + ".png"));
+                        wall.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, drawableResName + ".png")));
                         wallList.add(wall);
                     }
                 }
@@ -125,16 +125,5 @@ public class LevelParser {
             }
         }
         return level;
-    }
-
-    public static Bitmap getBitmapOrStandar(Context context,String path, String fileName)
-    {
-        String file = path+File.separator+fileName;
-        if(!FileUtils.fileExist(file))
-        {
-            file = context.getExternalFilesDir(null)+File.separator+"default"+File.separator+fileName;
-        }
-
-        return BitmapFactory.decodeFile(file);
     }
 }
