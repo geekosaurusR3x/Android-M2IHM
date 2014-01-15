@@ -1,5 +1,5 @@
-#lvl design type/x/y/width/height
-#type : p(player)/h(hole)/w(wall)/abl(arc bottom left)/abr(arc bottom right)/atl(arc top left)/atr(arc top right)/g(gun)/screen(screensize)
+#lvl design type/x/y/width/height/angle
+#type : p(player)/h(hole)/w(wall)/wa(wall arc)/g(gun)/s(screensize)
 #first line need to be the screen size of the dev devices.
 screen/0/0/1794/1080
 p/100/100/64/64

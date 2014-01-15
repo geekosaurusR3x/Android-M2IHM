@@ -61,6 +61,8 @@ public class Level extends Observable {
             mGunList.remove(objectToRemove);
         } else if (objectToRemove instanceof Hole) {
             mHoleList.remove(objectToRemove);
+        }else if (objectToRemove instanceof WallArc) {
+            mWallList.remove(objectToRemove);
         }
     }
 
@@ -75,6 +77,8 @@ public class Level extends Observable {
             mGunList.add((Gun) newObject);
         } else if (newObject instanceof Hole) {
             mHoleList.add((Hole) newObject);
+        }else if (newObject instanceof WallArc) {
+            mWallList.add((WallArc) newObject);
         }
     }
 

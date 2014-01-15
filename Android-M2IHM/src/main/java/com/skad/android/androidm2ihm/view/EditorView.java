@@ -63,6 +63,12 @@ public class EditorView extends View {
                 wall.setId(tag);
                 mLevel.add(wall);
                 break;
+            case R.id.editeur_wall_arc:
+                WallArc wallarc = new WallArc((int) x, (int) y, 64, 32);
+                wallarc.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getmPath(), "wall_arc.png")));
+                wallarc.setId(tag);
+                mLevel.add(wallarc);
+                break;
         }
 
         invalidate();

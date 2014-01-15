@@ -51,7 +51,7 @@ public class LevelParser {
                     int height = Integer.parseInt(temp[4]);
                     float angle = 0; //Default angle
                     if (temp.length > 5)
-                            Float.parseFloat(temp[5]);
+                            angle = Float.parseFloat(temp[5]);
                     int fireRate = 1000; // Default fire rate
                     if (temp.length > 6)
                         fireRate = Integer.parseInt(temp[6]);
@@ -69,23 +69,23 @@ public class LevelParser {
                         ball = new Ball(xPos, yPos, width, height);
                         ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded.png")));
                         ball.setAlternateSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded_red.png")));
-                        ball.setmAngle(angle);
+                        ball.rotate(angle);
                     } else if (objectType.equals("g")) { // gun
                         Gun gun = new Gun(xPos, yPos, width, height, fireRate);
                         gun.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "gun.png")));
                         gun.setBulletSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "bullet.png")));
                         gun.setRatioHeight(ratioHeight);
                         gun.setRatioWidth(ratioWidth);
-                        gun.setmAngle(angle);
+                        gun.rotate(angle);
                         gunList.add(gun);
                     } else if (objectType.equals("e")) {
                         end = new Target(xPos, yPos, width, height);
                         end.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "cible.png")));
-                        end.setmAngle(angle);
+                        end.rotate(angle);
                     } else if (objectType.equals("h")) { // hole
                         Hole hole = new Hole(xPos, yPos, width, height);
                         hole.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "hole.png")));
-                        hole.setmAngle(angle);
+                        hole.rotate(angle);
                         holeList.add(hole);
                     } else { // Walls
                         Wall wall = new Wall(xPos, yPos, width, height);
@@ -93,21 +93,12 @@ public class LevelParser {
                         if (objectType.equals("w")) { // wall (straight)
                             wall = new Wall(xPos, yPos, width, height);
                             drawableResName = "wall_grey_texture";
-                        } else if (objectType.equals("abl")) { // wall (curved - bottom left)
-                            wall = new WallArcBottomLeft(xPos, yPos, width, height);
-                            drawableResName = "arcwall_bottom_left";
-                        } else if (objectType.equals("abr")) { // wall (curved - bottom right)
-                            wall = new WallArcBottomRight(xPos, yPos, width, height);
-                            drawableResName = "arcwall_bottom_right";
-                        } else if (objectType.equals("atl")) { // wall (curved - top left)
-                            wall = new WallArcTopLeft(xPos, yPos, width, height);
-                            drawableResName = "arcwall_top_left";
-                        } else if (objectType.equals("atr")) { // wall (curved - top right)
-                            wall = new WallArcTopRight(xPos, yPos, width, height);
-                            drawableResName = "arcwall_top_right";
+                        } else if (objectType.equals("wa")) { // wall (curved - bottom left)
+                            wall = new WallArc(xPos, yPos, width, height);
+                            drawableResName = "wall_arc";
                         }
-                        wall.setmAngle(angle);
                         wall.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, drawableResName + ".png")));
+                        wall.rotate(angle);
                         wallList.add(wall);
                     }
                 }

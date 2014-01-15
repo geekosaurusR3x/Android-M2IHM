@@ -10,5 +10,7 @@
               android:title="@string/editeur_hole" />
         <item android:id="@+id/editeur_wall"
               android:title="@string/editeur_wall" />
+        <item android:id="@+id/editeur_wall_arc"
+              android:title="@string/editeur_wall_arc" />
     </group>
 </menu>
