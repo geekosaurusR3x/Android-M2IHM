@@ -58,6 +58,8 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
     public void fecthLvl()
     {
         ScrollView listButtonLvl = (ScrollView) findViewById(R.id.main_list_button);
+        //clean the view
+        listButtonLvl.removeAllViews();
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
@@ -65,12 +67,37 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         int numlvl = 1;
         for(String lvl : listLvl)
         {
-            Button bt = new Button(this);
-            bt.setText(lvl);
-            bt.setTag(R.id.main_lvl_num_tag, numlvl);
-            bt.setTag(R.id.main_lvl_dir_tag,lvl);
-            bt.setOnClickListener(this);
-            linearLayout.addView(bt);
+            LinearLayout linearLayoutsub = new LinearLayout(this);
+            linearLayoutsub.setOrientation(LinearLayout.HORIZONTAL);
+            //TODO
+            //Make the sublayout fill the parent
+            //linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.FILL_PARENT));
+            //playing button
+            Button buttonplay = new Button(this);
+            buttonplay.setText(lvl);
+            buttonplay.setTag(R.id.main_lvl_num_tag, numlvl);
+            buttonplay.setTag(R.id.main_lvl_dir_tag, lvl);
+            buttonplay.setOnClickListener(this);
+            //edit button
+            Button buttonedit = new Button(this);
+            buttonedit.setText("");
+            buttonedit.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_edit));
+            buttonedit.setTag(R.id.main_lvl_num_tag, 0);
+            buttonedit.setTag(R.id.main_lvl_dir_tag, lvl);
+            buttonedit.setOnClickListener(this);
+            //remove button
+            Button buttonsup = new Button(this);
+            buttonsup.setText("");
+            buttonsup.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_remove));
+            buttonsup.setTag(R.id.main_lvl_num_tag, -1);
+            buttonsup.setTag(R.id.main_lvl_dir_tag, lvl);
+            buttonsup.setOnClickListener(this);
+
+            linearLayoutsub.addView(buttonplay);
+            linearLayoutsub.addView(buttonedit);
+            linearLayoutsub.addView(buttonsup);
+
+            linearLayout.addView(linearLayoutsub);
             numlvl++;
         }
         listButtonLvl.addView(linearLayout);
@@ -124,18 +151,30 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
     @Override
     public void onClick(View view) {
         int numtag = Integer.parseInt(view.getTag(R.id.main_lvl_num_tag).toString());
+        String dirtag = view.getTag(R.id.main_lvl_dir_tag).toString();
 
-
-        Intent gameIntent;
-        if (numtag == 0) {
+        Intent gameIntent = null;
+        if (numtag == -1)
+        {
+            FileUtils.deleteLvl(this,dirtag);
+            fecthLvl();
+        }
+        else if (numtag == 0)
+        {
             gameIntent = new Intent(this, EditorActivity.class);
-        } else {
-            String dirtag = view.getTag(R.id.main_lvl_dir_tag).toString();
+        }
+        else
+        {
+
             gameIntent = new Intent(this, LevelActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
             gameIntent.putExtra(getString(R.string.extra_key_level_dir), dirtag);
         }
-        startActivity(gameIntent);
+
+        if(gameIntent != null)
+        {
+            startActivity(gameIntent);
+        }
     }
 
     @Override

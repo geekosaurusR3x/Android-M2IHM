@@ -2,6 +2,7 @@ package com.skad.android.androidm2ihm.utils;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -80,5 +81,21 @@ public class FileUtils {
             }
         }
         return list_lvl;
+    }
+
+    public static void deleteLvl(Context context,String name)
+    {
+        String path = context.getExternalFilesDir(null)+File.separator+name;
+        File dir = new File(path);
+        Log.d("toto", dir.toString());
+        if (dir.isDirectory() && fileExist(path))
+        {
+            String[] listFiles = dir.list();
+            for (int i = 0; i < listFiles.length; i++)
+            {
+                new File(dir, listFiles[i]).delete();
+            }
+        }
+        dir.delete();
     }
 }
