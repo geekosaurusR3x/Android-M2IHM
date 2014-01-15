@@ -1,8 +1,10 @@
 package com.skad.android.androidm2ihm.utils;
 
+import android.content.Context;
 import android.os.Environment;
 
 import java.io.*;
+import java.util.ArrayList;
 
 /**
  * Created by skad on 13/01/14.
@@ -63,5 +65,20 @@ public class FileUtils {
     {
         File file = new File(name);
         return file.exists();
+    }
+
+    public static ArrayList<String> listLvl(Context context)
+    {
+        File dir = new File(context.getExternalFilesDir(null),"");
+        String[] temp = dir.list();
+        ArrayList <String> list_lvl = new ArrayList<String>();
+        for (String dirname : temp)
+        {
+            if(!dirname.matches("default"))
+            {
+                list_lvl.add(dirname);
+            }
+        }
+        return list_lvl;
     }
 }

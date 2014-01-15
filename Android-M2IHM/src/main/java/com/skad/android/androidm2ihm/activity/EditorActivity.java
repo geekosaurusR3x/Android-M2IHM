@@ -39,6 +39,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     private int mIdSelected;
     private Handler repeatUpdateHandler = new Handler();
     private boolean mButtonRepeatLock = false;
+    private String mLevelDir = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,10 +60,10 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 showPopupMenu(view);
             }
         });
-        findViewById(R.id.editeur_sup_button).setOnClickListener(new Button.OnClickListener() {
+        findViewById(R.id.editeur_save_button).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showSaveDialog();
+                save();
             }
         });
         findViewById(R.id.editeur_remove_button).setOnClickListener(new Button.OnClickListener() {
@@ -122,6 +123,8 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         if (actionBar != null) {
             actionBar.hide();
         }
+
+        showSaveDialog();
     }
 
     @Override
@@ -245,7 +248,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        save(((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString());
+                        mLevelDir = ((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString();
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null);
@@ -253,10 +256,10 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         dialog.show();
     }
 
-    public void save(String filename) {
+    public void save() {
         String toastMsg = null;
         if (FileUtils.isExternalStorageWritable()) {
-            String Path = getExternalFilesDir(null)+File.separator+filename;
+            String Path = getExternalFilesDir(null)+File.separator+mLevelDir;
             FileUtils.makeDir(Path);
             DisplayMetrics metrics = getResources().getDisplayMetrics();
             try {
@@ -268,12 +271,12 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 temp += Level.getInstance().toString();
                 InputStream in = new ByteArrayInputStream(temp.getBytes());
                 FileUtils.writeFile(in,Path,"level.txt");
-                toastMsg = getString(R.string.editeur_save_succes_file, filename);
+                toastMsg = getString(R.string.editeur_save_succes_file, mLevelDir);
             } catch (IOException e) {
-                toastMsg = String.format(getString(R.string.editeur_save_error_file), filename, e.toString());
+                toastMsg = String.format(getString(R.string.editeur_save_error_file), mLevelDir, e.toString());
             }
         } else {
-            toastMsg = String.format(getString(R.string.editeur_save_error_file), filename, getString(R.string.editeur_save_error_sdcard_file));
+            toastMsg = String.format(getString(R.string.editeur_save_error_file), mLevelDir, getString(R.string.editeur_save_error_sdcard_file));
         }
         Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
     }

@@ -10,7 +10,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
@@ -18,6 +21,7 @@ import com.skad.android.androidm2ihm.task.MoveSdCard;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class MainActivity extends ActionBarActivity implements Button.OnClickListener, DialogInterface.OnClickListener {
 
@@ -45,19 +49,31 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             fecthLvl();
         }
 
+        Button btn = (Button) findViewById(R.id.button_editeur);
+        btn.setTag(R.id.main_lvl_num_tag,0);
+        btn.setOnClickListener(this);
+
     }
 
     public void fecthLvl()
     {
-        findViewById(R.id.button_level_1).setVisibility(View.VISIBLE);
-        findViewById(R.id.button_level_2).setVisibility(View.VISIBLE);
-        findViewById(R.id.button_level_3).setVisibility(View.VISIBLE);
-        findViewById(R.id.button_editeur).setVisibility(View.VISIBLE);
+        ScrollView listButtonLvl = (ScrollView) findViewById(R.id.main_list_button);
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        findViewById(R.id.button_level_1).setOnClickListener(this);
-        findViewById(R.id.button_level_3).setOnClickListener(this);
-        findViewById(R.id.button_level_2).setOnClickListener(this);
-        findViewById(R.id.button_editeur).setOnClickListener(this);
+        ArrayList<String> listLvl = FileUtils.listLvl(this);
+        int numlvl = 1;
+        for(String lvl : listLvl)
+        {
+            Button bt = new Button(this);
+            bt.setText(lvl);
+            bt.setTag(R.id.main_lvl_num_tag, numlvl);
+            bt.setTag(R.id.main_lvl_dir_tag,lvl);
+            bt.setOnClickListener(this);
+            linearLayout.addView(bt);
+            numlvl++;
+        }
+        listButtonLvl.addView(linearLayout);
     }
     public void onFinishMoveFile()
     {
@@ -107,13 +123,14 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
 
     @Override
     public void onClick(View view) {
-        int numtag = Integer.parseInt(view.getTag().toString());
-        String dirtag = "lvl"+numtag;
+        int numtag = Integer.parseInt(view.getTag(R.id.main_lvl_num_tag).toString());
+
 
         Intent gameIntent;
         if (numtag == 0) {
             gameIntent = new Intent(this, EditorActivity.class);
         } else {
+            String dirtag = view.getTag(R.id.main_lvl_dir_tag).toString();
             gameIntent = new Intent(this, LevelActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
             gameIntent.putExtra(getString(R.string.extra_key_level_dir), dirtag);

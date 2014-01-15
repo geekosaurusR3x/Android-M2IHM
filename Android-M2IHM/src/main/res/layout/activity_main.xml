@@ -16,8 +16,8 @@
 
     <LinearLayout
         android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_gravity="center">
 
         <TextView
@@ -30,45 +30,18 @@
             android:layout_gravity="center"
             android:textColor="#ffffff"/>
 
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:gravity="center">
-
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="80dp"
-                android:text="@string/btn_label_level_1"
-                android:tag="@integer/btn_tag_level_1"
-                android:id="@+id/button_level_1" android:visibility="invisible"/>
-
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="80dp"
-                android:text="@string/btn_label_level_2"
-                android:id="@+id/button_level_2"
-                android:tag="@integer/btn_tag_level_2"
-                android:layout_marginTop="20dp" android:visibility="invisible"/>
-
-            <Button
-                android:layout_width="200dp"
-                android:layout_height="80dp"
-                android:text="@string/btn_label_level_3"
-                android:id="@+id/button_level_3"
-                android:tag="@integer/btn_tag_level_3"
-                android:layout_marginTop="20dp" android:visibility="invisible"/>
-
-            <Button
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/btn_label_editeur"
-                    android:id="@+id/button_editeur"
-                    android:tag="@integer/btn_tag_editeur"
-                    android:layout_gravity="right" android:visibility="invisible"/>
-        </LinearLayout>
+        <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/btn_label_editeur"
+                android:id="@+id/button_editeur"
+                android:tag="@integer/btn_tag_editeur"
+                android:layout_gravity="right" android:visibility="visible"/>
+        <ScrollView
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/main_list_button" android:layout_gravity="center">
+        </ScrollView>
 
     </LinearLayout>
 
