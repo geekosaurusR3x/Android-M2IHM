@@ -2,10 +2,7 @@ package com.skad.android.androidm2ihm.utils;
 
 import android.os.Environment;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Created by skad on 13/01/14.
@@ -34,7 +31,15 @@ public class FileUtils {
         return false;
     }
 
-    public static void copyFile(InputStream in, OutputStream out) throws IOException
+    public static void writeFile(InputStream in,String path,String nameFile) throws IOException {
+        File file = new File(path, nameFile);
+        OutputStream out = new FileOutputStream(file);
+        writeDataFile(in,out);
+        out.flush();
+        out.close();
+    }
+
+    private static void writeDataFile(InputStream in, OutputStream out) throws IOException
     {
         byte[] buffer = new byte[1024];
         int read;
@@ -46,8 +51,17 @@ public class FileUtils {
 
     public static void makeDir(String name)
     {
-        File dir = new File(name);
-        if (!dir.exists())
+
+        if (!fileExist(name))
+        {
+            File dir = new File(name);
             dir.mkdir();
+        }
+    }
+
+    public static boolean fileExist(String name)
+    {
+        File file = new File(name);
+        return file.exists();
     }
 }

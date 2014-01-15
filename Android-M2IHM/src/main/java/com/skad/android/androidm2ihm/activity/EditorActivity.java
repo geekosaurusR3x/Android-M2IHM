@@ -24,10 +24,7 @@ import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.view.EditorView;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
 
 /**
  * Created by skad on 09/01/14.
@@ -261,18 +258,16 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         if (FileUtils.isExternalStorageWritable()) {
             String Path = getExternalFilesDir(null)+File.separator+filename;
             FileUtils.makeDir(Path);
-            File file = new File(Path, "level.txt");
             DisplayMetrics metrics = getResources().getDisplayMetrics();
             try {
-                OutputStream os = new FileOutputStream(file);
-                // First line (explains syntax)
-                os.write(getString(R.string.editeur_file_first_line).getBytes());
-                // Screen info
-                os.write(String.format(getString(R.string.editeur_file_screen_info), metrics.widthPixels, metrics.heightPixels).getBytes());
-                // Level
-                os.write(Level.getInstance().toString().getBytes());
-                os.close();
-
+                //first line explain the syntax
+                String temp =  getString(R.string.editeur_file_first_line);
+                //write displaymetric
+                temp += String.format(getString(R.string.editeur_file_screen_info), metrics.widthPixels, metrics.heightPixels);
+                //write lvl
+                temp += Level.getInstance().toString();
+                InputStream in = new ByteArrayInputStream(temp.getBytes());
+                FileUtils.writeFile(in,Path,"level.txt");
                 toastMsg = getString(R.string.editeur_save_succes_file, filename);
             } catch (IOException e) {
                 toastMsg = String.format(getString(R.string.editeur_save_error_file), filename, e.toString());

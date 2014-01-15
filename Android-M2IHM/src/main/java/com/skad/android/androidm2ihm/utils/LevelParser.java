@@ -129,12 +129,12 @@ public class LevelParser {
 
     public static Bitmap getBitmapOrStandar(Context context,String path, String fileName)
     {
-        Bitmap temp = BitmapFactory.decodeFile(path+File.separator+fileName);
-        if (temp == null)
+        String file = path+File.separator+fileName;
+        if(!FileUtils.fileExist(file))
         {
-            temp =  BitmapFactory.decodeFile(context.getExternalFilesDir(null)+File.separator+"default"+File.separator+fileName);
+            file = context.getExternalFilesDir(null)+File.separator+"default"+File.separator+fileName;
         }
 
-        return temp;
+        return BitmapFactory.decodeFile(file);
     }
 }

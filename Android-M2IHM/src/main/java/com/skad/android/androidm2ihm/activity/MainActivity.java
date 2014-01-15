@@ -15,6 +15,9 @@ import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.task.MoveSdCard;
+import com.skad.android.androidm2ihm.utils.FileUtils;
+
+import java.io.File;
 
 public class MainActivity extends ActionBarActivity implements Button.OnClickListener, DialogInterface.OnClickListener {
 
@@ -25,9 +28,14 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        boolean firstlaunch = sharedPreferences.getBoolean("Content Moved", false);
+        boolean assetsAlreadyMoved = sharedPreferences.getBoolean("Content Moved", false);
 
-        if(!firstlaunch)
+        //testing if files are present and ifnot remove
+        if(!FileUtils.fileExist(getExternalFilesDir(null)+ File.separator+"default"))
+        {
+            assetsAlreadyMoved = false;
+        }
+        if(!assetsAlreadyMoved)
         {
             MoveSdCard movetosd = new MoveSdCard(this);
             movetosd.execute(null);

@@ -63,12 +63,15 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
                 Log.e("tag", "Failed to get asset file list.", e);
             }
             Log.d("tag","Dir "+dir);
-            FileUtils.makeDir(mContext.getExternalFilesDir(null)+File.separator+dir);
-            for(String filename : sousdirs)
+            if(!(dir.matches("images")||dir.matches("sounds")||dir.matches("webkit"))) //useless assets dir
             {
-                copyAssets(dir + File.separator + filename);
-                mProgresPrecent++;
-                publishProgress(mProgresPrecent);
+                FileUtils.makeDir(mContext.getExternalFilesDir(null)+File.separator+dir);
+                for(String filename : sousdirs)
+                {
+                    copyAssets(dir + File.separator + filename);
+                    mProgresPrecent++;
+                    publishProgress(mProgresPrecent);
+                }
             }
         }
     }
@@ -77,16 +80,13 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
         Log.d("tag","File : "+filename);
         AssetManager assetManager = mContext.getAssets();
         InputStream in = null;
-        OutputStream out = null;
+        String path = mContext.getExternalFilesDir(null).getPath();
+
         try {
             in = assetManager.open(filename);
-            out = new FileOutputStream(new File(mContext.getExternalFilesDir(null), filename));
-            FileUtils.copyFile(in, out);
+            FileUtils.writeFile(in, path,filename);
             in.close();
             in = null;
-            out.flush();
-            out.close();
-            out = null;
         } catch(IOException e) {
             Log.e("tag", "Failed to copy asset file: " + filename, e);
         }
