@@ -22,6 +22,7 @@ import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.utils.FileUtils;
+import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.view.EditorView;
 
 import java.io.*;
@@ -39,7 +40,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     private int mIdSelected;
     private Handler repeatUpdateHandler = new Handler();
     private boolean mButtonRepeatLock = false;
-    private String mLevelDir = "";
+    private String mLevelDir = null;
+    private Level mLevel;
+    DisplayMetrics mMetrics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +52,10 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
 
         mCurrentTag = 0;
         mIdSelected = -1;
+
+        mLevelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
+
+        mMetrics = getResources().getDisplayMetrics();
 
         mEditeurView = (EditorView) findViewById(R.id.editeur_lvl);
         mEditeurView.setOnTouchListener(this);
@@ -123,8 +130,11 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         if (actionBar != null) {
             actionBar.hide();
         }
-
-        showSaveDialog();
+        if (!mLevelDir.matches(""))
+        {
+            mLevel = LevelParser.getLevelFromFile(this, mLevelDir, 0, mMetrics.widthPixels, mMetrics.heightPixels);
+        }
+        showSaveDialog(mLevelDir);
     }
 
     @Override
@@ -240,18 +250,25 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         return false;
     }
 
-    public void showSaveDialog() {
+    public void showSaveDialog(String name) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
         LayoutInflater inflater = getLayoutInflater();
-        builder.setView(inflater.inflate(R.layout.activity_editeur_save, null))
+
+        View textEntrySaveName = inflater.inflate(R.layout.activity_editeur_save, null);
+        EditText textView = ((EditText) textEntrySaveName.findViewById(R.id.editeur_filename));
+        textView.setText(name);
+
+        builder.setView(textEntrySaveName)
                 .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         mLevelDir = ((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString();
                     }
                 })
-                .setNegativeButton(android.R.string.cancel, null);
+                .setNegativeButton(android.R.string.cancel, null)
+                .setMessage(R.string.editeur_save_name_file);
+
         Dialog dialog = builder.create();
         dialog.show();
     }
@@ -261,14 +278,14 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         if (FileUtils.isExternalStorageWritable()) {
             String Path = getExternalFilesDir(null)+File.separator+mLevelDir;
             FileUtils.makeDir(Path);
-            DisplayMetrics metrics = getResources().getDisplayMetrics();
+
             try {
                 //first line explain the syntax
                 String temp =  getString(R.string.editeur_file_first_line);
                 //write displaymetric
-                temp += String.format(getString(R.string.editeur_file_screen_info), metrics.widthPixels, metrics.heightPixels);
+                temp += String.format(getString(R.string.editeur_file_screen_info), mMetrics.widthPixels, mMetrics.heightPixels);
                 //write lvl
-                temp += Level.getInstance().toString();
+                temp += mLevel.toString();
                 InputStream in = new ByteArrayInputStream(temp.getBytes());
                 FileUtils.writeFile(in,Path,"level.txt");
                 toastMsg = getString(R.string.editeur_save_succes_file, mLevelDir);

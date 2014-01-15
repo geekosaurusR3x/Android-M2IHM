@@ -51,6 +51,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
 
         Button btn = (Button) findViewById(R.id.button_editeur);
         btn.setTag(R.id.main_lvl_num_tag,0);
+        btn.setTag(R.id.main_lvl_dir_tag, "");
         btn.setOnClickListener(this);
 
     }
@@ -162,6 +163,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         else if (numtag == 0)
         {
             gameIntent = new Intent(this, EditorActivity.class);
+            gameIntent.putExtra(getString(R.string.extra_key_level_dir), dirtag);
         }
         else
         {

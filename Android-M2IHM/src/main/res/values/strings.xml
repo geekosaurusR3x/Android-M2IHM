@@ -51,7 +51,7 @@
     <string name="editeur_item_select">Item : %d selected</string>
     <string name="editeur_view_add">Add</string>
     <string name="editeur_view_save">Save</string>
-    <string name="editeur_save_name_file">FileName</string>
+    <string name="editeur_save_name_file">FileName ?</string>
     <string name="editeur_save_error_file">Saving level into : %1$s Error : %2$s</string>
     <string name="editeur_save_succes_file">Saving level into : %1$s Succes</string>
     <string name="editeur_save_error_sdcard_file">is your SDCARD mount ?</string>
