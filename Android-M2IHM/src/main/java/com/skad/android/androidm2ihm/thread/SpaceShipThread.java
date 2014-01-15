@@ -59,7 +59,7 @@ public class SpaceShipThread extends Thread {
                     Vector2D target = MathUtils.randomVector(mScreenHeight, mScreenWidth);
                     double scaleFactor = MathUtils.randomDouble(2);
                     SpaceObject spaceObject = new SpaceObject(pos, (int) (128 * mRatioWidth * scaleFactor), (int) (128 * mRatioHeight * scaleFactor));
-                    spaceObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(mContext, "default", "ship1.png")));
+                    spaceObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(mContext, Level.getInstance().getmPath(), "ship1.png")));
                     spaceObject.setDir(target);
                     spaceObject.setVelocity(10);
                     mBackgroundView.addSpaceShip(spaceObject);

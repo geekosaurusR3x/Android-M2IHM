@@ -58,7 +58,6 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         mMetrics = getResources().getDisplayMetrics();
 
         mEditeurView = (EditorView) findViewById(R.id.editeur_lvl);
-        mEditeurView.setmLevelDir(mLevelDir);
         mEditeurView.setOnTouchListener(this);
         mEditeurView.setOnLongClickListener(this);
 
@@ -285,7 +284,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 //write lvl
                 temp += mLevel.toString();
                 InputStream in = new ByteArrayInputStream(temp.getBytes());
-                FileUtils.writeFile(in,Path,"level.txt");
+                FileUtils.writeFile(in,mLevel.getmPath(),"level.txt");
                 toastMsg = getString(R.string.editeur_save_succes_file, mLevelDir);
             } catch (IOException e) {
                 toastMsg = String.format(getString(R.string.editeur_save_error_file), mLevelDir, e.toString());

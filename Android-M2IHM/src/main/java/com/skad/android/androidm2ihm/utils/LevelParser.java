@@ -24,7 +24,6 @@ public class LevelParser {
         // Determine correct level resource file
 
         String Path = context.getExternalFilesDir(null)+File.separator+levelDir ;
-        Log.d("toto",Path);
         File file = new File(FileUtils.getfileordefault(context,Path,"level.txt"));
         InputStream fileLevelStream = null;
 
@@ -69,7 +68,7 @@ public class LevelParser {
                     } else if (objectType.equals("p")) { // player (ball)
                         ball = new Ball(xPos, yPos, width, height);
                         ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded.png")));
-                        ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded_red.png")));
+                        ball.setAlternateSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded_red.png")));
                         ball.setmAngle(angle);
                     } else if (objectType.equals("g")) { // gun
                         Gun gun = new Gun(xPos, yPos, width, height, fireRate);
@@ -115,6 +114,7 @@ public class LevelParser {
             }
             level.setComponents(ball, end, wallList, holeList, gunList);
             level.setLevelNumber(levelNum);
+            level.setmPath(Path);
         } catch (IOException e) {
             e.printStackTrace();
         } finally {

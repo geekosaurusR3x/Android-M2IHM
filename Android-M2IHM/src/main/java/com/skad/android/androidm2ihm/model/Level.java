@@ -20,6 +20,7 @@ public class Level extends Observable {
     private List<Wall> mWallList = new ArrayList<Wall>();
     private List<Hole> mHoleList = new ArrayList<Hole>();
     private List<Gun> mGunList = new ArrayList<Gun>();
+    private String mPath;
 
     private Level() {
     }
@@ -107,6 +108,14 @@ public class Level extends Observable {
 
     public void setHoleList(List<Hole> holeList) {
         mHoleList = holeList;
+    }
+
+    public String getmPath() {
+        return mPath;
+    }
+
+    public void setmPath(String mPath) {
+        this.mPath = mPath;
     }
 
     public boolean containsGuns() {

@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.model.Score;
+import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.view.LevelView;
 
@@ -38,7 +39,6 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     private int mLevelNumber;
     private String mLevelDir;
     private Level mLevel;
-    private String mAudioPath;
     // Audio
     private boolean mMute;
     private MediaPlayer mBackgroundMusic;
@@ -64,12 +64,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         // Determine which level should be loaded
         mLevelNumber = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
         mLevelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
-        mAudioPath = this.getExternalFilesDir(null)+ File.separator+"default"+File.separator;
         // Init score
         mScore = new Score(mLevelNumber);
 
-        // Init task
-        // mGameTask = new GameTask(this);
 
         // Show level view
         drawLevel();
@@ -79,16 +76,13 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         mScoreView = (TextView) findViewById(R.id.txt_score);
         mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
 
-        // Setup sensors
-/*
-        mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-*/
+
 
         // Audio
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-        mIdSoundWall = mSoundPool.load(mAudioPath+"wall_hit.wav", 1);
-        mIdSoundGameOver = mSoundPool.load(mAudioPath+"gameover.wav", 1);
-        mIdSoundWin = mSoundPool.load(mAudioPath+"fins_level_completed.wav", 1);
+        mIdSoundWall = mSoundPool.load(FileUtils.getfileordefault(this,mLevel.getmPath(),"wall_hit.wav"), 1);
+        mIdSoundGameOver = mSoundPool.load(FileUtils.getfileordefault(this,mLevel.getmPath(),"gameover.wav"), 1);
+        mIdSoundWin = mSoundPool.load(FileUtils.getfileordefault(this,mLevel.getmPath(),"fins_level_completed.wav"), 1);
 
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -131,7 +125,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     }
 
     private void startBackgroundMusicPlayback() {
-        mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(mAudioPath+"background_music.wav")));
+        mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(FileUtils.getfileordefault(this,mLevel.getmPath(),"background_music.wav"))));
         mBackgroundMusic.setLooping(true);
         mBackgroundMusic.start();
     }
@@ -193,19 +187,6 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         super.onBackPressed();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
-
-    /*@Override
-    public void onSensorChanged(SensorEvent event) {
-        float xValue = event.values[1];
-        float yValue = event.values[0];
-        //mLevelView.setForce(xValue, yValue);
-        mLevel.updatePlayerPosition(xValue, yValue);
-    }
-
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int i) {
-
-    }*/
 
     private void saveHighScore() {
         int highscore = mScore.getHighScore(this);

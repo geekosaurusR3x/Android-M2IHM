@@ -5,6 +5,13 @@
              android:layout_height="match_parent"
              tools:context="com.skad.android.androidm2ihm.activity.LevelActivity"
              tools:ignore="MergeRootFrame">
+    <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:layout_gravity="center"
+            android:contentDescription="@string/img_desc_background"
+            android:background="@drawable/background" />
 
     <com.skad.android.androidm2ihm.view.BackgroundView
         android:layout_width="match_parent"
