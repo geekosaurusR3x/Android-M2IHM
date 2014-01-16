@@ -1,8 +1,6 @@
 package com.skad.android.androidm2ihm.model;
 
-import android.app.Application;
 import android.content.Context;
-import android.os.Environment;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,11 +117,11 @@ public class Level extends Observable {
         mHoleList = holeList;
     }
 
-    public String getmPath() {
+    public String getPath() {
         return mPath;
     }
 
-    public void setmPath(Context context,String mPath) {
+    public void setPath(Context context, String mPath) {
 
 
         this.mPath = context.getExternalFilesDir(null)+ File.separator+mPath ;
@@ -166,7 +164,6 @@ public class Level extends Observable {
         for (final Wall wall : mWallList) {
             Vector2D newdirection = mBall.intersects(wall);
             if (newdirection != null) {
-                // mLevelListener.onCollisionDetected(Level.COLLISION.COLLISION_WALL);
                 return newdirection;
             }
         }
@@ -177,7 +174,6 @@ public class Level extends Observable {
         for (final Bullet bullet : gun.getBulletList()) {
             Vector2D intersection = mBall.intersects(bullet);
             if (intersection != null) {
-                // mLevelListener.onCollisionDetected(Level.COLLISION.COLLISION_BULLET);
                 return bullet;
             }
         }
@@ -185,15 +181,9 @@ public class Level extends Observable {
     }
 
     public void updatePlayerPosition(float forceX, float forceY) {
-        if (mBall == null) {
-            return;
+        if (mBall != null) {
+            mBall.setDir(forceX, forceY);
         }
-
-        mBall.setDir(forceX, forceY);
-
-        //mBall.setPosition(new Vector2D(mBall.getXPos() + mBall.getVelocity() * forceX, mBall.getYPos() + mBall.getVelocity() * forceY));
-
-
     }
 
     public void updateBullets() {

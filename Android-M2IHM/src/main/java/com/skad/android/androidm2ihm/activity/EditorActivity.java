@@ -233,7 +233,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String LevelDir = ((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString();
-                        mLevel.setmPath(getApplicationContext(), LevelDir);
+                        mLevel.setPath(getApplicationContext(), LevelDir);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -246,7 +246,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     public void save() {
         String toastMsg = null;
         if (FileUtils.isExternalStorageWritable()) {
-            String Path = mLevel.getmPath();
+            String Path = mLevel.getPath();
             FileUtils.makeDir(Path);
 
             try {
@@ -257,7 +257,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 //write lvl
                 temp += mLevel.toString();
                 InputStream in = new ByteArrayInputStream(temp.getBytes());
-                FileUtils.writeFile(in, mLevel.getmPath(), "level.txt");
+                FileUtils.writeFile(in, mLevel.getPath(), "level.txt");
                 toastMsg = getString(R.string.editeur_save_succes_file, "");
             } catch (IOException e) {
                 toastMsg = String.format(getString(R.string.editeur_save_error_file), "", e.toString());

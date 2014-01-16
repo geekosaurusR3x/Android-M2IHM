@@ -70,9 +70,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
 
         // Audio
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
-        mIdSoundWall = mSoundPool.load(FileUtils.getfileordefault(this, mLevel.getmPath(), "wall_hit.wav"), 1);
-        mIdSoundGameOver = mSoundPool.load(FileUtils.getfileordefault(this, mLevel.getmPath(), "gameover.wav"), 1);
-        mIdSoundWin = mSoundPool.load(FileUtils.getfileordefault(this, mLevel.getmPath(), "fins_level_completed.wav"), 1);
+        mIdSoundWall = mSoundPool.load(FileUtils.getfileordefault(this, mLevel.getPath(), "wall_hit.wav"), 1);
+        mIdSoundGameOver = mSoundPool.load(FileUtils.getfileordefault(this, mLevel.getPath(), "gameover.wav"), 1);
+        mIdSoundWin = mSoundPool.load(FileUtils.getfileordefault(this, mLevel.getPath(), "fins_level_completed.wav"), 1);
 
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
@@ -155,7 +155,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
      * Starts playback of the (annoying) background music
      */
     private void startBackgroundMusicPlayback() {
-        mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(FileUtils.getfileordefault(this, mLevel.getmPath(), "background_music.wav"))));
+        mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(FileUtils.getfileordefault(this, mLevel.getPath(), "background_music.wav"))));
         mBackgroundMusic.setLooping(true);
         mBackgroundMusic.start();
     }

@@ -1,10 +1,7 @@
 package com.skad.android.androidm2ihm.utils;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.util.Log;
-import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.*;
 
 import java.io.*;
@@ -24,8 +21,8 @@ public class LevelParser {
         Level level = Level.getInstance();
 
         // Determine correct level resource file
-        level.setmPath(context, levelDir);
-        String Path = level.getmPath();
+        level.setPath(context, levelDir);
+        String Path = level.getPath();
         File file = new File(FileUtils.getfileordefault(context, Path, "level.txt"));
         InputStream fileLevelStream = null;
 
