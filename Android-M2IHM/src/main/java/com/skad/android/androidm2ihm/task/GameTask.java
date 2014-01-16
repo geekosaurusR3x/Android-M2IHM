@@ -81,7 +81,7 @@ public class GameTask extends AsyncTask<Void, Void, Void> /*implements SensorEve
             for (Gun gun : mLevel.getGunList()) {
                 gun.fire((int) mLevel.getBall().getXPos(), (int) mLevel.getBall().getYPos());
                 mBulletFiredLastTime = System.currentTimeMillis();
-                // A new bullet was fired, request update
+                // A new bullet was fired, request updateBullet
                 // mLevelView.invalidate();
             }
         }

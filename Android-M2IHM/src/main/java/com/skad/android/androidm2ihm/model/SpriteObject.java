@@ -135,13 +135,16 @@ abstract public class SpriteObject {
     public void reSize()
     {
         mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(),getHeight(), false);
+        if (mAlternateSprite != null) {
+            mAlternateSprite = Bitmap.createScaledBitmap(mOriginalAlternateSprite, getWidth(), getHeight(), false);
+        }
     }
 
     public Rect getBoundingRectangle() {
         return new Rect((int) mPosition.getX(), (int) mPosition.getY(), (int) mPosition.getX() + mWidth, (int) mPosition.getY() + mHeight);
     }
 
-    public boolean intersects(SpriteObject object) {
+    public Vector2D intersects(SpriteObject object) {
         if (Rect.intersects(getBoundingRectangle(), object.getBoundingRectangle())) {
             Rect collisionBounds = getCollisionBounds(getBoundingRectangle(), object.getBoundingRectangle());
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
@@ -155,12 +158,12 @@ abstract public class SpriteObject {
                     deltaY2 = MathUtils.maxOrZero(deltaY2, object.getScaledSprite().getHeight());
                     int bitmap2Pixel = object.getScaledSprite().getPixel(deltaX2, deltaY2);
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
-                        return true;
+                        return new Vector2D(deltaX1, deltaY1);
                     }
                 }
             }
         }
-        return false;
+        return null;
     }
 
     private Rect getCollisionBounds(Rect rect1, Rect rect2) {
@@ -219,6 +222,9 @@ abstract public class SpriteObject {
         matrix.postRotate(mAngle);
         reSize();
         mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
+        if (mAlternateSprite != null) {
+            mAlternateSprite = Bitmap.createBitmap(mAlternateSprite, 0, 0, mWidth, mHeight, matrix, true);
+        }
     }
 
     public double getDirX() {
@@ -227,6 +233,10 @@ abstract public class SpriteObject {
 
     public double getDirY() {
         return mDir.getY();
+    }
+
+    public Vector2D getDir() {
+        return mDir;
     }
 
     @Override

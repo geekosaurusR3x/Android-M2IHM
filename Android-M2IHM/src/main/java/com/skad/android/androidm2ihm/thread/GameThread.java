@@ -19,7 +19,7 @@ import java.util.Observer;
 public class GameThread extends Thread implements SensorEventListener, Observer {
     private static final String TAG = "GameThread";
     // Minimum movement value
-    private static final double MOVEMENT_THRESHOLD = 0.2;
+    private static final double MOVEMENT_THRESHOLD = 0.3;
     private boolean mRunning = true;
     private Level mLevel;
     private SurfaceHolder mSurfaceHolder;

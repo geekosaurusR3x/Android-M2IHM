@@ -162,19 +162,21 @@ public class Level extends Observable {
         return false;
     }
 
-    public boolean playerHitWall() {
+    public Vector2D playerHitWall() {
         for (final Wall wall : mWallList) {
-            if (mBall.intersects(wall)) {
+            Vector2D newdirection = mBall.intersects(wall);
+            if (newdirection != null) {
                 // mLevelListener.onCollisionDetected(Level.COLLISION.COLLISION_WALL);
-                return true;
+                return newdirection;
             }
         }
-        return false;
+        return null;
     }
 
     public Bullet playerWasHitByBullet(Gun gun) {
         for (final Bullet bullet : gun.getBulletList()) {
-            if (mBall.intersects(bullet)) {
+            Vector2D intersection = mBall.intersects(bullet);
+            if (intersection != null) {
                 // mLevelListener.onCollisionDetected(Level.COLLISION.COLLISION_BULLET);
                 return bullet;
             }
@@ -186,16 +188,45 @@ public class Level extends Observable {
         if (mBall == null) {
             return;
         }
-        int lastX = (int) mBall.getXPos();
-        int lastY = (int) mBall.getYPos();
 
         mBall.setDir(forceX, forceY);
-        mBall.forward();
+
         //mBall.setPosition(new Vector2D(mBall.getXPos() + mBall.getVelocity() * forceX, mBall.getYPos() + mBall.getVelocity() * forceY));
 
-        if (playerHitWall()) { // Player hit a wall
-            mBall.setXPos(lastX);
-            mBall.setYPos(lastY);
+
+    }
+
+    public void updateBullets() {
+        long currentTimeMs = System.currentTimeMillis();
+        //update bullet
+
+
+        for (Gun gun : mGunList) {
+            gun.rotate((int) mBall.getXPos(), (int) mBall.getYPos());
+            if (currentTimeMs - gun.getLastTimeFired() > gun.getFireRate()) {
+                gun.fire((int) mBall.getXPos(), (int) mBall.getYPos());
+                gun.setLastTimeFired(currentTimeMs);
+                // Log.d(TAG, "Fired bullet #" + gun.getBulletList().size());
+            }
+            Iterator<Bullet> bulletIterator = gun.getBulletList().iterator();
+            while (bulletIterator.hasNext()) {
+                Bullet bullet = bulletIterator.next();
+                bullet.forward();
+                //bullet.decreaseVelocity();
+                for (final Wall wall : mWallList) {
+                    Vector2D intersection = bullet.intersects(wall);
+                    if (intersection != null) {
+                        bulletIterator.remove();
+                    }
+                }
+            }
+        }
+
+        mBall.forward();
+
+        Vector2D newdirection = playerHitWall();
+        if (newdirection != null) { // Player hit a wall
+            mBall.setDir(newdirection);
             mBall.setShowAlternateSprite(true);
             // TODO bounce
             // ball.setDir(-ball.getDirX(), ball.getDirY());
@@ -225,29 +256,6 @@ public class Level extends Observable {
             //mLevelListener.onLevelFailed();
             setChanged();
             notifyObservers(EVENT.GAME_OVER);
-        }
-    }
-
-    public void updateBullets() {
-        long currentTimeMs = System.currentTimeMillis();
-        for (Gun gun : mGunList) {
-            gun.rotate((int) mBall.getXPos(), (int) mBall.getYPos());
-            if (currentTimeMs - gun.getLastTimeFired() > gun.getFireRate()) {
-                gun.fire((int) mBall.getXPos(), (int) mBall.getYPos());
-                gun.setLastTimeFired(currentTimeMs);
-                // Log.d(TAG, "Fired bullet #" + gun.getBulletList().size());
-            }
-            Iterator<Bullet> bulletIterator = gun.getBulletList().iterator();
-            while (bulletIterator.hasNext()) {
-                Bullet bullet = bulletIterator.next();
-                bullet.forward();
-                //bullet.decreaseVelocity();
-                for (final Wall wall : mWallList) {
-                    if (bullet.intersects(wall)) {
-                        bulletIterator.remove();
-                    }
-                }
-            }
         }
     }
 

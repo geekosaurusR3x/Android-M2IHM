@@ -49,6 +49,15 @@ public class Vector2D {
         mY /= vector.getY();
     }
 
+    public double scalaire(Vector2D vector) {
+
+        return (mX * vector.getX()) + (mY * vector.getY());
+    }
+
+    public Vector2D getNormalVector() {
+        return new Vector2D(-mY, mX);
+    }
+
     public Vector2D invert() {
         return new Vector2D(-mX, -mY);
     }

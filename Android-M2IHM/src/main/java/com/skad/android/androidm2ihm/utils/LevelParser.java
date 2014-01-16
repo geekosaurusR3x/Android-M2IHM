@@ -18,15 +18,15 @@ public class LevelParser {
     private LevelParser() {
     }
 
-    public static Level getLevelFromFile(Context context, String levelDir,int levelNum, int screenWidth, int screenHeight) {
+    public static Level getLevelFromFile(Context context, String levelDir, int levelNum, int screenWidth, int screenHeight) {
         double ratioWidth = 1;
         double ratioHeight = 1;
         Level level = Level.getInstance();
 
         // Determine correct level resource file
-        level.setmPath(context,levelDir);
+        level.setmPath(context, levelDir);
         String Path = level.getmPath();
-        File file = new File(FileUtils.getfileordefault(context,Path,"level.txt"));
+        File file = new File(FileUtils.getfileordefault(context, Path, "level.txt"));
         InputStream fileLevelStream = null;
 
         try {
@@ -53,7 +53,7 @@ public class LevelParser {
                     int height = Integer.parseInt(temp[4]);
                     float angle = 0; //Default angle
                     if (temp.length > 5)
-                            angle = Float.parseFloat(temp[5]);
+                        angle = Float.parseFloat(temp[5]);
                     int fireRate = 1000; // Default fire rate
                     if (temp.length > 6)
                         fireRate = Integer.parseInt(temp[6]);
@@ -71,6 +71,7 @@ public class LevelParser {
                         ball = new Ball(xPos, yPos, width, height);
                         ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded.png")));
                         ball.setAlternateSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(context, Path, "playership_shielded_red.png")));
+                        ball.setDir(0, 0);
                         ball.rotate(angle);
                     } else if (objectType.equals("g")) { // gun
                         Gun gun = new Gun(xPos, yPos, width, height, fireRate);
