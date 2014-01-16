@@ -47,15 +47,6 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     private int mIdSoundWall;
     private int mIdSoundGameOver;
     private int mIdSoundWin;
-    // Thread
-    // private GameTask mGameTask;
-/*
-    private boolean mBound = false;
-*/
-    // Sensors
-/*
-    private SensorManager mSensorManager;
-*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +56,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         // Determine which level should be loaded
         mLevelNumber = getIntent().getIntExtra(getString(R.string.extra_key_level), 1);
         mLevelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
+
         // Init score
         mScore = new Score(mLevelNumber);
-
 
         // Show level view
         drawLevel();
@@ -76,7 +67,6 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         mLevelView = (LevelView) findViewById(R.id.level_view);
         mScoreView = (TextView) findViewById(R.id.txt_score);
         mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
-
 
         // Audio
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
@@ -91,19 +81,48 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         }
     }
 
-    private void restartLevel() {
-/*
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-*/
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Sound preferences
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mMute = sharedPrefs.getBoolean(getString(R.string.pref_key_mute), false);
+        registerObserver();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopBackgroundMusicPlayback();
+        unregisterObserver();
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
+    }
+
+    /**
+     * Starts the game
+     */
+    private void startGame() {
         mScore.reset();
         mLevelView.startNewThread();
         drawLevel();
     }
 
+    /**
+     * Pauses the game
+     */
+    private void pauseGame() {
+        stopBackgroundMusicPlayback();
+    }
+
+    /**
+     * Advance to next level
+     */
     private void nextLevel() {
-/*
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-*/
         if (mLevelNumber < Level.LEVEL_COUNT) {
             mLevelNumber++;
             mScore.setLevel(mLevelNumber);
@@ -116,20 +135,34 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         }
     }
 
-    private void pauseGame() {
-        // mGameThread.setRunning(false);
-        stopBackgroundMusicPlayback();
-/*
-        mSensorManager.unregisterListener(this);
-*/
+    /**
+     * Register LevelActivity to observe both the Level and Score models
+     */
+    private void registerObserver() {
+        mLevel.addObserver(this);
+        mScore.addObserver(this);
     }
 
+    /**
+     * Unregisters LevelActivity as an observer of Level and Score
+     */
+    private void unregisterObserver() {
+        mLevel.deleteObserver(this);
+        mScore.deleteObserver(this);
+    }
+
+    /**
+     * Starts playback of the (annoying) background music
+     */
     private void startBackgroundMusicPlayback() {
         mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(FileUtils.getfileordefault(this, mLevel.getmPath(), "background_music.wav"))));
         mBackgroundMusic.setLooping(true);
         mBackgroundMusic.start();
     }
 
+    /**
+     * Stops music playback
+     */
     private void stopBackgroundMusicPlayback() {
         if (mBackgroundMusic != null) {
             mBackgroundMusic.release();
@@ -137,6 +170,19 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         }
     }
 
+    /**
+     * Save player's score in SharedPreferences if he bet his highscore
+     */
+    private void saveHighscore() {
+        int highscore = mScore.getHighScore(this);
+        if (mScore.getTotalScore() > highscore) {
+            mScore.saveHighScore(this);
+        }
+    }
+
+    /**
+     * Load a level from resources
+     */
     private void drawLevel() {
         DisplayMetrics metrics = getResources().getDisplayMetrics();
         mLevel = LevelParser.getLevelFromFile(this, mLevelDir, mLevelNumber, metrics.widthPixels, metrics.heightPixels);
@@ -145,57 +191,39 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         }
     }
 
-    private void unregisterObserver() {
-        mLevel.deleteObserver(this);
-        mScore.deleteObserver(this);
-    }
-
-    private void registerObserver() {
-        mLevel.addObserver(this);
-        mScore.addObserver(this);
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-/*
-        mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
-*/
-        // Sound preferences
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mMute = sharedPrefs.getBoolean(getString(R.string.pref_key_mute), false);
-        registerObserver();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        /*mSensorManager.unregisterListener(this);*/
-        stopBackgroundMusicPlayback();
-        unregisterObserver();
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Log.d(TAG, "destroy");
-        stopBackgroundMusicPlayback();
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
-    }
-
-    private void saveHighScore() {
-        int highscore = mScore.getHighScore(this);
-        if (mScore.getTotalScore() > highscore) {
-            mScore.saveHighScore(this);
+    /**
+     * This function gets called when the player finished the current level
+     */
+    public void onLevelCompleted() {
+        // Play sound
+        if (!mMute) {
+            mSoundPool.play(mIdSoundWin, 1, 1, 0, 0, 1);
         }
+        // Pause
+        pauseGame();
+        saveHighscore();
+        showSuccessDialog();
     }
 
-    // @Override
+    /**
+     * This function gets called when the player failed the current level
+     */
+    public void onLevelFailed() {
+        // Play sound
+        if (!mMute) {
+            mSoundPool.play(mIdSoundGameOver, 1, 1, 0, 0, 1);
+        }
+        // Pause
+        pauseGame();
+        mPlayerFailed = true;
+        showFailureDialog();
+    }
+
+    /**
+     * Gets called when a collision is detected in game
+     *
+     * @param collisionType The type of collision
+     */
     public void onCollisionDetected(Level.EVENT collisionType) {
         mScore.collided();
         switch (collisionType) {
@@ -212,6 +240,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         }
     }
 
+    /**
+     * Displays the dialog telling the user he failed the level
+     */
     private void showFailureDialog() {
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
         successDialogBuilder.setTitle(getString(R.string.dialog_failure_title));
@@ -223,6 +254,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         mPlayerFailed = true;
     }
 
+    /**
+     * Displays the dialog informing the user he completed the level
+     */
     private void showSuccessDialog() {
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
         successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
@@ -239,32 +273,10 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         mPlayerFailed = false;
     }
 
-    // @Override
-    public void onLevelCompleted() {
-        // Play sound
-        if (!mMute) {
-            mSoundPool.play(mIdSoundWin, 1, 1, 0, 0, 1);
-        }
-        // Pause
-        pauseGame();
-        saveHighScore();
-        showSuccessDialog();
-    }
-
-    // @Override
-    public void onLevelFailed() {
-        // Play sound
-        if (!mMute) {
-            mSoundPool.play(mIdSoundGameOver, 1, 1, 0, 0, 1);
-        }
-        // Pause
-        pauseGame();
-        mPlayerFailed = true;
-        showFailureDialog();
-    }
-
     @Override
     public void onClick(DialogInterface dialogInterface, int btnId) {
+        // Dialog not shown anymore -> Register observer again
+        //registerObserver();
         switch (btnId) {
             case DialogInterface.BUTTON_POSITIVE:
                 if (!mPlayerFailed) {
@@ -272,7 +284,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
                     break;
                 }
             case DialogInterface.BUTTON_NEUTRAL:
-                restartLevel();
+                startGame();
                 break;
         }
     }
@@ -280,7 +292,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     @Override
     public void onCancel(DialogInterface dialog) {
         // User cancelled dialog, restart game
-        restartLevel();
+        startGame();
     }
 
     @Override
@@ -291,48 +303,52 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
                 @Override
                 public void run() {
                     mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
-
                 }
 
             };
-            mHandler.post(action);
         } else if (observable instanceof Level) {
             if (data instanceof Level.EVENT) {
                 switch ((Level.EVENT) data) {
                     case GAME_OVER:
-                        /*action = new Runnable() {
+                        action = new Runnable() {
                             @Override
-                            public void run() {*/
-                        onLevelFailed();
-                            /*}
-                        };*/
+                            public void run() {
+                                onLevelFailed();
+                            }
+                        };
                         break;
                     case GAME_SUCCESS:
-                        /*action = new Runnable() {
+                        action = new Runnable() {
                             @Override
-                            public void run() {*/
-                        onLevelCompleted();
-                            /*}
-                        };*/
+                            public void run() {
+                                onLevelCompleted();
+                            }
+                        };
                         break;
                     case COLLISION_BULLET:
-                        /*action = new Runnable() {
+                        action = new Runnable() {
                             @Override
-                            public void run() {*/
-                        onCollisionDetected(Level.EVENT.COLLISION_BULLET);
-                            /*}
-                        };*/
+                            public void run() {
+                                onCollisionDetected(Level.EVENT.COLLISION_BULLET);
+                            }
+                        };
+                        break;
                     case COLLISION_WALL:
-                        /*action = new Runnable() {
+                        action = new Runnable() {
                             @Override
-                            public void run() {*/
-                        onCollisionDetected(Level.EVENT.COLLISION_WALL);
-                            /*}
-                        };*/
+                            public void run() {
+                                onCollisionDetected(Level.EVENT.COLLISION_WALL);
+                            }
+                        };
                         break;
                 }
             }
         }
-        /*mHandler.post(action);*/
+
+        if (action != null) {
+            mHandler.post(action);
+            // Unregister observer so that only one dialog get shown
+            // unregisterObserver();
+        }
     }
 }
