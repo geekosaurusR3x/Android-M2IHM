@@ -10,11 +10,10 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.Toast;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.task.MoveSdCard;
@@ -35,29 +34,24 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         boolean assetsAlreadyMoved = sharedPreferences.getBoolean("Content Moved", false);
 
         //testing if files are present and ifnot remove
-        if(!FileUtils.fileExist(getExternalFilesDir(null)+ File.separator+"default"))
-        {
+        if (!FileUtils.fileExist(getExternalFilesDir(null) + File.separator + "default")) {
             assetsAlreadyMoved = false;
         }
-        if(!assetsAlreadyMoved)
-        {
+        if (!assetsAlreadyMoved) {
             MoveSdCard movetosd = new MoveSdCard(this);
             movetosd.execute(null);
-        }
-        else
-        {
+        } else {
             fecthLvl();
         }
 
         Button btn = (Button) findViewById(R.id.button_editeur);
-        btn.setTag(R.id.main_lvl_num_tag,0);
+        btn.setTag(R.id.main_lvl_num_tag, 0);
         btn.setTag(R.id.main_lvl_dir_tag, "");
         btn.setOnClickListener(this);
 
     }
 
-    public void fecthLvl()
-    {
+    public void fecthLvl() {
         ScrollView listButtonLvl = (ScrollView) findViewById(R.id.main_list_button);
         //clean the view
         listButtonLvl.removeAllViews();
@@ -66,8 +60,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
 
         ArrayList<String> listLvl = FileUtils.listLvl(this);
         int numlvl = 1;
-        for(String lvl : listLvl)
-        {
+        for (String lvl : listLvl) {
             LinearLayout linearLayoutsub = new LinearLayout(this);
             linearLayoutsub.setOrientation(LinearLayout.HORIZONTAL);
             //TODO
@@ -80,16 +73,16 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             buttonplay.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonplay.setOnClickListener(this);
             //edit button
-            Button buttonedit = new Button(this);
-            buttonedit.setText("");
-            buttonedit.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_edit));
+            ImageButton buttonedit = new ImageButton(this);
+            buttonedit.setImageResource(R.drawable.ic_action_edit);
+            //buttonedit.setBackgroundResource(0); // Remove background
             buttonedit.setTag(R.id.main_lvl_num_tag, 0);
             buttonedit.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonedit.setOnClickListener(this);
             //remove button
-            Button buttonsup = new Button(this);
-            buttonsup.setText("");
-            buttonsup.setBackgroundDrawable(getResources().getDrawable(R.drawable.ic_action_remove));
+            ImageButton buttonsup = new ImageButton(this);
+            buttonsup.setImageResource(R.drawable.ic_action_remove);
+            // buttonsup.setBackgroundResource(0); // Remove background
             buttonsup.setTag(R.id.main_lvl_num_tag, -1);
             buttonsup.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonsup.setOnClickListener(this);
@@ -103,14 +96,15 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         }
         listButtonLvl.addView(linearLayout);
     }
-    public void onFinishMoveFile()
-    {
+
+    public void onFinishMoveFile() {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putBoolean("Content Moved", true);
         editor.commit();
         fecthLvl();
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -161,26 +155,19 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         String dirtag = view.getTag(R.id.main_lvl_dir_tag).toString();
 
         Intent gameIntent = null;
-        if (numtag == -1)
-        {
-            FileUtils.deleteLvl(this,dirtag);
+        if (numtag == -1) {
+            FileUtils.deleteLvl(this, dirtag);
             fecthLvl();
-        }
-        else if (numtag == 0)
-        {
+        } else if (numtag == 0) {
             gameIntent = new Intent(this, EditorActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level_dir), dirtag);
-        }
-        else
-        {
-
+        } else {
             gameIntent = new Intent(this, LevelActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level), numtag);
             gameIntent.putExtra(getString(R.string.extra_key_level_dir), dirtag);
         }
 
-        if(gameIntent != null)
-        {
+        if (gameIntent != null) {
             startActivity(gameIntent);
         }
     }
