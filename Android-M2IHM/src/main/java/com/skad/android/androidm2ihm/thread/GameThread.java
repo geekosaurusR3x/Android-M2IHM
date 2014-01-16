@@ -18,6 +18,8 @@ import java.util.Observer;
  */
 public class GameThread extends Thread implements SensorEventListener, Observer {
     private static final String TAG = "GameThread";
+    // Minimum movement value
+    private static final double MOVEMENT_THRESHOLD = 0.2;
     private boolean mRunning = true;
     private Level mLevel;
     private SurfaceHolder mSurfaceHolder;
@@ -60,6 +62,13 @@ public class GameThread extends Thread implements SensorEventListener, Observer 
     public void onSensorChanged(SensorEvent event) {
         float xValue = event.values[1];
         float yValue = event.values[0];
+        // Ensure x|y values aren't too low in order to prevent micro movement
+        if (Math.abs(xValue) < MOVEMENT_THRESHOLD) {
+            xValue = 0;
+        }
+        if (Math.abs(yValue) < MOVEMENT_THRESHOLD) {
+            yValue = 0;
+        }
         //mLevelView.setForce(xValue, yValue);
         mLevel.updatePlayerPosition(xValue, yValue);
     }

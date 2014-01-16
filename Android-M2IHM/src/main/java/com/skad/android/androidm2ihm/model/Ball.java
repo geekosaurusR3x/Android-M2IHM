@@ -5,8 +5,6 @@ package com.skad.android.androidm2ihm.model;
  */
 public class Ball extends SpriteObject {
 
-    public static final double ROTATE_THRESHOLD = 0.2;
-
     public Ball() {
         super();
         mWidth = 32;
@@ -28,8 +26,6 @@ public class Ball extends SpriteObject {
         } else {
             mDir = new Vector2D(targetX, targetY);
         }
-        if (Math.abs(targetX) > ROTATE_THRESHOLD && Math.abs(targetY) > ROTATE_THRESHOLD) {
-            rotate((int) (getXPos() + (100 * targetX)), (int) (getYPos() + (100 * targetY)));
-        }
+        rotate((int) (getXPos() + (100 * targetX)), (int) (getYPos() + (100 * targetY)));
     }
 }
