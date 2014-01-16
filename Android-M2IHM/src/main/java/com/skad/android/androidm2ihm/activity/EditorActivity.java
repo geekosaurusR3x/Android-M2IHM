@@ -1,7 +1,6 @@
 package com.skad.android.androidm2ihm.activity;
 
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -26,7 +25,9 @@ import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.view.EditorView;
 
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by skad on 09/01/14.
@@ -81,50 +82,21 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         });
 
         Button leftButton = (Button) findViewById(R.id.editeur_left_button);
-        leftButton.setOnClickListener(this);
-        leftButton.setOnLongClickListener(this);
-        leftButton.setOnTouchListener(this);
-
         Button rightButton = (Button) findViewById(R.id.editeur_right_button);
-        rightButton.setOnClickListener(this);
-        rightButton.setOnLongClickListener(this);
-        rightButton.setOnTouchListener(this);
-
         Button upButton = (Button) findViewById(R.id.editeur_up_button);
-        upButton.setOnClickListener(this);
-        upButton.setOnLongClickListener(this);
-        upButton.setOnTouchListener(this);
-
         Button downButton = (Button) findViewById(R.id.editeur_down_button);
-        downButton.setOnClickListener(this);
-        downButton.setOnLongClickListener(this);
-        downButton.setOnTouchListener(this);
-
         Button widthMinusButton = (Button) findViewById(R.id.editeur_widthminus_button);
-        widthMinusButton.setOnClickListener(this);
-        widthMinusButton.setOnLongClickListener(this);
-        widthMinusButton.setOnTouchListener(this);
-
         Button widthPlusButton = (Button) findViewById(R.id.editeur_widthplus_button);
-        widthPlusButton.setOnClickListener(this);
-        widthPlusButton.setOnLongClickListener(this);
-        widthPlusButton.setOnTouchListener(this);
-
         Button heightMinusButton = (Button) findViewById(R.id.editeur_heightminus_button);
-        heightMinusButton.setOnClickListener(this);
-        heightMinusButton.setOnLongClickListener(this);
-        heightMinusButton.setOnTouchListener(this);
-
         Button heightPlusButton = (Button) findViewById(R.id.editeur_heightplus_button);
-        heightPlusButton.setOnClickListener(this);
-        heightPlusButton.setOnLongClickListener(this);
-        heightPlusButton.setOnTouchListener(this);
-
         Button rotateButton = (Button) findViewById(R.id.editeur_rotate);
-        rotateButton.setOnClickListener(this);
-        rotateButton.setOnLongClickListener(this);
-        rotateButton.setOnTouchListener(this);
 
+        Button[] buttons = {leftButton, rightButton, upButton, downButton, widthPlusButton, widthMinusButton, heightPlusButton, heightMinusButton, rotateButton};
+        for (Button btn : buttons) {
+            btn.setOnClickListener(this);
+            btn.setOnLongClickListener(this);
+            btn.setOnTouchListener(this);
+        }
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -261,7 +233,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
                         String LevelDir = ((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_filename)).getText().toString();
-                        mLevel.setmPath( getApplicationContext() ,LevelDir);
+                        mLevel.setmPath(getApplicationContext(), LevelDir);
                     }
                 })
                 .setNegativeButton(android.R.string.cancel, null)
@@ -279,13 +251,13 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
 
             try {
                 //first line explain the syntax
-                String temp =  getString(R.string.editeur_file_first_line);
+                String temp = getString(R.string.editeur_file_first_line);
                 //write displaymetric
                 temp += String.format(getString(R.string.editeur_file_screen_info), mMetrics.widthPixels, mMetrics.heightPixels);
                 //write lvl
                 temp += mLevel.toString();
                 InputStream in = new ByteArrayInputStream(temp.getBytes());
-                FileUtils.writeFile(in,mLevel.getmPath(),"level.txt");
+                FileUtils.writeFile(in, mLevel.getmPath(), "level.txt");
                 toastMsg = getString(R.string.editeur_save_succes_file, "");
             } catch (IOException e) {
                 toastMsg = String.format(getString(R.string.editeur_save_error_file), "", e.toString());
