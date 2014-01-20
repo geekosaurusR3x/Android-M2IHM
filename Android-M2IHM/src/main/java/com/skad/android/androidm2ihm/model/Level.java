@@ -162,9 +162,9 @@ public class Level extends Observable {
 
     public Vector2D playerHitWall() {
         for (final Wall wall : mWallList) {
-            Vector2D newdirection = mBall.intersects(wall);
-            if (newdirection != null) {
-                return newdirection;
+            Vector2D pos = mBall.intersects(wall);
+            if (pos != null) {
+                return wall.getRebondVector(pos, mBall.getDir());
             }
         }
         return null;
@@ -211,12 +211,16 @@ public class Level extends Observable {
                 }
             }
         }
-
+        double lastx = mBall.getXPos();
+        double lasty = mBall.getYPos();
         mBall.forward();
-
+        mBall.decreseFreeze();
         Vector2D newdirection = playerHitWall();
         if (newdirection != null) { // Player hit a wall
-            mBall.setDir(newdirection);
+            //mBall.setDir(newdirection);
+            //mBall.setFreeze(10);
+            mBall.setXPos((int) lastx);
+            mBall.setYPos((int) lasty);
             mBall.setShowAlternateSprite(true);
             // TODO bounce
             // ball.setDir(-ball.getDirX(), ball.getDirY());

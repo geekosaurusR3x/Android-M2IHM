@@ -5,6 +5,8 @@ package com.skad.android.androidm2ihm.model;
  */
 public class Ball extends SpriteObject {
 
+    private int freeze;
+
     public Ball() {
         super();
         mWidth = 32;
@@ -16,16 +18,33 @@ public class Ball extends SpriteObject {
         super(x, y, width, height);
         mVelocity = 2.0;
         this.mType = "p";
+        this.freeze = 0;
 
+    }
+
+    public void setFreeze(int freeze) {
+        this.freeze = freeze;
+    }
+
+    public void decreseFreeze() {
+        if (freeze > 0) {
+            freeze--;
+        }
     }
 
     @Override
     public void setDir(double targetX, double targetY) {
+
         if (mDir != null) {
-            mDir.setXandY(targetX, targetY);
+            if (freeze == 0) {
+                mDir.setXandY(targetX, targetY);
+                //mDir.normalize();
+            }
+
         } else {
             mDir = new Vector2D(targetX, targetY);
         }
+
         rotate((int) (getXPos() + (100 * targetX)), (int) (getYPos() + (100 * targetY)));
     }
 }

@@ -18,7 +18,7 @@ public class Vector2D {
         return Math.sqrt((mX * mX) + (mY * mY));
     }
 
-    public Vector2D normalize() {
+    public void normalize() {
         double normX = 0.0;
         double normY = 0.0;
         double len = length();
@@ -26,7 +26,8 @@ public class Vector2D {
             normX = mX / len;
             normY = mY / len;
         }
-        return new Vector2D(normX, normY);
+        mX = normX;
+        mY = normY;
     }
 
     public void add(Vector2D vector) {
@@ -55,7 +56,7 @@ public class Vector2D {
     }
 
     public Vector2D getNormalVector() {
-        return new Vector2D(-mY, mX);
+        return new Vector2D(mY, -mX);
     }
 
     public Vector2D invert() {
@@ -87,5 +88,9 @@ public class Vector2D {
     public void setXandY(double x, double y) {
         mX = x;
         mY = y;
+    }
+
+    public String toString() {
+        return "X " + mX + " Y " + mY;
     }
 }

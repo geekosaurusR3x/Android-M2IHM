@@ -48,7 +48,8 @@ public class MathUtils {
 
     public static Vector2D vectorFromPoint(double X1, double Y1, double X2, double Y2) {
         Vector2D vector = new Vector2D(X2 - X1, Y2 - Y1);
-        return vector.normalize();
+        vector.normalize();
+        return vector;
     }
 
     public static final Point getCenterOfCircle() {

@@ -1,5 +1,6 @@
 package com.skad.android.androidm2ihm.model;
 
+import android.util.Log;
 import com.skad.android.androidm2ihm.utils.MathUtils;
 
 /**
@@ -12,8 +13,14 @@ public class Wall extends SpriteObject {
     }
 
     public Vector2D getRebondVector(Vector2D colisionPoint, Vector2D direction) {
-        Vector2D wallVectorNormalised = MathUtils.vectorFromPoint(getXPos(), getYPos(), getXPos() + getWidth(), getYPos() + getHeight());
-        return calculRebondVector(colisionPoint, direction, wallVectorNormalised);
+        Vector2D wallVectorNormalised = MathUtils.vectorFromPoint(getXPos(), getYPos(), getXPos() + getWidth(), getYPos());
+        Log.d("direction ", direction.toString());
+        Log.d("wallVectorNormalised ", wallVectorNormalised.toString());
+        Vector2D retour = calculRebondVector(colisionPoint, direction, wallVectorNormalised);
+        //retour.mult(new Vector2D(10.0,10.0));
+        Log.d("retour ", retour.toString());
+
+        return retour;
     }
 
     protected Vector2D calculRebondVector(Vector2D colisionPoint, Vector2D direction, Vector2D i) {
