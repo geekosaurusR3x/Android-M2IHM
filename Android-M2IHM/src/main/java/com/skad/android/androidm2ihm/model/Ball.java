@@ -8,13 +8,6 @@ public class Ball extends SpriteObject {
     private static final int ROTATION_THRESHOLD = 5;
     private int freeze;
 
-    public Ball() {
-        super();
-        mWidth = 32;
-        mHeight = 32;
-        mVelocity = 2.0;
-    }
-
     public Ball(int x, int y, int width, int height) {
         super(x, y, width, height);
         mVelocity = 2.0;
@@ -56,7 +49,7 @@ public class Ball extends SpriteObject {
         if (mDir != null) {
             if (freeze == 0) {
                 mDir.setXandY(targetX, targetY);
-                //mDir.normalize();
+                // mDir.normalize();
             }
         } else {
             mDir = new Vector2D(targetX, targetY);

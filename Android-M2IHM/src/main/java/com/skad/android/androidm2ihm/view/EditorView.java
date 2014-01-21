@@ -103,24 +103,24 @@ public class EditorView extends View {
 
     public void widthPlus(int id) {
         mLevel.getAllSprites().get(id).setWidth(mLevel.getAllSprites().get(id).getWidth() + 1);
-        mLevel.getAllSprites().get(id).reSize();
+        mLevel.getAllSprites().get(id).resize();
     }
 
     public void widthMinus(int id) {
         SpriteObject object = mLevel.getAllSprites().get(id);
         if (object.getWidth() - 1 > 0) {
             object.setWidth(object.getWidth() - 1);
-            object.reSize();
+            object.resize();
         }
     }
 
     public void heightPlus(int id) {
         mLevel.getAllSprites().get(id).setHeight(mLevel.getAllSprites().get(id).getHeight() + 1);
-        mLevel.getAllSprites().get(id).reSize();
+        mLevel.getAllSprites().get(id).resize();
     }
 
     public void rotate(int id) {
-        float angle = mLevel.getAllSprites().get(id).getmAngle() + 1;
+        float angle = mLevel.getAllSprites().get(id).getAngle() + 1;
         mLevel.getAllSprites().get(id).rotate(angle);
     }
 
@@ -128,7 +128,7 @@ public class EditorView extends View {
         SpriteObject object = mLevel.getAllSprites().get(id);
         if (object.getHeight() - 1 > 0) {
             object.setHeight(object.getHeight() - 1);
-            object.reSize();
+            object.resize();
         }
     }
 

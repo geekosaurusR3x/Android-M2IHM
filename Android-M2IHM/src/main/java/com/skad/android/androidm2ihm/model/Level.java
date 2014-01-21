@@ -186,12 +186,59 @@ public class Level extends Observable {
         }
     }
 
-    public void updateBullets() {
+    public void update() {
+        updatePlayer();
+        updateBullets();
+        checkForCollisions();
+    }
+
+    private void updatePlayer() {
+        double lastX = mBall.getXPos();
+        double lastY = mBall.getYPos();
+        mBall.forward();
+        // mBall.decreaseFreeze();
+        Vector2D newDirection = playerHitWall();
+        if (newDirection != null) { // Player hit a wall
+            // mBall.setDir(newDirection);
+            //mBall.setFreeze(10);
+            mBall.setXPos((int) lastX);
+            mBall.setYPos((int) lastY);
+            mBall.setShowAlternateSprite(true);
+            setChanged();
+            notifyObservers(EVENT.COLLISION_WALL);
+        } else {
+            mBall.setShowAlternateSprite(false);
+        }
+        for (final Gun gun : mGunList) {
+            Bullet bullet = playerWasHitByBullet(gun);
+            if (bullet != null) { // Player got hit by a bullet
+                // TODO bounce
+                mBall.setShowAlternateSprite(true);
+                gun.removeBullet(bullet);
+                setChanged();
+                notifyObservers(EVENT.COLLISION_BULLET);
+            } else {
+                mBall.setShowAlternateSprite(false);
+            }
+        }
+    }
+
+    private void checkForCollisions() {
+        if (playerReachedEnd()) { // Epic win
+            setChanged();
+            notifyObservers(EVENT.GAME_SUCCESS);
+        }
+        if (playerFellIntoHole()) { // Game over
+            setChanged();
+            notifyObservers(EVENT.GAME_OVER);
+        }
+    }
+
+    private void updateBullets() {
         long currentTimeMs = System.currentTimeMillis();
-        //update bullet
-
-
+        // update bullet positions
         for (Gun gun : mGunList) {
+            // Rotate gun so that they aim at the player'S ship
             gun.rotate((int) mBall.getXPos(), (int) mBall.getYPos());
             if (currentTimeMs - gun.getLastTimeFired() > gun.getFireRate()) {
                 gun.fire((int) mBall.getXPos(), (int) mBall.getYPos());
@@ -211,46 +258,7 @@ public class Level extends Observable {
                 }
             }
         }
-        double lastx = mBall.getXPos();
-        double lasty = mBall.getYPos();
-        mBall.forward();
-        mBall.decreaseFreeze();
-        Vector2D newdirection = playerHitWall();
-        if (newdirection != null) { // Player hit a wall
-            //mBall.setDir(newdirection);
-            //mBall.setFreeze(10);
-            mBall.setXPos((int) lastx);
-            mBall.setYPos((int) lasty);
-            mBall.setShowAlternateSprite(true);
-            // TODO bounce
-            // ball.setDir(-ball.getDirX(), ball.getDirY());
-            setChanged();
-            notifyObservers(EVENT.COLLISION_WALL);
-        } else {
-            mBall.setShowAlternateSprite(false);
-        }
-        for (final Gun gun : mGunList) {
-            Bullet bullet = playerWasHitByBullet(gun);
-            if (bullet != null) { // Player got hit by a bullet
-                // TODO bounce
-                mBall.setShowAlternateSprite(true);
-                gun.removeBullet(bullet);
-                setChanged();
-                notifyObservers(EVENT.COLLISION_BULLET);
-            } else {
-                mBall.setShowAlternateSprite(false);
-            }
-        }
-        if (playerReachedEnd()) { // Epic win
-            //mLevelListener.onLevelCompleted();
-            setChanged();
-            notifyObservers(EVENT.GAME_SUCCESS);
-        }
-        if (playerFellIntoHole()) { // Game over
-            //mLevelListener.onLevelFailed();
-            setChanged();
-            notifyObservers(EVENT.GAME_OVER);
-        }
+
     }
 
     /**

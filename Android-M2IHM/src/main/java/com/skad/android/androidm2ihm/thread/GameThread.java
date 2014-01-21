@@ -47,7 +47,7 @@ public class GameThread extends Thread implements SensorEventListener, Observer 
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
         synchronized (this) {
             while (mRunning) {
-                mLevel.updateBullets();
+                mLevel.update();
                 mcanvas = mSurfaceHolder.lockCanvas();
                 if (mcanvas != null) {
                     mLevelView.drawGameElements(mcanvas);
@@ -69,7 +69,6 @@ public class GameThread extends Thread implements SensorEventListener, Observer 
         if (Math.abs(yValue) < MOVEMENT_THRESHOLD) {
             yValue = 0;
         }
-        //mLevelView.setForce(xValue, yValue);
         mLevel.updatePlayerPosition(xValue, yValue);
     }
 

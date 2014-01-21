@@ -101,17 +101,17 @@ abstract public class SpriteObject {
         mHeight = height;
     }
 
-    public float getmAngle() {
+    public float getAngle() {
         return mAngle;
     }
 
-    public void setmAngle(float mAngle) {
+    public void setAngle(float mAngle) {
         this.mAngle = mAngle;
     }
 
     public void setSprite(Bitmap sprite) {
         mOriginalSprite = sprite;
-        reSize();
+        resize();
     }
 
     public void setAlternateSprite(Bitmap sprite) {
@@ -131,7 +131,7 @@ abstract public class SpriteObject {
         mRatioHeight = ratioHeight;
     }
 
-    public void reSize() {
+    public void resize() {
         mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(), getHeight(), false);
         if (mAlternateSprite != null) {
             mAlternateSprite = Bitmap.createScaledBitmap(mOriginalAlternateSprite, getWidth(), getHeight(), false);
@@ -213,7 +213,7 @@ abstract public class SpriteObject {
         Matrix matrix = new Matrix();
         mAngle = angle;
         matrix.postRotate(mAngle);
-        reSize();
+        resize();
         mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
         if (mAlternateSprite != null) {
             mAlternateSprite = Bitmap.createBitmap(mAlternateSprite, 0, 0, mWidth, mHeight, matrix, true);
@@ -238,6 +238,6 @@ abstract public class SpriteObject {
 
     @Override
     public String toString() {
-        return mType + "/" + (int) getXPos() + "/" + (int) getYPos() + "/" + getWidth() + "/" + getHeight() + "/" + getmAngle();
+        return mType + "/" + (int) getXPos() + "/" + (int) getYPos() + "/" + getWidth() + "/" + getHeight() + "/" + getAngle();
     }
 }
