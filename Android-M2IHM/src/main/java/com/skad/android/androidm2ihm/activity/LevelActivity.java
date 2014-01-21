@@ -60,6 +60,9 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         // Init score
         mScore = new Score(mLevelNumber);
 
+        // Sound preferences
+        determineSoundPreferences();
+
         // Show level view
         drawLevel();
 
@@ -85,8 +88,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     protected void onResume() {
         super.onResume();
         // Sound preferences
-        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-        mMute = sharedPrefs.getBoolean(getString(R.string.pref_key_mute), false);
+        determineSoundPreferences();
         registerObserver();
     }
 
@@ -102,6 +104,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         super.onBackPressed();
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
+
 
     /**
      * Starts the game
@@ -149,6 +152,15 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     private void unregisterObserver() {
         mLevel.deleteObserver(this);
         mScore.deleteObserver(this);
+    }
+
+    /**
+     * Determines whether to mute sound or not
+     * Sets the mMute variable
+     */
+    public void determineSoundPreferences() {
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        mMute = sharedPrefs.getBoolean(getString(R.string.pref_key_mute), false);
     }
 
     /**
