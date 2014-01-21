@@ -6,11 +6,9 @@ package com.skad.android.androidm2ihm.utils;
 
 import android.util.Log;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.*;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 import java.util.zip.ZipOutputStream;
 
 
@@ -20,8 +18,7 @@ public class ZipUtils {
     private ZipUtils() {
     }
 
-    public static void zip(String File, String zipFile) {
-        try {
+    public static void zip(String File, String zipFile) throws IOException {
             BufferedInputStream origin = null;
             FileOutputStream dest = new FileOutputStream(zipFile);
 
@@ -41,10 +38,38 @@ public class ZipUtils {
             origin.close();
 
             out.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
     }
 
+    public static void unpackZip(String path, String zipname) throws IOException {
+        InputStream in = new FileInputStream(path + File.separator + zipname);
+        ZipInputStream zis = new ZipInputStream(new BufferedInputStream(in));
+        ZipEntry entry;
+        String filename;
+        String dirname = zipname.substring(0, zipname.length() - 4);
+        FileUtils.makeDir(path + File.separator + dirname);
+        path = path + File.separator + dirname;
+
+        byte[] buffer = new byte[1024];
+        int count;
+
+        while ((entry = zis.getNextEntry()) != null) {
+            filename = entry.getName();
+            if (entry.isDirectory()) {
+                FileUtils.makeDir(path + File.separator + filename);
+
+            } else {
+                FileOutputStream fout = new FileOutputStream(path + File.separator + filename);
+
+                while ((count = zis.read(buffer)) != -1) {
+                    fout.write(buffer, 0, count);
+                }
+
+                fout.close();
+                zis.closeEntry();
+            }
+        }
+
+        zis.close();
+    }
 }

@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <integer name="btn_tag_level_1">1</integer>
-    <integer name="btn_tag_level_3">3</integer>
-    <integer name="btn_tag_level_2">2</integer>
     <integer name="btn_tag_editeur">0</integer>
+    <integer name="btn_tag_sup">-1</integer>
+    <integer name="btn_tag_share">-2</integer>
+    <integer name="btn_tag_donwload">-3</integer>
     <integer name="id_editeur_start">1</integer>
     <integer name="id_editeur_end">2</integer>
     <integer name="id_editeur_wall">3</integer>
     <integer name="id_editeur_hole">4</integer>
+
 
 </resources>

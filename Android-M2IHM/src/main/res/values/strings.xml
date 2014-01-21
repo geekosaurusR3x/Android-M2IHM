@@ -68,6 +68,9 @@
     <string name="extra_key_level_dir">Level_Dir</string>
     <string name="editeur_wall_arc">Wall Arc</string>
     <string name="uploading_content_server">Uploading content to the server</string>
+    <string name="donwload_list_lvl">Geting level list</string>
+    <string name="donwload_file_lvl">Geting level file</string>
+    <string name="main_donwload_level">Dowload Level</string>
 
 
 </resources>

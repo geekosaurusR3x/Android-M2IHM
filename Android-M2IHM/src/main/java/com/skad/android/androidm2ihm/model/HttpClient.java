@@ -1,5 +1,8 @@
 package com.skad.android.androidm2ihm.model;
 
+import org.apache.http.util.ByteArrayBuffer;
+
+import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -71,16 +74,19 @@ public class HttpClient {
         os.flush();
     }
 
-    public String getResponse() throws Exception {
+    public byte[] getResponse() throws Exception {
         InputStream is = con.getInputStream();
-        byte[] b1 = new byte[1024];
-        StringBuffer buffer = new StringBuffer();
+        BufferedInputStream bis = new BufferedInputStream(is);
 
-        while (is.read(b1) != -1)
-            buffer.append(new String(b1));
+        ByteArrayBuffer baf = new ByteArrayBuffer(5000);
+        int current = 0;
+        while ((current = bis.read()) != -1) {
+            baf.append((byte) current);
+        }
+        return baf.toByteArray();
+    }
 
-        con.disconnect();
-
-        return buffer.toString();
+    public void requestFile(String file) throws IOException {
+        con.getOutputStream().write(("name=" + file).getBytes());
     }
 }

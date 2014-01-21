@@ -3,12 +3,12 @@ package com.skad.android.androidm2ihm.task;
 import android.content.Context;
 import android.util.Log;
 import com.skad.android.androidm2ihm.R;
-import com.skad.android.androidm2ihm.activity.MainActivity;
 import com.skad.android.androidm2ihm.model.HttpClient;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.utils.ZipUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by skad on 14/01/14.
@@ -33,7 +33,11 @@ public class UploadLvl extends AsyncTaskWithPopUp {
         Log.d("Files", "Size: " + file.length);
         for (int i = 0; i < file.length; i++) {
             Log.d("Files", "FileName:" + file[i].getName());
-            ZipUtils.zip(path + File.separator + file[i].getName(), path + File.separator + dirname[0] + ".zip");
+            try {
+                ZipUtils.zip(path + File.separator + file[i].getName(), path + File.separator + dirname[0] + ".zip");
+            } catch (IOException e) {
+                Log.d("Zip", e.toString());
+            }
             mProgresPrecent++;
             publishProgress(mProgresPrecent);
         }
@@ -45,7 +49,7 @@ public class UploadLvl extends AsyncTaskWithPopUp {
             client.setMultipart();
             client.addFilePart(dirname[0] + ".zip", FileUtils.bytesFromFile(fileName));
             client.finishMultipart();
-            String data = client.getResponse();
+            String data = new String(client.getResponse());
             Log.d("Http :", "code " + data);
         } catch (Throwable t) {
             Log.e("Http :", t.toString());
@@ -58,6 +62,5 @@ public class UploadLvl extends AsyncTaskWithPopUp {
     @Override
     protected void onPostExecute(Long result) {
         super.onPostExecute(result);
-        ((MainActivity) mContext).onFinishMoveFile();
     }
 }
