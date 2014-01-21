@@ -1,8 +1,6 @@
 package com.skad.android.androidm2ihm.task;
 
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.os.AsyncTask;
 import android.util.Log;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.activity.MainActivity;
@@ -21,25 +19,11 @@ import java.net.URL;
 /**
  * Created by skad on 14/01/14.
  */
-public class UploadLvl extends AsyncTask<String, Integer, Long> {
-
-    private Context mContext;
-    private ProgressDialog progress;
-    private int mProgresPrecent;
+public class UploadLvl extends AssyncTaskWithPopUp {
 
     public UploadLvl(Context c) {
-        super();
-        mContext = c;
+        super(c, c.getString(R.string.uploading_content_server));
 
-    }
-
-    protected void onPreExecute() {
-        super.onPreExecute();
-        progress = new ProgressDialog(mContext);
-        progress.setMessage(mContext.getString(R.string.main_uploading_server));
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setProgress(0);
-        progress.show();
     }
 
     protected Long doInBackground(String... dirname) {
@@ -142,13 +126,9 @@ public class UploadLvl extends AsyncTask<String, Integer, Long> {
         return null;
     }
 
-    protected void onProgressUpdate(Integer... progres) {
-        super.onProgressUpdate(progres);
-        progress.setProgress(progres[0]);
-    }
-
+    @Override
     protected void onPostExecute(Long result) {
-        progress.dismiss();
+        super.onPostExecute(result);
         ((MainActivity) mContext).onFinishMoveFile();
     }
 }

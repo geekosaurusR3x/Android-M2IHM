@@ -1,43 +1,29 @@
 package com.skad.android.androidm2ihm.task;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.AsyncTask;
 import android.util.Log;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.activity.MainActivity;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 
-import java.io.*;
-import java.net.URL;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by skad on 14/01/14.
  */
-public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
-
-    private Context mContext;
-    private ProgressDialog progress;
-    private int mProgresPrecent;
+public class MoveSdCard extends AssyncTaskWithPopUp {
 
     public MoveSdCard(Context c)
     {
-        super();
-        mContext = c;
+        super(c, c.getString(R.string.moving_content_sdcard));
 
     }
 
-    protected void onPreExecute() {
-        super.onPreExecute();
-        progress = new ProgressDialog(mContext);
-        progress.setMessage(mContext.getString(R.string.moving_content_sdcard));
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setProgress(0);
-        progress.show();
-    }
-
-    protected Long doInBackground(URL... urls) {
+    @Override
+    protected Long doInBackground(String... urls) {
         mProgresPrecent = 0;
         parsingAsset();
         return null;
@@ -75,6 +61,7 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
             }
         }
     }
+
     protected void copyAssets(String filename)
     {
         Log.d("tag","File : "+filename);
@@ -92,13 +79,10 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
         }
     }
 
-    protected void onProgressUpdate(Integer... progres) {
-        super.onProgressUpdate(progres);
-        progress.setProgress(progres[0]);
-    }
-
+    @Override
     protected void onPostExecute(Long result) {
-         progress.dismiss();
+        super.onPostExecute(result);
+
         ((MainActivity)mContext).onFinishMoveFile();
     }
 }

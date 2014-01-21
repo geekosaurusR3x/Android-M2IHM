@@ -67,7 +67,7 @@
     <string name="moving_content_sdcard">Moving content to the SDCARD</string>
     <string name="extra_key_level_dir">Level_Dir</string>
     <string name="editeur_wall_arc">Wall Arc</string>
-    <string name="main_uploading_server">Uploading to the server</string>
+    <string name="uploading_content_server">Uploading content to the server</string>
 
 
 </resources>
