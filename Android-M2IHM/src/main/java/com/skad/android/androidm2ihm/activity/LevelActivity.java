@@ -47,6 +47,8 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     private int mIdSoundWall;
     private int mIdSoundGameOver;
     private int mIdSoundWin;
+    // Whether this class is observing mScore and mLevel
+    private boolean mObserving = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,13 +65,13 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         // Sound preferences
         determineSoundPreferences();
 
-        // Show level view
-        drawLevel();
-
         // Retain views
         mLevelView = (LevelView) findViewById(R.id.level_view);
         mScoreView = (TextView) findViewById(R.id.txt_score);
         mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
+
+        // Show level view
+        drawLevel();
 
         // Audio
         mSoundPool = new SoundPool(5, AudioManager.STREAM_MUSIC, 0);
@@ -105,14 +107,14 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         overridePendingTransition(R.anim.push_left_in, R.anim.push_left_out);
     }
 
-
     /**
      * Starts the game
      */
     private void startGame() {
         mScore.reset();
-        mLevelView.startNewThread();
         drawLevel();
+        mLevelView.startNewThread();
+        registerObserver();
     }
 
     /**
@@ -120,12 +122,15 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
      */
     private void pauseGame() {
         stopBackgroundMusicPlayback();
+        unregisterObserver();
     }
 
     /**
      * Advance to next level
      */
     private void nextLevel() {
+        // Dialog not shown anymore -> Register observer again
+        registerObserver();
         if (mLevelNumber < Level.LEVEL_COUNT) {
             mLevelNumber++;
             mScore.setLevel(mLevelNumber);
@@ -142,16 +147,22 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
      * Register LevelActivity to observe both the Level and Score models
      */
     private void registerObserver() {
-        mLevel.addObserver(this);
-        mScore.addObserver(this);
+        if (!mObserving) {
+            mLevel.addObserver(this);
+            mScore.addObserver(this);
+            mObserving = true;
+        }
     }
 
     /**
      * Unregisters LevelActivity as an observer of Level and Score
      */
     private void unregisterObserver() {
-        mLevel.deleteObserver(this);
-        mScore.deleteObserver(this);
+        if (mObserving) {
+            mLevel.deleteObserver(this);
+            mScore.deleteObserver(this);
+            mObserving = false;
+        }
     }
 
     /**
@@ -167,9 +178,11 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
      * Starts playback of the (annoying) background music
      */
     private void startBackgroundMusicPlayback() {
-        mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(FileUtils.getfileordefault(this, mLevel.getPath(), "background_music.wav"))));
-        mBackgroundMusic.setLooping(true);
-        mBackgroundMusic.start();
+        if (mBackgroundMusic == null || !mBackgroundMusic.isPlaying()) {
+            mBackgroundMusic = MediaPlayer.create(this, Uri.fromFile(new File(FileUtils.getfileordefault(this, mLevel.getPath(), "background_music.wav"))));
+            mBackgroundMusic.setLooping(true);
+            mBackgroundMusic.start();
+        }
     }
 
     /**
@@ -201,6 +214,8 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         if (!mMute) {
             startBackgroundMusicPlayback();
         }
+        // (Re)set displayed score
+        mScoreView.setText(String.format(getString(R.string.score), mScore.getTotalScore()));
     }
 
     /**
@@ -287,12 +302,13 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
 
     @Override
     public void onClick(DialogInterface dialogInterface, int btnId) {
-        // Dialog not shown anymore -> Register observer again
-        //registerObserver();
         switch (btnId) {
             case DialogInterface.BUTTON_POSITIVE:
                 if (!mPlayerFailed) {
                     nextLevel();
+                    break;
+                } else {
+                    startGame();
                     break;
                 }
             case DialogInterface.BUTTON_NEUTRAL:

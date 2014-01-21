@@ -80,22 +80,20 @@ public class GameThread extends Thread implements SensorEventListener, Observer 
 
     @Override
     public void update(Observable observable, Object data) {
-        if (observable instanceof Level) {
-            if (data instanceof Level.EVENT) {
-                Level.EVENT event = (Level.EVENT) data;
-                switch (event) {
-                    case COLLISION_BULLET:
-                        break;
-                    case COLLISION_WALL:
-                        break;
-                    case GAME_OVER:
-                    case GAME_SUCCESS:
-                        // Stop
-                        mRunning = false;
-                        interrupt();
-                        mSensorManager.unregisterListener(this);
-                        break;
-                }
+        if (observable instanceof Level && data instanceof Level.EVENT) {
+            Level.EVENT event = (Level.EVENT) data;
+            switch (event) {
+                case COLLISION_BULLET:
+                    break;
+                case COLLISION_WALL:
+                    break;
+                case GAME_OVER:
+                case GAME_SUCCESS:
+                    // Stop
+                    mRunning = false;
+                    mSensorManager.unregisterListener(this);
+                    interrupt();
+                    break;
             }
         }
     }

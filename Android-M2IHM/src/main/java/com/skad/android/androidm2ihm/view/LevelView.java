@@ -6,10 +6,8 @@ import android.graphics.Color;
 import android.graphics.PixelFormat;
 import android.graphics.PorterDuff;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
-import com.skad.android.androidm2ihm.model.Bullet;
 import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.model.SpriteObject;
 import com.skad.android.androidm2ihm.thread.GameThread;
@@ -20,13 +18,11 @@ import com.skad.android.androidm2ihm.thread.GameThread;
 public class LevelView extends SurfaceView implements SurfaceHolder.Callback/*implements Observer*/ {
 
     private static final String TAG = "LevelView";
-    private Level mLevel;
     private GameThread mGameThread;
     private SurfaceHolder mHolder;
 
     public LevelView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        mLevel = Level.getInstance();
         SurfaceHolder holder = getHolder();
         if (holder != null) {
             holder.addCallback(this);
