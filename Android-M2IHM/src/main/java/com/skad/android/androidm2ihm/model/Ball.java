@@ -5,6 +5,7 @@ package com.skad.android.androidm2ihm.model;
  */
 public class Ball extends SpriteObject {
 
+    private static final int ROATION_THRESHOLD = 5;
     private int freeze;
 
     public Ball() {
@@ -26,21 +27,37 @@ public class Ball extends SpriteObject {
         this.freeze = freeze;
     }
 
-    public void decreseFreeze() {
+    public void decreaseFreeze() {
         if (freeze > 0) {
             freeze--;
         }
     }
 
     @Override
-    public void setDir(double targetX, double targetY) {
+    public void rotate(int targetX, int targetY) {
+        if (mOriginalSprite == null) {
+            return;
+        }
+        double dx = targetX - getBoundingRectangle().centerX();
+        double dy = targetY - getBoundingRectangle().centerY();
+        float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+        if (angle < 0) {
+            angle += 360;
+        }
 
+        // Don't rotate too often (prevents flickering)
+        if (Math.abs(mAngle - angle) > ROATION_THRESHOLD) {
+            rotate(angle);
+        }
+    }
+
+    @Override
+    public void setDir(double targetX, double targetY) {
         if (mDir != null) {
             if (freeze == 0) {
                 mDir.setXandY(targetX, targetY);
                 //mDir.normalize();
             }
-
         } else {
             mDir = new Vector2D(targetX, targetY);
         }

@@ -17,15 +17,14 @@ abstract public class SpriteObject {
     protected double mRatioWidth;
     protected double mRatioHeight;
     protected double mVelocity;
-    private Bitmap mScaledSprite;
-    private Bitmap mAlternateSprite;
-    private Bitmap mOriginalSprite;
-    private Bitmap mOriginalAlternateSprite;
-    private boolean mShowAlternateSprite = false;
-    private float mAngle;
-
-    private int mId;
+    protected Bitmap mScaledSprite;
+    protected Bitmap mAlternateSprite;
+    protected Bitmap mOriginalSprite;
+    protected Bitmap mOriginalAlternateSprite;
+    protected boolean mShowAlternateSprite = false;
+    protected float mAngle;
     protected String mType;
+    private int mId;
 
     public SpriteObject() {
         this(0, 0, 64, 64);
@@ -67,39 +66,39 @@ abstract public class SpriteObject {
         mPosition.setY(yPos);
     }
 
-    public void setWidth(int width) {
-        mWidth = width;
-    }
-
-    public void setHeight(int height) {
-        mHeight = height;
-    }
-
     public int getId() {
         return mId;
     }
-    
+
+    public void setId(int mId) {
+        this.mId = mId;
+    }
+
     public Bitmap getScaledSprite() {
         if (mAlternateSprite != null) {
             return mShowAlternateSprite ? mAlternateSprite : mScaledSprite;
         }
         return mScaledSprite;
     }
-    public void setId(int mId) {
-        this.mId = mId;
-    }
 
-    public boolean isInto(int x, int y)
-    {
-        return getBoundingRectangle().contains(x,y);
+    public boolean isInto(int x, int y) {
+        return getBoundingRectangle().contains(x, y);
     }
 
     public int getWidth() {
         return mWidth;
     }
 
+    public void setWidth(int width) {
+        mWidth = width;
+    }
+
     public int getHeight() {
         return mHeight;
+    }
+
+    public void setHeight(int height) {
+        mHeight = height;
     }
 
     public float getmAngle() {
@@ -132,9 +131,8 @@ abstract public class SpriteObject {
         mRatioHeight = ratioHeight;
     }
 
-    public void reSize()
-    {
-        mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(),getHeight(), false);
+    public void reSize() {
+        mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(), getHeight(), false);
         if (mAlternateSprite != null) {
             mAlternateSprite = Bitmap.createScaledBitmap(mOriginalAlternateSprite, getWidth(), getHeight(), false);
         }
@@ -178,10 +176,6 @@ abstract public class SpriteObject {
         return pixel != Color.TRANSPARENT;
     }
 
-    public void setDir(Vector2D vector) {
-        setDir(vector.getX(), vector.getY());
-    }
-
     public void setDir(double targetX, double targetY) {
         Vector2D temp = MathUtils.vectorFromPoint(getXPos(), getYPos(), targetX, targetY);
         mDir = temp;
@@ -212,7 +206,6 @@ abstract public class SpriteObject {
         if (angle < 0) {
             angle += 360;
         }
-
         rotate(angle);
     }
 
@@ -239,9 +232,12 @@ abstract public class SpriteObject {
         return mDir;
     }
 
+    public void setDir(Vector2D vector) {
+        setDir(vector.getX(), vector.getY());
+    }
+
     @Override
-    public String toString()
-    {
-        return mType+"/"+(int)getXPos()+"/"+(int)getYPos()+"/"+getWidth()+"/"+getHeight()+"/"+getmAngle();
+    public String toString() {
+        return mType + "/" + (int) getXPos() + "/" + (int) getYPos() + "/" + getWidth() + "/" + getHeight() + "/" + getmAngle();
     }
 }

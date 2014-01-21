@@ -214,7 +214,7 @@ public class Level extends Observable {
         double lastx = mBall.getXPos();
         double lasty = mBall.getYPos();
         mBall.forward();
-        mBall.decreseFreeze();
+        mBall.decreaseFreeze();
         Vector2D newdirection = playerHitWall();
         if (newdirection != null) { // Player hit a wall
             //mBall.setDir(newdirection);
