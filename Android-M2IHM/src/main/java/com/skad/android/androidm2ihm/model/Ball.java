@@ -5,7 +5,7 @@ package com.skad.android.androidm2ihm.model;
  */
 public class Ball extends SpriteObject {
 
-    private static final int ROATION_THRESHOLD = 5;
+    private static final int ROTATION_THRESHOLD = 5;
     private int freeze;
 
     public Ball() {
@@ -46,7 +46,7 @@ public class Ball extends SpriteObject {
         }
 
         // Don't rotate too often (prevents flickering)
-        if (Math.abs(mAngle - angle) > ROATION_THRESHOLD) {
+        if (Math.abs(mAngle - angle) > ROTATION_THRESHOLD) {
             rotate(angle);
         }
     }
