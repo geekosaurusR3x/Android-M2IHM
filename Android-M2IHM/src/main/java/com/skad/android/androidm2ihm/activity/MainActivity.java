@@ -17,6 +17,7 @@ import android.widget.ScrollView;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.task.MoveSdCard;
+import com.skad.android.androidm2ihm.task.UploadLvl;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 
 import java.io.File;
@@ -75,21 +76,26 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             //edit button
             ImageButton buttonedit = new ImageButton(this);
             buttonedit.setImageResource(R.drawable.ic_action_edit);
-            //buttonedit.setBackgroundResource(0); // Remove background
             buttonedit.setTag(R.id.main_lvl_num_tag, 0);
             buttonedit.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonedit.setOnClickListener(this);
             //remove button
             ImageButton buttonsup = new ImageButton(this);
             buttonsup.setImageResource(R.drawable.ic_action_remove);
-            // buttonsup.setBackgroundResource(0); // Remove background
             buttonsup.setTag(R.id.main_lvl_num_tag, -1);
             buttonsup.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonsup.setOnClickListener(this);
+            //share button
+            ImageButton buttonup = new ImageButton(this);
+            buttonup.setImageResource(R.drawable.ic_action_share);
+            buttonup.setTag(R.id.main_lvl_num_tag, -2);
+            buttonup.setTag(R.id.main_lvl_dir_tag, lvl);
+            buttonup.setOnClickListener(this);
 
             linearLayoutsub.addView(buttonplay);
             linearLayoutsub.addView(buttonedit);
             linearLayoutsub.addView(buttonsup);
+            linearLayoutsub.addView(buttonup);
 
             linearLayout.addView(linearLayoutsub);
             numlvl++;
@@ -155,7 +161,10 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         String dirtag = view.getTag(R.id.main_lvl_dir_tag).toString();
 
         Intent gameIntent = null;
-        if (numtag == -1) {
+        if (numtag == -2) {
+            UploadLvl uploadLvl = new UploadLvl(this);
+            uploadLvl.execute(dirtag);
+        } else if (numtag == -1) {
             FileUtils.deleteLvl(this, dirtag);
             fecthLvl();
         } else if (numtag == 0) {

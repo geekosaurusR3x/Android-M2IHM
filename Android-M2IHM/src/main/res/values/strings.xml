@@ -16,7 +16,9 @@
 
     <string name="extra_key_level">Level_ID</string>
     <string name="dialog_success_title">Success!</string>
-    <string name="dialog_success_msg">You completed level %1$d!\nYour score: %2$d (Highscore: %3$d)\nProceed to level %4$d?</string>
+    <string name="dialog_success_msg">You completed level %1$d!\nYour score: %2$d (Highscore: %3$d)\nProceed to level
+        %4$d?
+    </string>
     <string name="dialog_failure_title">Failure!</string>
     <string name="dialog_failure_msg">Restart?</string>
     <string name="dialog_success_msg_alt">You did it! You completed the very last level. Congrats!</string>
@@ -29,7 +31,9 @@
     <string name="action_about">About</string>
     <string name="about_images">Images</string>
     <string name="about_images_author_sprites">DANIEL COOK</string>
-    <string name="about_images_author_sprites_url">http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html</string>
+    <string name="about_images_author_sprites_url">
+        http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html
+    </string>
     <string name="about_audio">Audio</string>
     <string name="about_audio_fins_url">http://www.freesound.org/people/fins/sounds/133284/</string>
     <string name="about_audio_background_url">http://www.playonloop.com/2013-music-loops/mecha-world/</string>
@@ -55,11 +59,15 @@
     <string name="editeur_save_error_file">Saving level into : %1$s Error : %2$s</string>
     <string name="editeur_save_succes_file">Saving level into : %1$s Succes</string>
     <string name="editeur_save_error_sdcard_file">is your SDCARD mount ?</string>
-    <string name="editeur_file_first_line">#lvl design type/x/y/width/height/angle/firerate\n#type : p(player)/h(hole)/w(wall)/wa(wall arc)/g(gun)/screen(screensize)\n#first line need to be the screen size of the dev devices.\n</string>
+    <string name="editeur_file_first_line">#lvl design type/x/y/width/height/angle/firerate\n#type :
+        p(player)/h(hole)/w(wall)/wa(wall arc)/g(gun)/screen(screensize)\n#first line need to be the screen size of the
+        dev devices.\n
+    </string>
     <string name="editeur_file_screen_info">screen/0/0/%1$d/%2$d\n</string>
     <string name="moving_content_sdcard">Moving content to the SDCARD</string>
     <string name="extra_key_level_dir">Level_Dir</string>
     <string name="editeur_wall_arc">Wall Arc</string>
+    <string name="main_uploading_server">Uploading to the server</string>
 
 
 </resources>
