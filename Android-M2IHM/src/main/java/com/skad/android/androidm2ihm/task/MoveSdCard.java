@@ -14,10 +14,9 @@ import java.io.InputStream;
 /**
  * Created by skad on 14/01/14.
  */
-public class MoveSdCard extends AssyncTaskWithPopUp {
+public class MoveSdCard extends AsyncTaskWithPopUp {
 
-    public MoveSdCard(Context c)
-    {
+    public MoveSdCard(Context c) {
         super(c, c.getString(R.string.moving_content_sdcard));
 
     }
@@ -29,8 +28,7 @@ public class MoveSdCard extends AssyncTaskWithPopUp {
         return null;
     }
 
-    protected void parsingAsset()
-    {
+    protected void parsingAsset() {
         AssetManager assetManager = mContext.getAssets();
         String[] dirs = null;
         String[] sousdirs = null;
@@ -40,20 +38,18 @@ public class MoveSdCard extends AssyncTaskWithPopUp {
         } catch (IOException e) {
             Log.e("tag", "Failed to get asset file list.", e);
         }
-        Log.d("tag","nb files "+dirs.length);
-        for(String dir : dirs)
-        {
+        Log.d("tag", "nb files " + dirs.length);
+        for (String dir : dirs) {
             try {
                 sousdirs = assetManager.list(dir);
             } catch (IOException e) {
                 Log.e("tag", "Failed to get asset file list.", e);
             }
-            Log.d("tag","Dir "+dir);
-            if(!(dir.matches("images")||dir.matches("sounds")||dir.matches("webkit"))) //useless assets dir
+            Log.d("tag", "Dir " + dir);
+            if (!(dir.matches("images") || dir.matches("sounds") || dir.matches("webkit"))) //useless assets dir
             {
-                FileUtils.makeDir(mContext.getExternalFilesDir(null)+File.separator+dir);
-                for(String filename : sousdirs)
-                {
+                FileUtils.makeDir(mContext.getExternalFilesDir(null) + File.separator + dir);
+                for (String filename : sousdirs) {
                     copyAssets(dir + File.separator + filename);
                     mProgresPrecent++;
                     publishProgress(mProgresPrecent);
@@ -62,19 +58,18 @@ public class MoveSdCard extends AssyncTaskWithPopUp {
         }
     }
 
-    protected void copyAssets(String filename)
-    {
-        Log.d("tag","File : "+filename);
+    protected void copyAssets(String filename) {
+        Log.d("tag", "File : " + filename);
         AssetManager assetManager = mContext.getAssets();
         InputStream in = null;
         String path = mContext.getExternalFilesDir(null).getPath();
 
         try {
             in = assetManager.open(filename);
-            FileUtils.writeFile(in, path,filename);
+            FileUtils.writeFile(in, path, filename);
             in.close();
             in = null;
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.e("tag", "Failed to copy asset file: " + filename, e);
         }
     }
@@ -83,6 +78,6 @@ public class MoveSdCard extends AssyncTaskWithPopUp {
     protected void onPostExecute(Long result) {
         super.onPostExecute(result);
 
-        ((MainActivity)mContext).onFinishMoveFile();
+        ((MainActivity) mContext).onFinishMoveFile();
     }
 }

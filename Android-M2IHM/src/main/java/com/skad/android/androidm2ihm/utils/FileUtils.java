@@ -49,6 +49,17 @@ public class FileUtils {
         }
     }
 
+    public static byte[] bytesFromFile(String fileName) throws IOException {
+        File file = new File(fileName);
+        byte[] buffer = new byte[(int) file.length()];
+        InputStream is = null;
+        is = new FileInputStream(file);
+        while (is.read(buffer) != -1) ;
+        is.close();
+
+        return buffer;
+    }
+
     public static void makeDir(String name) {
 
         if (!fileExist(name)) {

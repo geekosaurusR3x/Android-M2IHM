@@ -8,14 +8,14 @@ import android.os.AsyncTask;
  * Created by skad on 21/01/14.
  */
 
-public class AssyncTaskWithPopUp extends AsyncTask<String, Integer, Long> {
+public class AsyncTaskWithPopUp extends AsyncTask<String, Integer, Long> {
 
     protected Context mContext;
     private ProgressDialog mProgress;
     protected int mProgresPrecent;
     private String mMsg;
 
-    public AssyncTaskWithPopUp(Context c, String msg) {
+    public AsyncTaskWithPopUp(Context c, String msg) {
         super();
         mContext = c;
         mMsg = msg;

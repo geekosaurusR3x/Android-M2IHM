@@ -4,22 +4,16 @@ import android.content.Context;
 import android.util.Log;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.activity.MainActivity;
+import com.skad.android.androidm2ihm.model.HttpClient;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 import com.skad.android.androidm2ihm.utils.ZipUtils;
 
-import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
 
 /**
  * Created by skad on 14/01/14.
  */
-public class UploadLvl extends AssyncTaskWithPopUp {
+public class UploadLvl extends AsyncTaskWithPopUp {
 
     public UploadLvl(Context c) {
         super(c, c.getString(R.string.uploading_content_server));
@@ -44,84 +38,19 @@ public class UploadLvl extends AssyncTaskWithPopUp {
             publishProgress(mProgresPrecent);
         }
 
+        String url = "http://skad.no-ip.org/Android-M2ihm/upload.php";
+        String fileName = path + File.separator + dirname[0] + ".zip";
         try {
-            String fileName = path + File.separator + dirname[0] + ".zip";
-
-            HttpURLConnection conn = null;
-            DataOutputStream dos = null;
-            String lineEnd = "\r\n";
-            String twoHyphens = "--";
-            String boundary = "*****";
-            int bytesRead, bytesAvailable, bufferSize;
-            byte[] buffer;
-            int maxBufferSize = 1 * 1024 * 1024;
-            File sourceFile = new File(fileName);
-
-            // open a URL connection to the Servlet
-            FileInputStream fileInputStream = new FileInputStream(sourceFile);
-            URL url = new URL("http://skad.no-ip.org/Android-M2ihm/upload.php");
-
-            // Open a HTTP  connection to  the URL
-            conn = (HttpURLConnection) url.openConnection();
-            conn.setDoInput(true); // Allow Inputs
-            conn.setDoOutput(true); // Allow Outputs
-            conn.setUseCaches(false); // Don't use a Cached Copy
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Connection", "Keep-Alive");
-            conn.setRequestProperty("ENCTYPE", "multipart/form-data");
-            conn.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            conn.setRequestProperty("uploaded_file", dirname[0] + ".zip");
-
-            dos = new DataOutputStream(conn.getOutputStream());
-
-            dos.writeBytes(twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"uploaded_file\";filename=\""
-                    + fileName + "\"" + lineEnd);
-
-            dos.writeBytes(lineEnd);
-
-            // create a buffer of  maximum size
-            bytesAvailable = fileInputStream.available();
-
-            bufferSize = Math.min(bytesAvailable, maxBufferSize);
-            buffer = new byte[bufferSize];
-
-            // read file and write it into form...
-            bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-
-            while (bytesRead > 0) {
-
-                dos.write(buffer, 0, bufferSize);
-                bytesAvailable = fileInputStream.available();
-                bufferSize = Math.min(bytesAvailable, maxBufferSize);
-                bytesRead = fileInputStream.read(buffer, 0, bufferSize);
-                mProgresPrecent++;
-                publishProgress(mProgresPrecent);
-
-            }
-
-            // send multipart form data necesssary after file data...
-            dos.writeBytes(lineEnd);
-            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
-
-            // Responses from the server (code and message)
-            int serverResponseCode = conn.getResponseCode();
-            String serverResponseMessage = conn.getResponseMessage();
-
-            Log.i("uploadFile", "HTTP Response is : "
-                    + serverResponseMessage + ": " + serverResponseCode);
-
-            //close the streams //
-            fileInputStream.close();
-            dos.flush();
-            dos.close();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (ProtocolException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+            HttpClient client = new HttpClient(url);
+            client.setMultipart();
+            client.addFilePart(dirname[0] + ".zip", FileUtils.bytesFromFile(fileName));
+            client.finishMultipart();
+            String data = client.getResponse();
+            Log.d("Http :", "code " + data);
+        } catch (Throwable t) {
+            Log.e("Http :", t.toString());
         }
+
         publishProgress(100);
         return null;
     }
