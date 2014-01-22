@@ -51,9 +51,15 @@ public class Level extends Observable {
         mHoleList.clear();
         mTarget = null;
         mBall = null;
+        setChanged();
+        notifyObservers();
     }
 
     public void remove(SpriteObject objectToRemove) {
+        List<SpriteObject> spriteObjectList = getAllSprites();
+        if (spriteObjectList == null || spriteObjectList.isEmpty() || !spriteObjectList.contains(objectToRemove)) {
+            return;
+        }
         if (objectToRemove instanceof Ball) {
             mBall = null;
         } else if (objectToRemove instanceof Target) {
@@ -64,9 +70,11 @@ public class Level extends Observable {
             mGunList.remove(objectToRemove);
         } else if (objectToRemove instanceof Hole) {
             mHoleList.remove(objectToRemove);
-        }else if (objectToRemove instanceof WallArc) {
+        } else if (objectToRemove instanceof WallArc) {
             mWallList.remove(objectToRemove);
         }
+        setChanged();
+        notifyObservers();
     }
 
     public void add(SpriteObject newObject) {
@@ -80,9 +88,23 @@ public class Level extends Observable {
             mGunList.add((Gun) newObject);
         } else if (newObject instanceof Hole) {
             mHoleList.add((Hole) newObject);
-        }else if (newObject instanceof WallArc) {
+        } else if (newObject instanceof WallArc) {
             mWallList.add((WallArc) newObject);
         }
+        setChanged();
+        notifyObservers();
+    }
+
+    public int getId(SpriteObject object) {
+        return getAllSprites().indexOf(object);
+    }
+
+    public SpriteObject get(int id) {
+        List<SpriteObject> spriteObjects = getAllSprites();
+        if (id > 0 && id < spriteObjects.size()) {
+            return spriteObjects.get(id);
+        }
+        return null;
     }
 
     public Ball getBall() {
@@ -124,7 +146,7 @@ public class Level extends Observable {
     public void setPath(Context context, String mPath) {
 
 
-        this.mPath = context.getExternalFilesDir(null)+ File.separator+mPath ;
+        this.mPath = context.getExternalFilesDir(null) + File.separator + mPath;
     }
 
     public boolean containsGuns() {
@@ -164,7 +186,7 @@ public class Level extends Observable {
         for (final Wall wall : mWallList) {
             Vector2D pos = mBall.intersects(wall);
             if (pos != null) {
-                return wall.getRebondVector(pos, mBall.getDir());
+                return wall.getReboundVector(pos, mBall.getDir());
             }
         }
         return null;
@@ -199,10 +221,11 @@ public class Level extends Observable {
         // mBall.decreaseFreeze();
         Vector2D newDirection = playerHitWall();
         if (newDirection != null) { // Player hit a wall
-            // mBall.setDir(newDirection);
+            mBall.setDir(newDirection);
             //mBall.setFreeze(10);
-            mBall.setXPos((int) lastX);
-            mBall.setYPos((int) lastY);
+            // Uncomment the two following line to disable bouncing
+            // mBall.setXPos((int) lastX);
+            // mBall.setYPos((int) lastY);
             mBall.setShowAlternateSprite(true);
             setChanged();
             notifyObservers(EVENT.COLLISION_WALL);
@@ -238,7 +261,7 @@ public class Level extends Observable {
         long currentTimeMs = System.currentTimeMillis();
         // update bullet positions
         for (Gun gun : mGunList) {
-            // Rotate gun so that they aim at the player'S ship
+            // Rotate gun so that they aim at the player's ship
             gun.rotate((int) mBall.getXPos(), (int) mBall.getYPos());
             if (currentTimeMs - gun.getLastTimeFired() > gun.getFireRate()) {
                 gun.fire((int) mBall.getXPos(), (int) mBall.getYPos());
@@ -248,7 +271,29 @@ public class Level extends Observable {
             Iterator<Bullet> bulletIterator = gun.getBulletList().iterator();
             while (bulletIterator.hasNext()) {
                 Bullet bullet = bulletIterator.next();
-                bullet.forward();
+                // Vector2D currentPosition = bullet.getPosition();
+                // Vector2D nextPosition = bullet.getNextPosition();
+
+                // Vector2D movement = currentPosition;
+                // movement.sub(nextPosition);
+                /*boolean removeBullet = false;
+                boolean xCurrentBigger = currentPosition.getX() > nextPosition.getX();
+                boolean yCurrentBigger = currentPosition.getY() > nextPosition.getY();
+                // Check if there's a bullet in the way
+                for (int xMov = (int) currentPosition.getX(); xCurrentBigger ? xMov < nextPosition.getX() : xMov > nextPosition.getX(); xMov = xCurrentBigger ? xMov - 1 : xMov + 1) {
+                    for (int yMov = (int) currentPosition.getY(); yCurrentBigger ? yMov < nextPosition.getY() : yMov > nextPosition.getY(); yMov = yCurrentBigger ? yMov - 1 : yMov + 1) {
+                        for (final Wall wall : mWallList) {
+                            if (wall.isInto(xMov, yMov)) {
+                                removeBullet = true;
+                            }
+                        }
+                    }
+                }
+                if (removeBullet) {
+                    bulletIterator.remove();
+                } else {
+                    bullet.forward();
+                }*/
                 //bullet.decreaseVelocity();
                 for (final Wall wall : mWallList) {
                     Vector2D intersection = bullet.intersects(wall);

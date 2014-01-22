@@ -34,42 +34,43 @@ public class EditorView extends View {
         invalidate();
     }
 
-    public void addElement(int tag, float x, float y) {
+    public int addElement(int tag, float x, float y) {
+        SpriteObject spriteObject = null;
         switch (tag) {
             case R.id.editeur_start:
-                Ball ball = new Ball((int) x, (int) y, 92, 92);
-                ball.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "playership.png")));
-                ball.setId(tag);
-                mLevel.add(ball);
+                spriteObject = new Ball((int) x, (int) y, 92, 92);
+                spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "playership.png")));
+                spriteObject.setId(tag);
+                mLevel.add(spriteObject);
                 break;
             case R.id.editeur_end:
-                Target target = new Target((int) x, (int) y, 128, 128);
-                target.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "cible.png")));
-                target.setId(tag);
-                mLevel.add(target);
+                spriteObject = new Target((int) x, (int) y, 128, 128);
+                spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "cible.png")));
+                spriteObject.setId(tag);
+                mLevel.add(spriteObject);
                 break;
             case R.id.editeur_hole:
-                Hole hole = new Hole((int) x, (int) y, 92, 92);
-                hole.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "hole.png")));
-                hole.setId(tag);
-                mLevel.add(hole);
+                spriteObject = new Hole((int) x, (int) y, 92, 92);
+                spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "hole.png")));
+                spriteObject.setId(tag);
+                mLevel.add(spriteObject);
                 break;
             case R.id.editeur_wall:
-                Wall wall = new Wall((int) x, (int) y, 64, 32);
-                wall.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "wall.png")));
-                wall.setId(tag);
-                mLevel.add(wall);
+                spriteObject = new Wall((int) x, (int) y, 64, 32);
+                spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "wall.png")));
+                spriteObject.setId(tag);
+                mLevel.add(spriteObject);
                 break;
             case R.id.editeur_wall_arc:
-                WallArc wallarc = new WallArc((int) x, (int) y, 64, 32);
-                wallarc.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "wall_arc.png")));
-                wallarc.setId(tag);
-                mLevel.add(wallarc);
+                spriteObject = new WallArc((int) x, (int) y, 64, 32);
+                spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "wall_arc.png")));
+                spriteObject.setId(tag);
+                mLevel.add(spriteObject);
                 break;
         }
 
         invalidate();
-
+        return mLevel.getId(spriteObject);
     }
 
     public void removeElement(int id) {

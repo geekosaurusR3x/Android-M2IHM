@@ -86,7 +86,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             buttonedit.setOnClickListener(this);
             //remove button
             ImageButton buttonsup = new ImageButton(this);
-            buttonsup.setImageResource(R.drawable.ic_action_remove);
+            buttonsup.setImageResource(R.drawable.ic_action_delete);
             buttonsup.setTag(R.id.main_lvl_num_tag, R.integer.btn_tag_sup);
             buttonsup.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonsup.setOnClickListener(this);

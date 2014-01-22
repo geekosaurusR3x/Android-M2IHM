@@ -28,14 +28,17 @@ import com.skad.android.androidm2ihm.view.EditorView;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.*;
 
 /**
  * Created by skad on 09/01/14.
  */
-public class EditorActivity extends ActionBarActivity implements View.OnTouchListener, View.OnLongClickListener, View.OnClickListener {
+public class EditorActivity extends ActionBarActivity implements View.OnTouchListener, View.OnLongClickListener, View.OnClickListener, Observer {
     private static final String TAG = "EditorActivity";
+    DisplayMetrics mMetrics;
     // Views
-    private EditorView mEditeurView;
+    private EditorView mEditorView;
+    private List<Button> mLevelButtons;
     private int mCurrentTag;
     private float mXTouch;
     private float mYTouch;
@@ -43,7 +46,6 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     private Handler repeatUpdateHandler = new Handler();
     private boolean mButtonRepeatLock = false;
     private Level mLevel;
-    DisplayMetrics mMetrics;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,14 +56,29 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         mCurrentTag = 0;
         mIdSelected = -1;
 
-        String levelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
-
         mMetrics = getResources().getDisplayMetrics();
 
-        mEditeurView = (EditorView) findViewById(R.id.editeur_lvl);
-        mEditeurView.setOnTouchListener(this);
-        mEditeurView.setOnLongClickListener(this);
+        String levelDir = getIntent().getStringExtra(getString(R.string.extra_key_level_dir));
+        mLevel = LevelParser.getLevelFromFile(this, levelDir, 0, mMetrics.widthPixels, mMetrics.heightPixels);
+        mLevel.addObserver(this);
 
+        // Retain views
+        mEditorView = (EditorView) findViewById(R.id.editeur_lvl);
+        mEditorView.setOnTouchListener(this);
+        mEditorView.setOnLongClickListener(this);
+        Button leftButton = (Button) findViewById(R.id.editeur_left_button);
+        Button rightButton = (Button) findViewById(R.id.editeur_right_button);
+        Button upButton = (Button) findViewById(R.id.editeur_up_button);
+        Button downButton = (Button) findViewById(R.id.editeur_down_button);
+        Button widthMinusButton = (Button) findViewById(R.id.editeur_widthminus_button);
+        Button widthPlusButton = (Button) findViewById(R.id.editeur_widthplus_button);
+        Button heightMinusButton = (Button) findViewById(R.id.editeur_heightminus_button);
+        Button heightPlusButton = (Button) findViewById(R.id.editeur_heightplus_button);
+        Button rotatePlusButton = (Button) findViewById(R.id.editeur_rotate_plus);
+        Button rotateMinusButton = (Button) findViewById(R.id.editeur_rotate_minus);
+        mLevelButtons = new ArrayList<Button>(Arrays.asList(leftButton, rightButton, upButton, downButton, widthPlusButton, widthMinusButton, heightPlusButton, heightMinusButton, rotatePlusButton, rotateMinusButton));
+
+        // Assign listeners
         findViewById(R.id.editeur_add_button).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,33 +94,27 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         findViewById(R.id.editeur_remove_button).setOnClickListener(new Button.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mEditeurView.removeElement(mIdSelected);
+                mEditorView.removeElement(mIdSelected);
+                mIdSelected--;
             }
         });
-
-        Button leftButton = (Button) findViewById(R.id.editeur_left_button);
-        Button rightButton = (Button) findViewById(R.id.editeur_right_button);
-        Button upButton = (Button) findViewById(R.id.editeur_up_button);
-        Button downButton = (Button) findViewById(R.id.editeur_down_button);
-        Button widthMinusButton = (Button) findViewById(R.id.editeur_widthminus_button);
-        Button widthPlusButton = (Button) findViewById(R.id.editeur_widthplus_button);
-        Button heightMinusButton = (Button) findViewById(R.id.editeur_heightminus_button);
-        Button heightPlusButton = (Button) findViewById(R.id.editeur_heightplus_button);
-        Button rotatePlusButton = (Button) findViewById(R.id.editeur_rotate_plus);
-        Button rotateMinusButton = (Button) findViewById(R.id.editeur_rotate_minus);
-
-        Button[] buttons = {leftButton, rightButton, upButton, downButton, widthPlusButton, widthMinusButton, heightPlusButton, heightMinusButton, rotatePlusButton, rotateMinusButton};
-        for (Button btn : buttons) {
+        for (Button btn : mLevelButtons) {
+            btn.setVisibility(mLevel.getAllSprites().isEmpty() ? View.INVISIBLE : View.VISIBLE);
             btn.setOnClickListener(this);
             btn.setOnLongClickListener(this);
             btn.setOnTouchListener(this);
         }
+
         // Hide ActionBar
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.hide();
         }
-        mLevel = LevelParser.getLevelFromFile(this, levelDir, 0, mMetrics.widthPixels, mMetrics.heightPixels);
+
+        // Hide buttons if Level is empty
+        findViewById(R.id.editeur_remove_button).setVisibility(mLevel.getAllSprites().isEmpty() ? View.INVISIBLE : View.VISIBLE);
+
+        // Prompt user for a file name
         showSaveDialog(levelDir);
     }
 
@@ -118,41 +129,51 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         performAction(view.getId());
     }
 
+    /**
+     * What to do when a button is pressed/held down
+     *
+     * @param action
+     */
     private void performAction(int action) {
         switch (action) {
             case R.id.editeur_left_button:
-                mEditeurView.moveLeft(mIdSelected);
+                mEditorView.moveLeft(mIdSelected);
                 break;
             case R.id.editeur_right_button:
-                mEditeurView.moveRight(mIdSelected);
+                mEditorView.moveRight(mIdSelected);
                 break;
             case R.id.editeur_up_button:
-                mEditeurView.moveUp(mIdSelected);
+                mEditorView.moveUp(mIdSelected);
                 break;
             case R.id.editeur_down_button:
-                mEditeurView.moveDown(mIdSelected);
+                mEditorView.moveDown(mIdSelected);
                 break;
             case R.id.editeur_widthminus_button:
-                mEditeurView.widthMinus(mIdSelected);
+                mEditorView.widthMinus(mIdSelected);
                 break;
             case R.id.editeur_widthplus_button:
-                mEditeurView.widthPlus(mIdSelected);
+                mEditorView.widthPlus(mIdSelected);
                 break;
             case R.id.editeur_heightminus_button:
-                mEditeurView.heightMinus(mIdSelected);
+                mEditorView.heightMinus(mIdSelected);
                 break;
             case R.id.editeur_heightplus_button:
-                mEditeurView.heightPlus(mIdSelected);
+                mEditorView.heightPlus(mIdSelected);
                 break;
             case R.id.editeur_rotate_plus:
-                mEditeurView.rotateplus(mIdSelected);
+                mEditorView.rotateplus(mIdSelected);
                 break;
             case R.id.editeur_rotate_minus:
-                mEditeurView.rotateminus(mIdSelected);
+                mEditorView.rotateminus(mIdSelected);
                 break;
         }
     }
 
+    /**
+     * Displays a popup menu holding all items that a user can add to his level
+     *
+     * @param v Parent view
+     */
     private void showPopupMenu(View v) {
         PopupMenu popupMenu = new PopupMenu(this, v);
         popupMenu.getMenuInflater().inflate(R.menu.editeur_menu, popupMenu.getMenu());
@@ -171,8 +192,8 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
 
     @Override
     public boolean onLongClick(View view) {
-        if (view.equals(mEditeurView)) {
-            mIdSelected = mEditeurView.getElementId(mXTouch, mYTouch);
+        if (view.equals(mEditorView)) {
+            mIdSelected = mEditorView.getElementId(mXTouch, mYTouch);
             if (mIdSelected != -1) {
                 Toast.makeText(EditorActivity.this, "Item Selected " + mIdSelected, Toast.LENGTH_LONG).show();
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -192,12 +213,12 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         int action = motionEvent.getAction();
-        if (view.equals(mEditeurView)) {
+        if (view.equals(mEditorView)) {
             switch (action) {
                 case MotionEvent.ACTION_DOWN:
                     if (mCurrentTag != 0) {
                         Toast.makeText(EditorActivity.this, String.format("Placer %d a x: %s y: %s", mCurrentTag, motionEvent.getX(), motionEvent.getY()), Toast.LENGTH_LONG).show();
-                        mEditeurView.addElement(mCurrentTag, motionEvent.getX(), motionEvent.getY());
+                        mIdSelected = mEditorView.addElement(mCurrentTag, motionEvent.getX(), motionEvent.getY());
                         mCurrentTag = 0;
                     } else if (mIdSelected == -1) {
                         mXTouch = motionEvent.getX();
@@ -209,7 +230,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                     break;
                 case MotionEvent.ACTION_MOVE:
                     if (mIdSelected != -1) {
-                        mEditeurView.moveElementById(mIdSelected, motionEvent.getX(), motionEvent.getY());
+                        mEditorView.moveElementById(mIdSelected, motionEvent.getX(), motionEvent.getY());
                     }
                     break;
             }
@@ -223,6 +244,11 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         return false;
     }
 
+    /**
+     * Prompt the user for a file name where his level will be stored
+     *
+     * @param name The default file name
+     */
     public void showSaveDialog(String name) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
@@ -247,6 +273,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         dialog.show();
     }
 
+    /**
+     * Save the currently displayed level to a file
+     */
     public void save() {
         String toastMsg = null;
         if (FileUtils.isExternalStorageWritable()) {
@@ -254,11 +283,11 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
             FileUtils.makeDir(Path);
 
             try {
-                //first line explain the syntax
+                // First line explain the syntax
                 String temp = getString(R.string.editeur_file_first_line);
-                //write displaymetric
+                // Write display metrics
                 temp += String.format(getString(R.string.editeur_file_screen_info), mMetrics.widthPixels, mMetrics.heightPixels);
-                //write lvl
+                // Write lvl
                 temp += mLevel.toString();
                 InputStream in = new ByteArrayInputStream(temp.getBytes());
                 FileUtils.writeFile(in, mLevel.getPath(), "level.txt");
@@ -272,6 +301,20 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
     }
 
+    @Override
+    public void update(Observable observable, Object data) {
+        if (observable instanceof Level) {
+            // Hide remove button if Level is empty
+            findViewById(R.id.editeur_remove_button).setVisibility(mLevel.getAllSprites().isEmpty() ? View.INVISIBLE : View.VISIBLE);
+            for (Button btn : mLevelButtons) {
+                btn.setVisibility(mLevel.getAllSprites().isEmpty() ? View.INVISIBLE : View.VISIBLE);
+            }
+        }
+    }
+
+    /**
+     * This inner class is responsible for triggering the right action when a button is held down
+     */
     private class RepeatingUpdater implements Runnable {
         private int mAction;
 
