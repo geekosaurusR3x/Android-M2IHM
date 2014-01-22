@@ -66,4 +66,10 @@
     <string name="editeur_save_error_sdcard_file">Votre carte SD est-elle montée correctement ?</string>
     <string name="moving_content_sdcard">Copie des ressources en cours...</string>
     <string name="main_uploading_server">Upload de l'archive...</string>
+
+    <string name="donwload_list_lvl">Téléchargement de la liste des niveaux</string>
+    <string name="donwload_file_lvl">Téléchargement du niveau</string>
+    <string name="main_donwload_level">Télécharger un Level</string>
+    <string name="editeur_rotate_minus">Rotation -</string>
+    <string name="editeur_rotate_plus">Rotateíon +</string>
 </resources>

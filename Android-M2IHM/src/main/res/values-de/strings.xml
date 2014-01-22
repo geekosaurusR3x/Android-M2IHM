@@ -60,5 +60,9 @@
     <string name="moving_content_sdcard">Kopiere Dateien auf SD-Karte...</string>
     <string name="main_uploading_server">Lade Datei hoch...</string>
 
-
+    <string name="donwload_list_lvl">Hole Level Liste</string>
+    <string name="donwload_file_lvl">Level Download</string>
+    <string name="main_donwload_level">Level laden</string>
+    <string name="editeur_rotate_minus">Drehen -</string>
+    <string name="editeur_rotate_plus">Drehen +</string>
 </resources>
