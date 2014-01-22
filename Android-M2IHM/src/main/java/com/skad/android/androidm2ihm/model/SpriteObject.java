@@ -26,10 +26,6 @@ abstract public class SpriteObject {
     protected String mType;
     private int mId;
 
-    public SpriteObject() {
-        this(0, 0, 64, 64);
-    }
-
     protected SpriteObject(int x, int y, int width, int height) {
         mPosition = new Vector2D(x, y);
         mWidth = width;
@@ -142,19 +138,26 @@ abstract public class SpriteObject {
         return new Rect((int) mPosition.getX(), (int) mPosition.getY(), (int) mPosition.getX() + mWidth, (int) mPosition.getY() + mHeight);
     }
 
+    /**
+     * Check whether two SpriteObjects are intersecting
+     *
+     * @param object The other SpriteObject we may be intersecting with
+     * @return A Vector2D representing the intersection between the two SpriteObjects, null if there's no intersection
+     */
     public Vector2D intersects(SpriteObject object) {
         if (Rect.intersects(getBoundingRectangle(), object.getBoundingRectangle())) {
             Rect collisionBounds = getCollisionBounds(getBoundingRectangle(), object.getBoundingRectangle());
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
-                    int deltaX1 = i - (int) mPosition.getX(), deltaY1 = j - (int) mPosition.getY();
-                    deltaX1 = MathUtils.maxOrZero(deltaX1, mScaledSprite.getWidth());
-                    deltaY1 = MathUtils.maxOrZero(deltaY1, mScaledSprite.getHeight());
+                    // Deltas
+                    int deltaX1 = MathUtils.maxOrZero(i - (int) mPosition.getX(), mScaledSprite.getWidth());
+                    int deltaY1 = MathUtils.maxOrZero(j - (int) mPosition.getY(), mScaledSprite.getHeight());
+                    int deltaX2 = MathUtils.maxOrZero(i - (int) object.getXPos(), object.getScaledSprite().getWidth());
+                    int deltaY2 = MathUtils.maxOrZero(j - (int) object.getYPos(), object.getScaledSprite().getHeight());
+                    // Pixel content
                     int bitmap1Pixel = mScaledSprite.getPixel(deltaX1, deltaY1);
-                    int deltaX2 = i - (int) object.getXPos(), deltaY2 = j - (int) object.getYPos();
-                    deltaX2 = MathUtils.maxOrZero(deltaX2, object.getScaledSprite().getWidth());
-                    deltaY2 = MathUtils.maxOrZero(deltaY2, object.getScaledSprite().getHeight());
                     int bitmap2Pixel = object.getScaledSprite().getPixel(deltaX2, deltaY2);
+                    // If both pixels are filled (ie. non-transparent) the 2 bitmaps are intersecting
                     if (isFilled(bitmap1Pixel) && isFilled(bitmap2Pixel)) {
                         return new Vector2D(deltaX1, deltaY1);
                     }
@@ -194,6 +197,15 @@ abstract public class SpriteObject {
         // TODO Better collision handling
         mPosition.setX(mPosition.getX() + mVelocity * mDir.getX());
         mPosition.setY(mPosition.getY() + mVelocity * mDir.getY());
+    }
+
+    /**
+     * Retrieve the position our object would take if we were to call the forward() method right now
+     *
+     * @return A Vector2D holding the next position
+     */
+    public Vector2D getNextPosition() {
+        return new Vector2D(mPosition.getX() + mVelocity * mDir.getX(), mPosition.getY() + mVelocity * mDir.getY());
     }
 
     public void rotate(int targetX, int targetY) {
