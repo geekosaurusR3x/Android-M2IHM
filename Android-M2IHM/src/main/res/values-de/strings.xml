@@ -3,9 +3,6 @@
 
     <string name="app_name">Android-M2IHM</string>
     <string name="action_settings">Einstellungen</string>
-    <string name="btn_label_level_1">Level 1</string>
-    <string name="btn_label_level_2">Level 2</string>
-    <string name="btn_label_level_3">Level 3</string>
     <string name="btn_label_editeur">Level erstellen</string>
 
     <string name="title_activity_level">LevelActivity</string>
@@ -58,11 +55,15 @@
     <string name="editeur_save_succes_file">Datei %1$s erfolgreich geschrieben</string>
     <string name="editeur_save_error_sdcard_file">Ist ihre SD-Karte gemountet?</string>
     <string name="moving_content_sdcard">Kopiere Dateien auf SD-Karte...</string>
-    <string name="main_uploading_server">Lade Datei hoch...</string>
+    <string name="uploading_content_server">Lade Datei hoch...</string>
 
     <string name="donwload_list_lvl">Hole Level Liste</string>
     <string name="donwload_file_lvl">Level Download</string>
     <string name="main_donwload_level">Level laden</string>
     <string name="editeur_rotate_minus">Drehen -</string>
     <string name="editeur_rotate_plus">Drehen +</string>
+    <string name="editor_height_inc">Höhe +</string>
+    <string name="editor_width_dec">Breite -</string>
+    <string name="editor_width_inc">Höhe +</string>
+    <string name="editor_height_dec">Breite -</string>
 </resources>

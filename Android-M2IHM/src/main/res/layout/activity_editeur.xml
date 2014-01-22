@@ -24,8 +24,8 @@
             />
 
     <ImageView
-            android:id="@+id/img_background"
-            android:layout_width="match_parent"
+        android:id="@+id/img_glass_background"
+        android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:background="@drawable/glass"
@@ -73,7 +73,7 @@
                 android:id="@+id/editeur_remove_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_action_remove"
+                android:src="@drawable/ic_action_delete"
                 android:layout_gravity="right|top"
                 />
 
@@ -83,36 +83,57 @@
                 android:layout_gravity="left|bottom"
                 android:orientation="vertical">
 
-            <Button android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/editeur_rotate_minus"
-                    android:id="@+id/editeur_rotate_minus"/>
-            <Button
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+                <Button
                     android:id="@+id/editeur_up_button"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Up"/>
+                    android:layout_gravity="center"
+                    android:text="@string/editor_up"/>
+            </LinearLayout>
 
-            <Button
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right|bottom"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/editeur_left_button"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/editor_left"/>
+
+                <Button
                     android:id="@+id/editeur_down_button"
                     style="?android:attr/buttonStyleSmall"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Down"/>
+                    android:text="@string/editor_down"/>
+
+                <Button
+                    android:id="@+id/editeur_right_button"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/editor_right"/>
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="wrap_content"
+            android:orientation="horizontal"
+            android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|bottom"
                 >
-
-            <LinearLayout
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="right">
 
                 <Button
                         android:layout_width="wrap_content"
@@ -120,28 +141,14 @@
                         android:text="@string/editeur_rotate_plus"
                         android:id="@+id/editeur_rotate_plus"
                         />
-            </LinearLayout>
 
-            <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="right|bottom"
-                    android:orientation="horizontal">
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/editeur_rotate_minus"
+                android:id="@+id/editeur_rotate_minus"/>
 
-                <Button
-                        android:id="@+id/editeur_left_button"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Left"/>
 
-                <Button
-                        android:id="@+id/editeur_right_button"
-                        style="?android:attr/buttonStyleSmall"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Right"/>
-            </LinearLayout>
         </LinearLayout>
 
 
@@ -151,7 +158,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|top"
-                android:text="Height +"/>
+                android:text="@string/editor_height_inc"/>
 
         <Button
                 android:id="@+id/editeur_widthminus_button"
@@ -159,7 +166,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left|center_vertical"
-                android:text="width -"/>
+                android:text="@string/editor_width_dec"/>
 
         <Button
                 android:id="@+id/editeur_widthplus_button"
@@ -167,7 +174,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="right|center_vertical"
-                android:text="Width +"/>
+                android:text="@string/editor_width_inc"/>
 
         <Button
                 android:id="@+id/editeur_heightminus_button"
@@ -175,7 +182,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal|bottom"
-                android:text="Height -"/>
+                android:text="@string/editor_height_dec"/>
 
     </FrameLayout>
 </FrameLayout>

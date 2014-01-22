@@ -3,12 +3,7 @@
 
     <string name="app_name">Android-M2IHM</string>
     <string name="action_settings">Settings</string>
-    <string name="btn_label_level_1">Level 1</string>
-    <string name="btn_label_level_2">Level 2</string>
-    <string name="btn_label_level_3">Level 3</string>
     <string name="btn_label_editeur">Add a Level</string>
-
-    <string name="title_activity_level">LevelActivity</string>
 
     <string name="txt_label_greeting">Watcha want to do?</string>
     <string name="img_desc_background">Background</string>
@@ -67,11 +62,19 @@
     <string name="moving_content_sdcard">Moving content to the SDCARD</string>
     <string name="extra_key_level_dir" tools:ignore="MissingTranslation">Level_Dir</string>
     <string name="editeur_wall_arc">Wall Arc</string>
-    <string name="main_uploading_server">Uploading to the server</string>
 
+    <string name="uploading_content_server">Uploading content</string>
     <string name="donwload_list_lvl">Geting level list</string>
     <string name="donwload_file_lvl">Geting level file</string>
     <string name="main_donwload_level">Dowload Level</string>
-    <string name="editeur_rotate_minus">Rotate -</string>
-    <string name="editeur_rotate_plus">Rotate +</string>
+    <string name="editeur_rotate_minus">↺</string>
+    <string name="editeur_rotate_plus">↻</string>
+    <string name="editor_up" tools:ignore="MissingTranslation">↑</string>
+    <string name="editor_down" tools:ignore="MissingTranslation">↓</string>
+    <string name="editor_left" tools:ignore="MissingTranslation">←</string>
+    <string name="editor_right" tools:ignore="MissingTranslation">→</string>
+    <string name="editor_height_inc">Height +</string>
+    <string name="editor_width_dec">Width -</string>
+    <string name="editor_width_inc">Width +</string>
+    <string name="editor_height_dec">Height -</string>
 </resources>
