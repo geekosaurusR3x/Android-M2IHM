@@ -45,10 +45,15 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             fecthLvl();
         }
 
-        Button btn = (Button) findViewById(R.id.button_editeur);
-        btn.setTag(R.id.main_lvl_num_tag, 0);
-        btn.setTag(R.id.main_lvl_dir_tag, "");
-        btn.setOnClickListener(this);
+        Button btnedit = (Button) findViewById(R.id.button_editeur);
+        btnedit.setTag(R.id.main_lvl_num_tag, R.integer.btn_tag_editeur);
+        btnedit.setTag(R.id.main_lvl_dir_tag, "");
+        btnedit.setOnClickListener(this);
+
+        Button btndownload = (Button) findViewById(R.id.button_donwload);
+        btndownload.setTag(R.id.main_lvl_num_tag, R.integer.btn_tag_donwload);
+        btndownload.setTag(R.id.main_lvl_dir_tag, "");
+        btndownload.setOnClickListener(this);
 
     }
 
@@ -76,19 +81,19 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             //edit button
             ImageButton buttonedit = new ImageButton(this);
             buttonedit.setImageResource(R.drawable.ic_action_edit);
-            buttonedit.setTag(R.id.main_lvl_num_tag, 0);
+            buttonedit.setTag(R.id.main_lvl_num_tag, R.integer.btn_tag_editeur);
             buttonedit.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonedit.setOnClickListener(this);
             //remove button
             ImageButton buttonsup = new ImageButton(this);
             buttonsup.setImageResource(R.drawable.ic_action_remove);
-            buttonsup.setTag(R.id.main_lvl_num_tag, -1);
+            buttonsup.setTag(R.id.main_lvl_num_tag, R.integer.btn_tag_sup);
             buttonsup.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonsup.setOnClickListener(this);
             //share button
             ImageButton buttonup = new ImageButton(this);
             buttonup.setImageResource(R.drawable.ic_action_share);
-            buttonup.setTag(R.id.main_lvl_num_tag, -2);
+            buttonup.setTag(R.id.main_lvl_num_tag, R.integer.btn_tag_share);
             buttonup.setTag(R.id.main_lvl_dir_tag, lvl);
             buttonup.setOnClickListener(this);
 
@@ -161,15 +166,17 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         String dirtag = view.getTag(R.id.main_lvl_dir_tag).toString();
 
         Intent gameIntent = null;
-        if (numtag == -2) {
+        if (numtag == R.integer.btn_tag_share) {
             UploadLvl uploadLvl = new UploadLvl(this);
             uploadLvl.execute(dirtag);
-        } else if (numtag == -1) {
+        } else if (numtag == R.integer.btn_tag_sup) {
             FileUtils.deleteLvl(this, dirtag);
             fecthLvl();
-        } else if (numtag == 0) {
+        } else if (numtag == R.integer.btn_tag_editeur) {
             gameIntent = new Intent(this, EditorActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level_dir), dirtag);
+        } else if (numtag == R.integer.btn_tag_donwload) {
+            gameIntent = new Intent(this, DownloadLevelActivity.class);
         } else {
             gameIntent = new Intent(this, LevelActivity.class);
             gameIntent.putExtra(getString(R.string.extra_key_level), numtag);

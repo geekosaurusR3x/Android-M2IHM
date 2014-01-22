@@ -5,6 +5,7 @@ import android.os.Environment;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.StringTokenizer;
 
 /**
  * Created by skad on 13/01/14.
@@ -49,6 +50,17 @@ public class FileUtils {
         }
     }
 
+    public static byte[] bytesFromFile(String fileName) throws IOException {
+        File file = new File(fileName);
+        byte[] buffer = new byte[(int) file.length()];
+        InputStream is = null;
+        is = new FileInputStream(file);
+        while (is.read(buffer) != -1) ;
+        is.close();
+
+        return buffer;
+    }
+
     public static void makeDir(String name) {
 
         if (!fileExist(name)) {
@@ -70,6 +82,15 @@ public class FileUtils {
             if (!dirname.matches("default")) {
                 list_lvl.add(dirname);
             }
+        }
+        return list_lvl;
+    }
+
+    public static ArrayList<String> listLvlfromstring(String list, String delimiteur) {
+        ArrayList<String> list_lvl = new ArrayList<String>();
+        StringTokenizer tokens = new StringTokenizer(list, delimiteur);
+        while (tokens.hasMoreTokens()) {
+            list_lvl.add(tokens.nextToken());
         }
         return list_lvl;
     }

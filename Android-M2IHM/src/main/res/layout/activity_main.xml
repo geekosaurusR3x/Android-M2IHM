@@ -7,36 +7,46 @@
              tools:ignore="MergeRootFrame">
 
     <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/imageView"
-        android:layout_gravity="center"
-        android:contentDescription="@string/img_desc_background"
-        android:background="@drawable/background" />
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/imageView"
+            android:layout_gravity="center"
+            android:contentDescription="@string/img_desc_background"
+            android:background="@drawable/background"/>
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_gravity="center">
+            android:orientation="vertical"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="@string/txt_label_greeting"
-            android:id="@+id/textView"
-            android:textSize="60sp"
-            android:layout_gravity="center"
-            android:textColor="#ffffff"/>
-
-        <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/btn_label_editeur"
-                android:id="@+id/button_editeur"
-                android:tag="@integer/btn_tag_editeur"
-                android:layout_gravity="right" android:visibility="visible"/>
+                android:textAppearance="?android:attr/textAppearanceLarge"
+                android:text="@string/txt_label_greeting"
+                android:id="@+id/textView"
+                android:textSize="60sp"
+                android:layout_gravity="center"
+                android:textColor="#ffffff"/>
+
+        <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:layout_gravity="center">
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/main_donwload_level"
+                    android:tag="@integer/btn_tag_donwload"
+                    android:id="@+id/button_donwload" android:layout_gravity="left"/>
+            <Button
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/btn_label_editeur"
+                    android:id="@+id/button_editeur"
+                    android:tag="@integer/btn_tag_editeur"
+                    android:visibility="visible" android:layout_gravity="right"/>
+        </LinearLayout>
         <ScrollView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <string name="app_name">Android-M2IHM</string>
     <string name="action_settings">Settings</string>
@@ -49,27 +49,29 @@
     <string name="about_music_background">Background Music: mecha-world</string>
     <string name="score_default"/>
     <string name="editeur_start">Player</string>
-    <string name="editeur_end">Target</string>
+    <string name="editeur_end">Cible</string>
     <string name="editeur_hole">Hole</string>
     <string name="editeur_wall">Wall</string>
-    <string name="editeur_wall_arc">Wall (curved)</string>
     <string name="editeur_item_select">Item : %d selected</string>
     <string name="editeur_view_add">Add</string>
     <string name="editeur_view_save">Save</string>
     <string name="editeur_save_name_file">FileName ?</string>
-    <string name="editeur_save_error_file">Saving level to: %1$s Error: %2$s</string>
-    <string name="editeur_save_succes_file">Saving level to: %1$s Succes</string>
-    <string name="editeur_save_error_sdcard_file">Is your SD card mounted?</string>
-    <string name="editeur_file_first_line" tools:ignore="MissingTranslation">#lvl design type/x/y/width/height/angle/firerate\n#type :
-        p(player)/h(hole)/w(wall)/wa(wall arc)/g(gun)/screen(screensize)\n#The first line has to be the screen size of the
-        device.\n
+    <string name="editeur_save_error_file">Saving level into : %1$s Error : %2$s</string>
+    <string name="editeur_save_succes_file">Saving level into : %1$s Succes</string>
+    <string name="editeur_save_error_sdcard_file">is your SDCARD mount ?</string>
+    <string name="editeur_file_first_line">#lvl design type/x/y/width/height/angle/firerate\n#type :
+        p(player)/h(hole)/w(wall)/wa(wall arc)/g(gun)/screen(screensize)\n#first line need to be the screen size of the
+        dev devices.\n
     </string>
-    <string name="editeur_file_screen_info" tools:ignore="MissingTranslation">screen/0/0/%1$d/%2$d\n</string>
-    <string name="moving_content_sdcard">Moving content to the SD card...</string>
-
-    <string name="extra_key_level_dir" tools:ignore="MissingTranslation">Level_Dir</string>
-
+    <string name="editeur_file_screen_info">screen/0/0/%1$d/%2$d\n</string>
+    <string name="moving_content_sdcard">Moving content to the SDCARD</string>
+    <string name="extra_key_level_dir">Level_Dir</string>
+    <string name="editeur_wall_arc">Wall Arc</string>
     <string name="main_uploading_server">Uploading to the server</string>
 
-
+    <string name="donwload_list_lvl">Geting level list</string>
+    <string name="donwload_file_lvl">Geting level file</string>
+    <string name="main_donwload_level">Dowload Level</string>
+    <string name="editeur_rotate_minus">Rotate -</string>
+    <string name="editeur_rotate_plus">Rotate +</string>
 </resources>

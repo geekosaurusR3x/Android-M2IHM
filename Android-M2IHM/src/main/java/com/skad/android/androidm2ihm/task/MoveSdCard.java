@@ -1,50 +1,34 @@
 package com.skad.android.androidm2ihm.task;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.os.AsyncTask;
 import android.util.Log;
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.activity.MainActivity;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 
-import java.io.*;
-import java.net.URL;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * Created by skad on 14/01/14.
  */
-public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
+public class MoveSdCard extends AsyncTaskWithPopUp {
 
-    private Context mContext;
-    private ProgressDialog progress;
-    private int mProgresPrecent;
-
-    public MoveSdCard(Context c)
-    {
-        super();
-        mContext = c;
+    public MoveSdCard(Context c) {
+        super(c, c.getString(R.string.moving_content_sdcard));
 
     }
 
-    protected void onPreExecute() {
-        super.onPreExecute();
-        progress = new ProgressDialog(mContext);
-        progress.setMessage(mContext.getString(R.string.moving_content_sdcard));
-        progress.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
-        progress.setProgress(0);
-        progress.show();
-    }
-
-    protected Long doInBackground(URL... urls) {
+    @Override
+    protected Long doInBackground(String... urls) {
         mProgresPrecent = 0;
         parsingAsset();
         return null;
     }
 
-    protected void parsingAsset()
-    {
+    protected void parsingAsset() {
         AssetManager assetManager = mContext.getAssets();
         String[] dirs = null;
         String[] sousdirs = null;
@@ -54,20 +38,18 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
         } catch (IOException e) {
             Log.e("tag", "Failed to get asset file list.", e);
         }
-        Log.d("tag","nb files "+dirs.length);
-        for(String dir : dirs)
-        {
+        Log.d("tag", "nb files " + dirs.length);
+        for (String dir : dirs) {
             try {
                 sousdirs = assetManager.list(dir);
             } catch (IOException e) {
                 Log.e("tag", "Failed to get asset file list.", e);
             }
-            Log.d("tag","Dir "+dir);
-            if(!(dir.matches("images")||dir.matches("sounds")||dir.matches("webkit"))) //useless assets dir
+            Log.d("tag", "Dir " + dir);
+            if (!(dir.matches("images") || dir.matches("sounds") || dir.matches("webkit"))) //useless assets dir
             {
-                FileUtils.makeDir(mContext.getExternalFilesDir(null)+File.separator+dir);
-                for(String filename : sousdirs)
-                {
+                FileUtils.makeDir(mContext.getExternalFilesDir(null) + File.separator + dir);
+                for (String filename : sousdirs) {
                     copyAssets(dir + File.separator + filename);
                     mProgresPrecent++;
                     publishProgress(mProgresPrecent);
@@ -75,30 +57,27 @@ public class MoveSdCard extends AsyncTask<URL, Integer, Long>{
             }
         }
     }
-    protected void copyAssets(String filename)
-    {
-        Log.d("tag","File : "+filename);
+
+    protected void copyAssets(String filename) {
+        Log.d("tag", "File : " + filename);
         AssetManager assetManager = mContext.getAssets();
         InputStream in = null;
         String path = mContext.getExternalFilesDir(null).getPath();
 
         try {
             in = assetManager.open(filename);
-            FileUtils.writeFile(in, path,filename);
+            FileUtils.writeFile(in, path, filename);
             in.close();
             in = null;
-        } catch(IOException e) {
+        } catch (IOException e) {
             Log.e("tag", "Failed to copy asset file: " + filename, e);
         }
     }
 
-    protected void onProgressUpdate(Integer... progres) {
-        super.onProgressUpdate(progres);
-        progress.setProgress(progres[0]);
-    }
-
+    @Override
     protected void onPostExecute(Long result) {
-         progress.dismiss();
-        ((MainActivity)mContext).onFinishMoveFile();
+        super.onPostExecute(result);
+
+        ((MainActivity) mContext).onFinishMoveFile();
     }
 }
