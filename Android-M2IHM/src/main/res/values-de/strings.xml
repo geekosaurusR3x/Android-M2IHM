@@ -6,12 +6,14 @@
     <string name="btn_label_level_1">Level 1</string>
     <string name="btn_label_level_2">Level 2</string>
     <string name="btn_label_level_3">Level 3</string>
+    <string name="btn_label_editeur">Level erstellen</string>
 
     <string name="title_activity_level">LevelActivity</string>
 
     <string name="pref_key_highscore">highscore_%1$d</string>
 
     <string name="txt_label_greeting">Levelauswahl</string>
+    <string name="img_desc_background">Hintergrund</string>
     <string name="img_desc_glass_background">Hintergrundbild - Sternenhimmel</string>
 
     <string name="extra_key_level">Level_ID</string>
@@ -44,7 +46,19 @@
     <string name="about_sound_win">Winning sound: fins</string>
     <string name="about_music_background">Background Music: mecha-world</string>
     <string name="score_default"/>
-    <string name="editeur_start">Start</string>
+    <string name="editeur_start">Spieler</string>
+    <string name="editeur_end">Ziel</string>
+    <string name="editeur_hole">Loch</string>
+    <string name="editeur_wall">Wand</string>
+    <string name="editeur_wall_arc">Wall (m. Winkel)</string>
+    <string name="editeur_view_add">Hinzufügen</string>
+    <string name="editeur_view_save">Speichern</string>
+    <string name="editeur_save_name_file">Dateiname?</string>
+    <string name="editeur_save_error_file">Fehler beim speichern von %1$s: %2$s</string>
+    <string name="editeur_save_succes_file">Datei %1$s erfolgreich geschrieben</string>
+    <string name="editeur_save_error_sdcard_file">Ist ihre SD-Karte gemountet?</string>
+    <string name="moving_content_sdcard">Kopiere Dateien auf SD-Karte...</string>
+    <string name="main_uploading_server">Lade Datei hoch...</string>
 
 
 </resources>

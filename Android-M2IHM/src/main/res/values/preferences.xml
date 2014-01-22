@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <string name="pref_key_mute">pref_key_mute</string>
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="pref_key_mute" tools:ignore="MissingTranslation">pref_key_mute</string>
     <string name="pref_key_highscore">highscore_%1$d</string>
 </resources>

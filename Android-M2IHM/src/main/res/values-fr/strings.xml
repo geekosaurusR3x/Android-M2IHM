@@ -13,11 +13,8 @@
     <string name="pref_key_highscore">highscore_%1$d</string>
 
     <string name="txt_label_greeting">Quel Niveau?</string>
+    <string name="img_desc_background">Fond d\'écran</string>
     <string name="img_desc_glass_background">Fond d\'écran spacial</string>
-
-    <integer name="btn_tag_level_1">1</integer>
-    <integer name="btn_tag_level_3">3</integer>
-    <integer name="btn_tag_level_2">2</integer>
 
     <string name="extra_key_level">Level_ID</string>
     <string name="dialog_success_title">Gagné !</string>
@@ -49,7 +46,24 @@
     <string name="about_sound_win">Winning sound: fins</string>
     <string name="about_music_background">Background Music: mecha-world</string>
     <string name="score_default"/>
-    <string name="editeur_start">Start</string>
 
-
+    <string name="pref_cat_audio">Ton</string>
+    <string name="pref_mute">Sound abschalten</string>
+    <string name="pref_mute_summ">Stumm schalten</string>
+    <string name="about_sound_win">Winning sound: fins</string>
+    <string name="about_music_background">Background Music: mecha-world</string>
+    <string name="score_default"/>
+    <string name="editeur_start">Vaisseau</string>
+    <string name="editeur_end">Arrivée</string>
+    <string name="editeur_hole">Trou</string>
+    <string name="editeur_wall">Mur</string>
+    <string name="editeur_wall_arc">Mut (arondi)</string>
+    <string name="editeur_view_add">Ajouter</string>
+    <string name="editeur_view_save">Enregistrer</string>
+    <string name="editeur_save_name_file">Nom de fichier ?</string>
+    <string name="editeur_save_error_file">Erreur lors de l'enregistrement de %1$s: %2$s</string>
+    <string name="editeur_save_succes_file">%1$s écrit avec succès</string>
+    <string name="editeur_save_error_sdcard_file">Votre carte SD est-elle montée correctement ?</string>
+    <string name="moving_content_sdcard">Copie des ressources en cours...</string>
+    <string name="main_uploading_server">Upload de l'archive...</string>
 </resources>
