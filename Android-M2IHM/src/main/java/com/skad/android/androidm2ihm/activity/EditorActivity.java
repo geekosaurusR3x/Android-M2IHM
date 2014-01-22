@@ -89,9 +89,10 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         Button widthPlusButton = (Button) findViewById(R.id.editeur_widthplus_button);
         Button heightMinusButton = (Button) findViewById(R.id.editeur_heightminus_button);
         Button heightPlusButton = (Button) findViewById(R.id.editeur_heightplus_button);
-        Button rotateButton = (Button) findViewById(R.id.editeur_rotate);
+        Button rotatePlusButton = (Button) findViewById(R.id.editeur_rotate_plus);
+        Button rotateMinusButton = (Button) findViewById(R.id.editeur_rotate_minus);
 
-        Button[] buttons = {leftButton, rightButton, upButton, downButton, widthPlusButton, widthMinusButton, heightPlusButton, heightMinusButton, rotateButton};
+        Button[] buttons = {leftButton, rightButton, upButton, downButton, widthPlusButton, widthMinusButton, heightPlusButton, heightMinusButton, rotatePlusButton, rotateMinusButton};
         for (Button btn : buttons) {
             btn.setOnClickListener(this);
             btn.setOnLongClickListener(this);
@@ -143,8 +144,11 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
             case R.id.editeur_heightplus_button:
                 mEditeurView.heightPlus(mIdSelected);
                 break;
-            case R.id.editeur_rotate:
-                mEditeurView.rotate(mIdSelected);
+            case R.id.editeur_rotate_plus:
+                mEditeurView.rotateplus(mIdSelected);
+                break;
+            case R.id.editeur_rotate_minus:
+                mEditeurView.rotateminus(mIdSelected);
                 break;
         }
     }

@@ -92,7 +92,7 @@ public class LevelParser {
                         String drawableResName = "";
                         if (objectType.equals("w")) { // wall (straight)
                             wall = new Wall(xPos, yPos, width, height);
-                            drawableResName = "wall_grey_texture";
+                            drawableResName = "wall";
                         } else if (objectType.equals("wa")) { // wall (curved)
                             wall = new WallArc(xPos, yPos, width, height);
                             drawableResName = "wall_arc";

@@ -71,6 +71,8 @@
     <string name="donwload_list_lvl">Geting level list</string>
     <string name="donwload_file_lvl">Geting level file</string>
     <string name="main_donwload_level">Dowload Level</string>
+    <string name="editeur_rotate_minus">Rotate -</string>
+    <string name="editeur_rotate_plus">Rotate +</string>
 
 
 </resources>

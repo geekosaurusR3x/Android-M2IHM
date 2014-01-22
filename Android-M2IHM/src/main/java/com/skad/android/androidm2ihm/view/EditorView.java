@@ -56,7 +56,7 @@ public class EditorView extends View {
                 break;
             case R.id.editeur_wall:
                 Wall wall = new Wall((int) x, (int) y, 64, 32);
-                wall.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "wall_grey_texture.png")));
+                wall.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "wall.png")));
                 wall.setId(tag);
                 mLevel.add(wall);
                 break;
@@ -103,25 +103,23 @@ public class EditorView extends View {
 
     public void widthPlus(int id) {
         mLevel.getAllSprites().get(id).setWidth(mLevel.getAllSprites().get(id).getWidth() + 1);
-        mLevel.getAllSprites().get(id).resize();
+        //mLevel.getAllSprites().get(id).resize();
+        mLevel.getAllSprites().get(id).rotate(mLevel.getAllSprites().get(id).getAngle());
     }
 
     public void widthMinus(int id) {
         SpriteObject object = mLevel.getAllSprites().get(id);
         if (object.getWidth() - 1 > 0) {
             object.setWidth(object.getWidth() - 1);
-            object.resize();
+            //object.resize();
+            object.rotate(object.getAngle());
         }
     }
 
     public void heightPlus(int id) {
         mLevel.getAllSprites().get(id).setHeight(mLevel.getAllSprites().get(id).getHeight() + 1);
-        mLevel.getAllSprites().get(id).resize();
-    }
-
-    public void rotate(int id) {
-        float angle = mLevel.getAllSprites().get(id).getAngle() + 1;
-        mLevel.getAllSprites().get(id).rotate(angle);
+        //mLevel.getAllSprites().get(id).resize();
+        mLevel.getAllSprites().get(id).rotate(mLevel.getAllSprites().get(id).getAngle());
     }
 
     public void heightMinus(int id) {
@@ -129,7 +127,18 @@ public class EditorView extends View {
         if (object.getHeight() - 1 > 0) {
             object.setHeight(object.getHeight() - 1);
             object.resize();
+            object.rotate(object.getAngle());
         }
+    }
+
+    public void rotateplus(int id) {
+        float angle = mLevel.getAllSprites().get(id).getAngle() + 1;
+        mLevel.getAllSprites().get(id).rotate(angle);
+    }
+
+    public void rotateminus(int id) {
+        float angle = mLevel.getAllSprites().get(id).getAngle() - 1;
+        mLevel.getAllSprites().get(id).rotate(angle);
     }
 
     public void moveElementById(int id, float x, float y) {
