@@ -12,7 +12,7 @@ public class Wall extends SpriteObject {
         this.mType = "w";
     }
 
-    public Vector2D getRebondVector(Vector2D colisionPoint, Vector2D direction) {
+    public Vector2D getReboundVector(Vector2D colisionPoint, Vector2D direction) {
         Vector2D wallVectorNormalised = MathUtils.vectorFromPoint(getXPos(), getYPos(), getXPos() + getWidth(), getYPos());
         Log.d("direction ", direction.toString());
         Log.d("wallVectorNormalised ", wallVectorNormalised.toString());
