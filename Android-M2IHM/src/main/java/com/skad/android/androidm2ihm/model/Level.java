@@ -221,11 +221,11 @@ public class Level extends Observable {
         // mBall.decreaseFreeze();
         Vector2D newDirection = playerHitWall();
         if (newDirection != null) { // Player hit a wall
-            mBall.setDir(newDirection);
+            //mBall.setDir(newDirection);
             //mBall.setFreeze(10);
             // Uncomment the two following line to disable bouncing
-            // mBall.setXPos((int) lastX);
-            // mBall.setYPos((int) lastY);
+            mBall.setXPos((int) lastX);
+            mBall.setYPos((int) lastY);
             mBall.setShowAlternateSprite(true);
             setChanged();
             notifyObservers(EVENT.COLLISION_WALL);

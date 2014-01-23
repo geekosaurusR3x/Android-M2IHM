@@ -15,7 +15,9 @@
 
     <string name="extra_key_level">Level_ID</string>
     <string name="dialog_success_title">Gewonnen!</string>
-    <string name="dialog_success_msg">Sie haben Level %1$d geschafft!\nIhr score: %2$d (Highscore: %3$d)\nZum nächsten Level (%4$d)?</string>
+    <string name="dialog_success_msg">Sie haben Level %1$d geschafft!\nIhr score: %2$d (Highscore: %3$d)\nZum nächsten
+        Level (%4$d)?
+    </string>
     <string name="dialog_failure_title">Verloren!</string>
     <string name="dialog_failure_msg">Nochmal?</string>
     <string name="dialog_success_msg_alt">Bravo, sie haben das letzte Level gemeistert!</string>
@@ -28,7 +30,9 @@
     <string name="action_about">Über</string>
     <string name="about_images">Bilder</string>
     <string name="about_images_author_sprites">DANIEL COOK</string>
-    <string name="about_images_author_sprites_url">http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html</string>
+    <string name="about_images_author_sprites_url">
+        http://www.lostgarden.com/2007/04/free-game-graphics-tyrian-ships-and.html
+    </string>
     <string name="about_audio">Audio</string>
     <string name="about_audio_fins_url">http://www.freesound.org/people/fins/sounds/133284/</string>
     <string name="about_audio_background_url">http://www.playonloop.com/2013-music-loops/mecha-world/</string>
@@ -60,8 +64,6 @@
     <string name="donwload_list_lvl">Hole Level Liste</string>
     <string name="donwload_file_lvl">Level Download</string>
     <string name="main_donwload_level">Level laden</string>
-    <string name="editeur_rotate_minus">Drehen -</string>
-    <string name="editeur_rotate_plus">Drehen +</string>
     <string name="editor_height_inc">Höhe +</string>
     <string name="editor_width_dec">Breite -</string>
     <string name="editor_width_inc">Höhe +</string>

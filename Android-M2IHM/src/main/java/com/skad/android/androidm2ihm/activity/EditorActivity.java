@@ -195,7 +195,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
         if (view.equals(mEditorView)) {
             mIdSelected = mEditorView.getElementId(mXTouch, mYTouch);
             if (mIdSelected != -1) {
-                Toast.makeText(EditorActivity.this, "Item Selected " + mIdSelected, Toast.LENGTH_LONG).show();
+                //Toast.makeText(EditorActivity.this, "Item Selected " + mIdSelected, Toast.LENGTH_LONG).show();
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
                 v.vibrate(50);
                 findViewById(R.id.editeur_frame_button).setVisibility(View.VISIBLE);

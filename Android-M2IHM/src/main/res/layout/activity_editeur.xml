@@ -67,9 +67,9 @@
             android:id="@+id/editeur_frame_button"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:visibility="visible">
+            android:visibility="invisible">
 
-        <ImageButton
+    <ImageButton
                 android:id="@+id/editeur_remove_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
