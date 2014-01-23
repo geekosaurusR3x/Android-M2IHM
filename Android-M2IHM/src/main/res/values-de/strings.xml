@@ -60,8 +60,6 @@
     <string name="donwload_list_lvl">Hole Level Liste</string>
     <string name="donwload_file_lvl">Level Download</string>
     <string name="main_donwload_level">Level laden</string>
-    <string name="editeur_rotate_minus">Drehen -</string>
-    <string name="editeur_rotate_plus">Drehen +</string>
     <string name="editor_height_inc">Höhe +</string>
     <string name="editor_width_dec">Breite -</string>
     <string name="editor_width_inc">Höhe +</string>

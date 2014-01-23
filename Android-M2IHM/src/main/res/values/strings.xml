@@ -67,8 +67,8 @@
     <string name="donwload_list_lvl">Geting level list</string>
     <string name="donwload_file_lvl">Geting level file</string>
     <string name="main_donwload_level">Dowload Level</string>
-    <string name="editeur_rotate_minus">↺</string>
-    <string name="editeur_rotate_plus">↻</string>
+    <string name="editeur_rotate_minus" tools:ignore="MissingTranslation">↺</string>
+    <string name="editeur_rotate_plus" tools:ignore="MissingTranslation">↻</string>
     <string name="editor_up" tools:ignore="MissingTranslation">↑</string>
     <string name="editor_down" tools:ignore="MissingTranslation">↓</string>
     <string name="editor_left" tools:ignore="MissingTranslation">←</string>

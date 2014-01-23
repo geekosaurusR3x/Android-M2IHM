@@ -59,8 +59,6 @@
     <string name="donwload_list_lvl">Téléchargement de la liste des niveaux</string>
     <string name="donwload_file_lvl">Téléchargement du niveau</string>
     <string name="main_donwload_level">Télécharger un Level</string>
-    <string name="editeur_rotate_minus">Rotation -</string>
-    <string name="editeur_rotate_plus">Rotatíon +</string>
     <string name="editor_height_inc">Hauteur +</string>
     <string name="editor_width_dec">Hauteur -</string>
     <string name="editor_width_inc">Largeur +</string>
