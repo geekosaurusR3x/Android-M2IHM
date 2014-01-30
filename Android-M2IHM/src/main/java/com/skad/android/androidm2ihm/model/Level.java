@@ -100,11 +100,14 @@ public class Level extends Observable {
     }
 
     public SpriteObject get(int id) {
+        // TODO Try catch block for try ArrayIndexOutOfBoundsException
         List<SpriteObject> spriteObjects = getAllSprites();
-        if (id > 0 && id < spriteObjects.size()) {
-            return spriteObjects.get(id);
+        if (id < 0) { // Negative id, return first object
+            id = 0;
+        } else if (id >= spriteObjects.size()) {
+            id = spriteObjects.size() - 1; // Index too big, return last object
         }
-        return null;
+        return spriteObjects.get(id);
     }
 
     public Ball getBall() {
@@ -170,7 +173,10 @@ public class Level extends Observable {
     }
 
     public boolean playerReachedEnd() {
-        return mTarget.intoHole(mBall);
+        if (mTarget != null) { // This level may have no end at all
+            return mTarget.intoHole(mBall);
+        }
+        return false;
     }
 
     public boolean playerFellIntoHole() {
