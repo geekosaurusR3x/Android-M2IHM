@@ -271,12 +271,12 @@ public class Level extends Observable {
             Iterator<Bullet> bulletIterator = gun.getBulletList().iterator();
             while (bulletIterator.hasNext()) {
                 Bullet bullet = bulletIterator.next();
-                // Vector2D currentPosition = bullet.getPosition();
-                // Vector2D nextPosition = bullet.getNextPosition();
+                Vector2D currentPosition = bullet.getPosition();
+                Vector2D nextPosition = bullet.getNextPosition();
 
-                // Vector2D movement = currentPosition;
-                // movement.sub(nextPosition);
-                /*boolean removeBullet = false;
+                Vector2D movement = currentPosition;
+                movement.sub(nextPosition);
+                boolean removeBullet = false;
                 boolean xCurrentBigger = currentPosition.getX() > nextPosition.getX();
                 boolean yCurrentBigger = currentPosition.getY() > nextPosition.getY();
                 // Check if there's a bullet in the way
@@ -293,8 +293,8 @@ public class Level extends Observable {
                     bulletIterator.remove();
                 } else {
                     bullet.forward();
-                }*/
-                //bullet.decreaseVelocity();
+                }
+                bullet.decreaseVelocity();
                 for (final Wall wall : mWallList) {
                     Vector2D intersection = bullet.intersects(wall);
                     if (intersection != null) {
