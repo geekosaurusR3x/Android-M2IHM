@@ -161,10 +161,10 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 mEditorView.heightPlus(mIdSelected);
                 break;
             case R.id.editeur_rotate_plus:
-                mEditorView.rotateplus(mIdSelected);
+                mEditorView.rotatePlus(mIdSelected);
                 break;
             case R.id.editeur_rotate_minus:
-                mEditorView.rotateminus(mIdSelected);
+                mEditorView.rotateMinus(mIdSelected);
                 break;
         }
     }

@@ -14,6 +14,8 @@ import com.skad.android.androidm2ihm.utils.FileUtils;
  */
 public class EditorView extends View {
 
+    private static final String TAG = "EditorView";
+
     // Bitmap background;
     private Level mLevel;
 
@@ -74,42 +76,42 @@ public class EditorView extends View {
     }
 
     public void removeElement(int id) {
-        mLevel.remove(mLevel.getAllSprites().get(id));
+        mLevel.remove(mLevel.get(id));
     }
 
     public int getElementId(float x, float y) {
         for (final SpriteObject mSpriteObject : mLevel.getAllSprites()) {
             if (mSpriteObject.isInto((int) x, (int) y)) {
-                return mLevel.getAllSprites().indexOf(mSpriteObject);
+                return mLevel.getId(mSpriteObject);
             }
         }
         return -1;
     }
 
     public void moveLeft(int id) {
-        mLevel.getAllSprites().get(id).setXPos((int) (mLevel.getAllSprites().get(id).getXPos() - 1));
+        mLevel.get(id).setXPos((int) (mLevel.get(id).getXPos() - 1));
     }
 
     public void moveRight(int id) {
-        mLevel.getAllSprites().get(id).setXPos((int) (mLevel.getAllSprites().get(id).getXPos() + 1));
+        mLevel.get(id).setXPos((int) (mLevel.get(id).getXPos() + 1));
     }
 
     public void moveUp(int id) {
-        mLevel.getAllSprites().get(id).setYPos((int) (mLevel.getAllSprites().get(id).getYPos() - 1));
+        mLevel.get(id).setYPos((int) (mLevel.get(id).getYPos() - 1));
     }
 
     public void moveDown(int id) {
-        mLevel.getAllSprites().get(id).setYPos((int) (mLevel.getAllSprites().get(id).getYPos() + 1));
+        mLevel.get(id).setYPos((int) (mLevel.get(id).getYPos() + 1));
     }
 
     public void widthPlus(int id) {
-        mLevel.getAllSprites().get(id).setWidth(mLevel.getAllSprites().get(id).getWidth() + 1);
-        //mLevel.getAllSprites().get(id).resize();
-        mLevel.getAllSprites().get(id).rotate(mLevel.getAllSprites().get(id).getAngle());
+        mLevel.get(id).setWidth(mLevel.get(id).getWidth() + 1);
+        //mLevel.get(id).resize();
+        mLevel.get(id).rotate(mLevel.get(id).getAngle());
     }
 
     public void widthMinus(int id) {
-        SpriteObject object = mLevel.getAllSprites().get(id);
+        SpriteObject object = mLevel.get(id);
         if (object.getWidth() - 1 > 0) {
             object.setWidth(object.getWidth() - 1);
             //object.resize();
@@ -118,13 +120,13 @@ public class EditorView extends View {
     }
 
     public void heightPlus(int id) {
-        mLevel.getAllSprites().get(id).setHeight(mLevel.getAllSprites().get(id).getHeight() + 1);
-        //mLevel.getAllSprites().get(id).resize();
-        mLevel.getAllSprites().get(id).rotate(mLevel.getAllSprites().get(id).getAngle());
+        mLevel.get(id).setHeight(mLevel.get(id).getHeight() + 1);
+        //mLevel.get(id).resize();
+        mLevel.get(id).rotate(mLevel.get(id).getAngle());
     }
 
     public void heightMinus(int id) {
-        SpriteObject object = mLevel.getAllSprites().get(id);
+        SpriteObject object = mLevel.get(id);
         if (object.getHeight() - 1 > 0) {
             object.setHeight(object.getHeight() - 1);
             object.resize();
@@ -132,20 +134,20 @@ public class EditorView extends View {
         }
     }
 
-    public void rotateplus(int id) {
-        float angle = mLevel.getAllSprites().get(id).getAngle() + 1;
-        mLevel.getAllSprites().get(id).rotate(angle);
+    public void rotatePlus(int id) {
+        float angle = mLevel.get(id).getAngle() + 1;
+        mLevel.get(id).rotate(angle);
     }
 
-    public void rotateminus(int id) {
-        float angle = mLevel.getAllSprites().get(id).getAngle() - 1;
-        mLevel.getAllSprites().get(id).rotate(angle);
+    public void rotateMinus(int id) {
+        float angle = mLevel.get(id).getAngle() - 1;
+        mLevel.get(id).rotate(angle);
     }
 
     public void moveElementById(int id, float x, float y) {
-        int X = (int) x - (mLevel.getAllSprites().get(id).getWidth() / 2);
-        int Y = (int) y - (mLevel.getAllSprites().get(id).getHeight() / 2);
-        mLevel.getAllSprites().get(id).setXPos(X);
-        mLevel.getAllSprites().get(id).setYPos(Y);
+        int X = (int) x - (mLevel.get(id).getWidth() / 2);
+        int Y = (int) y - (mLevel.get(id).getHeight() / 2);
+        mLevel.get(id).setXPos(X);
+        mLevel.get(id).setYPos(Y);
     }
 }
