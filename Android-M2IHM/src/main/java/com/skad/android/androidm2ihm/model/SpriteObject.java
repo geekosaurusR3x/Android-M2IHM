@@ -7,69 +7,166 @@ import android.graphics.Rect;
 import com.skad.android.androidm2ihm.utils.MathUtils;
 
 /**
+ * Represent a generique object that can be drawing on the screen
  * Created by skad on 19/12/13.
  */
 abstract public class SpriteObject {
+    /**
+     * Position of the SpriteObject into screen repert
+     */
     protected Vector2D mPosition;
+    /**
+     * Direction of the SpriteObject movement
+     */
     protected Vector2D mDir;
+    /**
+     * With of the SpriteObject
+     */
     protected int mWidth;
+    /**
+     * Height of the SpriteObject
+     */
     protected int mHeight;
+    /**
+     * Width Ratio between the original screen size were the lvl was design and the actual screen size
+     */
     protected double mRatioWidth;
+    /**
+     * Height Ratio between the original screen size were the lvl was design and the actual screen size
+     */
     protected double mRatioHeight;
+    /**
+     * Velocity off the player
+     */
     protected double mVelocity;
+    /**
+     * Scaled Bitmap with is the normal picture of the sprite
+     */
     protected Bitmap mScaledSprite;
+    /**
+     * Scaled Bitmap with is the alternate picture of the sprite when the player was hit
+     */
     protected Bitmap mAlternateSprite;
+    /**
+     * Original Bitmap with is the normal picture of the sprite (needed for the rotation)
+     */
     protected Bitmap mOriginalSprite;
+    /**
+     * Original Bitmap with is the alternate picture of the sprite when the player was hit (needed for the rotation)
+     */
     protected Bitmap mOriginalAlternateSprite;
+    /**
+     * Switch for the sprite
+     */
     protected boolean mShowAlternateSprite = false;
+    /**
+     * Actual rotation of the sprite
+     */
     protected float mAngle;
+    /**
+     * Type of the SpriteObject
+     */
     protected String mType;
+    /**
+     * Id of the SpriteObject
+     */
     private int mId;
 
+    /**
+     * Constructor of the SpriteObject
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     */
     protected SpriteObject(int x, int y, int width, int height) {
         mPosition = new Vector2D(x, y);
         mWidth = width;
         mHeight = height;
     }
 
+    /**
+     * Constructor of the SpriteObject but take an Vector2D instead of X and Y
+     * @param pos
+     * @param width
+     * @param height
+     */
     protected SpriteObject(Vector2D pos, int width, int height) {
         mPosition = pos;
         mWidth = width;
         mHeight = height;
     }
 
+    /**
+     * Return the actual position of the object
+     * @return Return the actual position of the object
+     * @see com.skad.android.androidm2ihm.model.Vector2D
+     */
     public Vector2D getPosition() {
         return mPosition;
     }
 
+    /**
+     * Set the actual position of the SpriteObject with the param
+     * @param position
+     * @see com.skad.android.androidm2ihm.model.Vector2D
+     */
     public void setPosition(Vector2D position) {
         mPosition = position;
     }
 
+    /**
+     * Return the X position of the SpriteObject
+     * @return Return the X position of the SpriteObject
+     */
     public double getXPos() {
         return mPosition.getX();
     }
 
+    /**
+     * Set the X position with the param
+     * @param xPos Set the X position with the param
+     */
     public void setXPos(int xPos) {
         mPosition.setX(xPos);
     }
 
+    /**
+     * Return the Y position of the SpriteObject
+     * @return Return the Y position of the SpriteObject
+     */
     public double getYPos() {
         return mPosition.getY();
     }
 
+    /**
+     * Set the Y position with the param
+     * @param yPos Set the Y position with the param
+     */
     public void setYPos(int yPos) {
         mPosition.setY(yPos);
     }
 
+    /**
+     * Return the Id of the SpriteObject
+     * @return Return the Id of the SpriteObject
+     */
     public int getId() {
         return mId;
     }
 
+    /**
+     * Set the Id of the SpriteObject
+     * @param mId Set the Id of the SpriteObject
+     */
     public void setId(int mId) {
         this.mId = mId;
     }
 
+    /**
+     * Return the ScaledSprite Bitmap or if(mShowAlternateSprite) return the mAlternateSprite
+     * @return Return the ScaledSprite Bitmap or if(mShowAlternateSprite) return the mAlternateSprite
+     */
     public Bitmap getScaledSprite() {
         if (mAlternateSprite != null) {
             return mShowAlternateSprite ? mAlternateSprite : mScaledSprite;
@@ -77,6 +174,12 @@ abstract public class SpriteObject {
         return mScaledSprite;
     }
 
+    /**
+     * Calculate if a point is into the bounding rectangle of the sprite
+     * @param x
+     * @param y
+     * @return Return true if X and Y is into the bounding rectangle of the sprite else false
+     */
     public boolean isInto(int x, int y) {
         return getBoundingRectangle().contains(x, y);
     }
@@ -110,11 +213,19 @@ abstract public class SpriteObject {
         resize();
     }
 
+    /**
+     * Set the AlternateSprite with the param
+     * @param sprite an alternate Bitmap
+     */
     public void setAlternateSprite(Bitmap sprite) {
         mAlternateSprite = Bitmap.createScaledBitmap(sprite, mWidth, mHeight, false);
         mOriginalAlternateSprite = sprite;
     }
 
+    /**
+     * Switch the display sprite with the bool
+     * @param alternativeSprite
+     */
     public void setShowAlternateSprite(boolean alternativeSprite) {
         mShowAlternateSprite = alternativeSprite;
     }
@@ -127,6 +238,9 @@ abstract public class SpriteObject {
         mRatioHeight = ratioHeight;
     }
 
+    /**
+     * Resize the OriginalSprites with the with and the height of the SpriteObject
+     */
     public void resize() {
         mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(), getHeight(), false);
         if (mAlternateSprite != null) {
@@ -143,6 +257,7 @@ abstract public class SpriteObject {
      *
      * @param object The other SpriteObject we may be intersecting with
      * @return A Vector2D representing the intersection between the two SpriteObjects, null if there's no intersection
+     * @see com.skad.android.androidm2ihm.model.Vector2D
      */
     public Vector2D intersects(SpriteObject object) {
         if (Rect.intersects(getBoundingRectangle(), object.getBoundingRectangle())) {
@@ -203,6 +318,7 @@ abstract public class SpriteObject {
      * Retrieve the position our object would take if we were to call the forward() method right now
      *
      * @return A Vector2D holding the next position
+     * @see com.skad.android.androidm2ihm.model.Vector2D
      */
     public Vector2D getNextPosition() {
         return new Vector2D(mPosition.getX() + mVelocity * mDir.getX(), mPosition.getY() + mVelocity * mDir.getY());
