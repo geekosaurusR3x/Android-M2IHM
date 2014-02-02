@@ -423,9 +423,9 @@ public class Level extends Observable {
         // update bullet positions
         for (Gun gun : mGunList) {
             // Rotate gun so that they aim at the player's ship
-            gun.rotate((int) mBall.getXPos(), (int) mBall.getYPos());
+            gun.rotate((int) mBall.getBoundingRectangle().centerX(), (int) mBall.getBoundingRectangle().centerY());
             if (currentTimeMs - gun.getLastTimeFired() > gun.getFireRate()) {
-                gun.fire((int) mBall.getXPos(), (int) mBall.getYPos());
+                gun.fire((int) mBall.getBoundingRectangle().centerX(), (int) mBall.getBoundingRectangle().centerY());
                 gun.setLastTimeFired(currentTimeMs);
                 // Log.d(TAG, "Fired bullet #" + gun.getBulletList().size());
             }
@@ -467,8 +467,6 @@ public class Level extends Observable {
                 } else {
                     bullet.forward();
                 }*/
-
-
             }
         }
 
