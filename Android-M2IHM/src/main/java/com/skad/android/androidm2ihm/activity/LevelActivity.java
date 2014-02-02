@@ -227,7 +227,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         List<String> levelList = FileUtils.listLvl(this);
         String currentPath = FileUtils.basename(mLevel.getPath());
         int currentIndex = levelList.indexOf(currentPath);
-        if (levelList != null && !levelList.isEmpty() && currentIndex >= 0 && currentIndex < levelList.size() - 2) {
+        if (levelList != null && !levelList.isEmpty() && currentIndex >= 0 && currentIndex <= levelList.size() - 2) {
             nextPath = levelList.get(currentIndex + 1);
         }
         return nextPath;

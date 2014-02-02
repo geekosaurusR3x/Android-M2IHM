@@ -32,6 +32,10 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback/*im
         holder.setFormat(PixelFormat.TRANSPARENT);
     }
 
+    /**
+     * Draw the level's content in our view
+     * @param canvas Where to draw
+     */
     public void drawGameElements(Canvas canvas) {
         canvas.drawColor(Color.TRANSPARENT, PorterDuff.Mode.CLEAR);
         for (final SpriteObject sprite : Level.getInstance().getAllSprites()) {
@@ -58,6 +62,9 @@ public class LevelView extends SurfaceView implements SurfaceHolder.Callback/*im
         mGameThread.interrupt();
     }
 
+    /**
+     * Restart the attached thread
+     */
     public void startNewThread() {
         mGameThread = new GameThread(mHolder, getContext(), this);
         mGameThread.setRunning(true);
