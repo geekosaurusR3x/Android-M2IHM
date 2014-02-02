@@ -23,6 +23,7 @@ import com.skad.android.androidm2ihm.utils.LevelParser;
 import com.skad.android.androidm2ihm.view.LevelView;
 
 import java.io.File;
+import java.util.List;
 import java.util.Observable;
 import java.util.Observer;
 
@@ -131,12 +132,13 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
     private void nextLevel() {
         // Dialog not shown anymore -> Register observer again
         registerObserver();
-        if (mLevelNumber < Level.LEVEL_COUNT) {
+        if (!isLastLevel()) {
             mLevelNumber++;
             mScore.setLevel(mLevelNumber);
             mScore.reset();
-            mLevelView.startNewThread();
+            mLevelDir = getNextLevelPath();
             drawLevel();
+            mLevelView.startNewThread();
         } else {
             // Player completed last level, exit
             finish();
@@ -203,6 +205,32 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         if (mScore.getTotalScore() > highscore) {
             mScore.saveHighScore(this);
         }
+    }
+
+    /**
+     * Check whether the current level is the last one
+     *
+     * @return
+     */
+    private boolean isLastLevel() {
+        String nextLevelFileName = getNextLevelPath();
+        return (nextLevelFileName == null || nextLevelFileName.length() == 0);
+    }
+
+    /**
+     * Get the filename (without whole path) of the next level resource
+     *
+     * @return Filename of next level, null if there is no next level
+     */
+    private String getNextLevelPath() {
+        String nextPath = null;
+        List<String> levelList = FileUtils.listLvl(this);
+        String currentPath = FileUtils.basename(mLevel.getPath());
+        int currentIndex = levelList.indexOf(currentPath);
+        if (levelList != null && !levelList.isEmpty() && currentIndex >= 0 && currentIndex < levelList.size() - 2) {
+            nextPath = levelList.get(currentIndex + 1);
+        }
+        return nextPath;
     }
 
     /**
@@ -288,7 +316,7 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
         AlertDialog.Builder successDialogBuilder = new AlertDialog.Builder(this);
         successDialogBuilder.setTitle(getString(R.string.dialog_success_title));
         String msg;
-        if (mLevelNumber < Level.LEVEL_COUNT) {
+        if (!isLastLevel()) {
             msg = String.format(getString(R.string.dialog_success_msg), mLevelNumber, mScore.getTotalScore(), mScore.getHighScore(this), (mLevelNumber + 1));
         } else {
             msg = getString(R.string.dialog_success_msg_alt);

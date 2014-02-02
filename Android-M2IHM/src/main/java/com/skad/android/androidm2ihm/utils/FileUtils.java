@@ -3,8 +3,14 @@ package com.skad.android.androidm2ihm.utils;
 import android.content.Context;
 import android.os.Environment;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.StringTokenizer;
 
 /**
@@ -80,12 +86,11 @@ public class FileUtils {
     }
 
     /**
-     * Create the directory name if not exist
+     * Create the directory if it does not exist yet
      *
-     * @param name
+     * @param name The name of the new directory
      */
     public static void makeDir(String name) {
-
         if (!fileExist(name)) {
             File dir = new File(name);
             dir.mkdir();
@@ -103,19 +108,26 @@ public class FileUtils {
         return file.exists();
     }
 
+    public static String basename(String path) {
+        int basenameIndex = path.lastIndexOf(File.separator);
+        return path.substring(basenameIndex + 1);
+    }
+
     /**
-     * Generate a ArrayList of String witch list level dir into the external media storage
+     * Generates a List of Strings holding all Level file names
      *
-     * @param context
-     * @return Level arrayList
+     * @param context The current context
+     * @return Level List
      */
-    public static ArrayList<String> listLvl(Context context) {
+    public static List<String> listLvl(Context context) {
         File dir = new File(context.getExternalFilesDir(null), "");
         String[] temp = dir.list();
-        ArrayList<String> list_lvl = new ArrayList<String>();
-        for (String dirname : temp) {
-            if (!dirname.matches("default")) {
-                list_lvl.add(dirname);
+        List<String> list_lvl = new ArrayList<String>();
+        if (temp != null) {
+            for (String dirname : temp) {
+                if (!dirname.matches("default")) {
+                    list_lvl.add(dirname);
+                }
             }
         }
         return list_lvl;

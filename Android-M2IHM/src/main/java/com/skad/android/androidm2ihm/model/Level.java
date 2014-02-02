@@ -1,6 +1,7 @@
 package com.skad.android.androidm2ihm.model;
 
 import android.content.Context;
+import android.util.Log;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -44,11 +45,12 @@ public class Level extends Observable {
 
     /**
      * Set all componenets at once
-     * @param ball The ball
-     * @param end The target
+     *
+     * @param ball     The ball
+     * @param end      The target
      * @param wallList A list holding all wall items
      * @param holeList A list holding all holes
-     * @param gunList A list holding all guns
+     * @param gunList  A list holding all guns
      */
     public void setComponents(Ball ball, Target end, List<Wall> wallList, List<Hole> holeList, List<Gun> gunList) {
         mBall = ball;
@@ -73,6 +75,7 @@ public class Level extends Observable {
 
     /**
      * Remove an item from the level
+     *
      * @param objectToRemove The SpriteObject we want to remove
      */
     public void remove(SpriteObject objectToRemove) {
@@ -99,6 +102,7 @@ public class Level extends Observable {
 
     /**
      * Add an item to the level
+     *
      * @param newObject The SpriteObject to add to our level
      */
     public void add(SpriteObject newObject) {
@@ -121,6 +125,7 @@ public class Level extends Observable {
 
     /**
      * Get the index of an item in our SpriteObject list
+     *
      * @param object The object whose index we want to retrieve
      * @return The index of the SpriteObject
      */
@@ -130,6 +135,7 @@ public class Level extends Observable {
 
     /**
      * Retrieve a SpriteObject from its identifier (index in list)
+     *
      * @param id Index in the list (confer getAllSprites())
      * @return The desired SpriteObject, or the last one if index > size of the SpriteObject list, the first one if index < 0
      */
@@ -146,6 +152,7 @@ public class Level extends Observable {
 
     /**
      * Retrieve the player's SpriteObject aka the Ball
+     *
      * @return Ball
      */
     public Ball getBall() {
@@ -154,6 +161,7 @@ public class Level extends Observable {
 
     /**
      * Set the player's SpriteObject aka the Ball
+     *
      * @param ball Ball
      */
     public void setBall(Ball ball) {
@@ -162,6 +170,7 @@ public class Level extends Observable {
 
     /**
      * Retrieve this level's target object
+     *
      * @return The target
      */
     public Target getTarget() {
@@ -170,6 +179,7 @@ public class Level extends Observable {
 
     /**
      * Set this level's target object
+     *
      * @param end The new target
      */
     public void setTarget(Target end) {
@@ -178,6 +188,7 @@ public class Level extends Observable {
 
     /**
      * Retrieve the wall list
+     *
      * @return A list holding all wall items
      */
     public List<Wall> getWallList() {
@@ -186,7 +197,8 @@ public class Level extends Observable {
 
     /**
      * Set the wall list
-     * @param  wallList The new list holding all wall items
+     *
+     * @param wallList The new list holding all wall items
      */
     public void setWallList(List<Wall> wallList) {
         mWallList = wallList;
@@ -194,6 +206,7 @@ public class Level extends Observable {
 
     /**
      * Retrieve the hole list
+     *
      * @return A list holding all hole items
      */
     public List<Hole> getHoleList() {
@@ -202,7 +215,8 @@ public class Level extends Observable {
 
     /**
      * Set the hole list
-     * @param  holeList The new list holding all hole items
+     *
+     * @param holeList The new list holding all hole items
      */
     public void setHoleList(List<Hole> holeList) {
         mHoleList = holeList;
@@ -210,6 +224,7 @@ public class Level extends Observable {
 
     /**
      * Retrieve the path where our level is stored
+     *
      * @return The path to our resource file
      */
     public String getPath() {
@@ -218,19 +233,19 @@ public class Level extends Observable {
 
     /**
      * Set the path where our level is stored
-     *
+     * <p/>
      * TODO Remove the context parameter
      *
      * @param context Current context
-     * @param mPath The actual file name
+     * @param mPath   The actual file name
      */
     public void setPath(Context context, String mPath) {
         this.mPath = context.getExternalFilesDir(null) + File.separator + mPath;
     }
 
-
     /**
      * Check if this level contains any guns
+     *
      * @return True if there is at least one gun, false otherwise
      */
     public boolean containsGuns() {
@@ -239,6 +254,7 @@ public class Level extends Observable {
 
     /**
      * Retrieve the list of guns
+     *
      * @return A list holding all guns present in this level
      */
     public List<Gun> getGunList() {
@@ -247,6 +263,7 @@ public class Level extends Observable {
 
     /**
      * Set our gun list
+     *
      * @param gunList A list holding all guns
      */
     public void setGunList(List<Gun> gunList) {
@@ -255,8 +272,9 @@ public class Level extends Observable {
 
     /**
      * Retrieve this level's number (As in level 1, level 2 etc.)
-     * @deprecated
+     *
      * @return The level number
+     * @deprecated
      */
     public int getLevelNumber() {
         return mLevelNumber;
@@ -264,6 +282,7 @@ public class Level extends Observable {
 
     /**
      * Set this level's number (As in level 1, level 2 etc.)
+     *
      * @param levelNumber The new level number
      */
     public void setLevelNumber(int levelNumber) {
@@ -272,6 +291,7 @@ public class Level extends Observable {
 
     /**
      * Check whether the player has reached the target
+     *
      * @return true if level is completed, false otherwise
      */
     public boolean playerReachedEnd() {
@@ -283,6 +303,7 @@ public class Level extends Observable {
 
     /**
      * Check whether the player fell into a hole and the game should be considered as lost
+     *
      * @return true if the player is currentyl in collision with a hole object, false otherwise
      */
     public boolean playerFellIntoHole() {
@@ -296,6 +317,7 @@ public class Level extends Observable {
 
     /**
      * Check whether the player hit a wall
+     *
      * @return true if the player is currently in collision with a wall object, false otherwise
      */
     public Vector2D playerHitWall() {
@@ -310,6 +332,7 @@ public class Level extends Observable {
 
     /**
      * Check whether the player was hit by a bullet
+     *
      * @return true if the player is currently in collision with a bullet object, false otherwise
      */
     public Bullet playerWasHitByBullet(Gun gun) {
@@ -324,6 +347,7 @@ public class Level extends Observable {
 
     /**
      * Update a player position (move)
+     *
      * @param forceX Where the player is heading for (X axis)
      * @param forceY Where the player is heading for (Y axis)
      */
@@ -408,6 +432,18 @@ public class Level extends Observable {
             Iterator<Bullet> bulletIterator = gun.getBulletList().iterator();
             while (bulletIterator.hasNext()) {
                 Bullet bullet = bulletIterator.next();
+                bullet.forward();
+                bullet.decreaseVelocity();
+                for (final Wall wall : mWallList) {
+                    Vector2D intersection = bullet.intersects(wall);
+                    if (intersection != null) {
+                        try {
+                            bulletIterator.remove();
+                        } catch (IllegalStateException e) {
+                            Log.wtf(TAG, "Error when trying to remove bullet: " + e.getCause());
+                        }
+                    }
+                }
                 /*Vector2D currentPosition = bullet.getPosition();
                 Vector2D nextPosition = bullet.getNextPosition();
 
@@ -432,14 +468,7 @@ public class Level extends Observable {
                     bullet.forward();
                 }*/
 
-                bullet.forward();
-                bullet.decreaseVelocity();
-                for (final Wall wall : mWallList) {
-                    Vector2D intersection = bullet.intersects(wall);
-                    if (intersection != null) {
-                        bulletIterator.remove();
-                    }
-                }
+
             }
         }
 
@@ -489,5 +518,7 @@ public class Level extends Observable {
     /**
      * Events to be reported to observers
      */
-    public static enum EVENT {GAME_OVER, GAME_SUCCESS, COLLISION_WALL, COLLISION_BULLET}
+    public static enum EVENT {
+        GAME_OVER, GAME_SUCCESS, COLLISION_WALL, COLLISION_BULLET
+    }
 }

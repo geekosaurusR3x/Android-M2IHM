@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
+
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.task.MoveSdCard;
@@ -21,7 +22,7 @@ import com.skad.android.androidm2ihm.task.UploadLvl;
 import com.skad.android.androidm2ihm.utils.FileUtils;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends ActionBarActivity implements Button.OnClickListener, DialogInterface.OnClickListener {
 
@@ -64,7 +65,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         LinearLayout linearLayout = new LinearLayout(this);
         linearLayout.setOrientation(LinearLayout.VERTICAL);
 
-        ArrayList<String> listLvl = FileUtils.listLvl(this);
+        List<String> listLvl = FileUtils.listLvl(this);
         int numlvl = 1;
         for (String lvl : listLvl) {
             LinearLayout linearLayoutsub = new LinearLayout(this);
