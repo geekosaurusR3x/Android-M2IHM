@@ -49,6 +49,7 @@
     <string name="editeur_start">Vaisseau</string>
     <string name="editeur_end">Arrivée</string>
     <string name="editeur_hole">Trou</string>
+    <string name="editeur_gun">Cannon</string>
     <string name="editeur_wall">Mur</string>
     <string name="editeur_wall_arc">Mut (arondi)</string>
     <string name="editeur_view_add">Ajouter</string>

@@ -57,6 +57,12 @@ public class EditorView extends View {
                 spriteObject.setId(tag);
                 mLevel.add(spriteObject);
                 break;
+            case R.id.editeur_gun:
+                spriteObject = new Gun((int) x, (int) y, 92, 92, 1000);
+                spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "gun.png")));
+                spriteObject.setId(tag);
+                mLevel.add(spriteObject);
+                break;
             case R.id.editeur_wall:
                 spriteObject = new Wall((int) x, (int) y, 64, 32);
                 spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "wall.png")));

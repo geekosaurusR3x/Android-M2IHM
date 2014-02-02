@@ -1,16 +1,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:compatLib="http://schemas.android.com/apk/res-auto">
+        >
 
     <group android:id="@+id/group_popupmenu">
         <item android:id="@+id/editeur_start"
-              android:title="@string/editeur_start" />
+              android:title="@string/editeur_start"/>
         <item android:id="@+id/editeur_end"
-              android:title="@string/editeur_end" />
+              android:title="@string/editeur_end"/>
         <item android:id="@+id/editeur_hole"
-              android:title="@string/editeur_hole" />
+              android:title="@string/editeur_hole"/>
+        <item android:id="@+id/editeur_gun"
+              android:title="@string/editeur_gun"/>
         <item android:id="@+id/editeur_wall"
-              android:title="@string/editeur_wall" />
+              android:title="@string/editeur_wall"/>
         <item android:id="@+id/editeur_wall_arc"
-              android:title="@string/editeur_wall_arc" />
+              android:title="@string/editeur_wall_arc"/>
     </group>
 </menu>

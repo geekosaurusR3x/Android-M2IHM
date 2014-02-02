@@ -50,6 +50,7 @@
     <string name="editeur_start">Spieler</string>
     <string name="editeur_end">Ziel</string>
     <string name="editeur_hole">Loch</string>
+    <string name="editeur_gun">Kanone</string>
     <string name="editeur_wall">Wand</string>
     <string name="editeur_wall_arc">Wall (m. Winkel)</string>
     <string name="editeur_view_add">Hinzufügen</string>
