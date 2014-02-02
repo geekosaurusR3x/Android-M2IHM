@@ -359,33 +359,50 @@ public class Level extends Observable {
     /**
      * Update all objects in this level
      */
-    public void update() {
-        updatePlayer();
+    public void update(boolean bounce) {
+        updatePlayer(bounce);
         updateBullets();
         checkForCollisions();
     }
 
     /**
-     * Make a player move and check for collisions
+     * Make a player actually move and check for collisions
+     * @param bounce Whether we should bounce off walls
      */
-    private void updatePlayer() {
+    private void updatePlayer(boolean bounce) {
         double lastX = mBall.getXPos();
         double lastY = mBall.getYPos();
         mBall.forward();
-        // mBall.decreaseFreeze();
+        if (bounce) {
+            mBall.decreaseFreeze();
+        }
         Vector2D newDirection = playerHitWall();
+        boolean playerHit = false;
+
         if (newDirection != null) { // Player hit a wall
-            //mBall.setDir(newDirection);
-            //mBall.setFreeze(10);
             // Uncomment the two following line to disable bouncing
-            mBall.setXPos((int) lastX);
-            mBall.setYPos((int) lastY);
+            if (!bounce) {
+                mBall.setXPos((int) lastX);
+                mBall.setYPos((int) lastY);
+            } else {
+                mBall.setDir(newDirection);
+                mBall.setFreeze(10);
+            }
             mBall.setShowAlternateSprite(true);
+            playerHit = true;
             setChanged();
             notifyObservers(EVENT.COLLISION_WALL);
         } else {
             mBall.setShowAlternateSprite(false);
         }
+        checkForBulletCollision(playerHit);
+    }
+
+    /**
+     * Check whether the player was hit a bullet
+     * @param playerHitAWall Whether the player has hit a wall during the tick
+     */
+    private void checkForBulletCollision(boolean playerHitAWall) {
         for (final Gun gun : mGunList) {
             Bullet bullet = playerWasHitByBullet(gun);
             if (bullet != null) { // Player got hit by a bullet
@@ -395,7 +412,9 @@ public class Level extends Observable {
                 setChanged();
                 notifyObservers(EVENT.COLLISION_BULLET);
             } else {
-                mBall.setShowAlternateSprite(false);
+                if (!playerHitAWall) {
+                    mBall.setShowAlternateSprite(false);
+                }
             }
         }
     }

@@ -12,17 +12,17 @@ public class Ball extends SpriteObject {
      */
     private static final int ROTATION_THRESHOLD = 5;
     /**
-     * Number of frame were the player can't move
+     * Number of frame during which the player can't move
      */
     private int freeze;
 
     /**
      * Constructor
      *
-     * @param x
-     * @param y
-     * @param width
-     * @param height set the type of p
+     * @param x Original X position
+     * @param y Original Y position
+     * @param width Sprite width
+     * @param height Sprite height
      */
     public Ball(int x, int y, int width, int height) {
         super(x, y, width, height);
@@ -35,14 +35,14 @@ public class Ball extends SpriteObject {
     /**
      * Set the number of frame for freeze
      *
-     * @param freeze
+     * @param freeze Number of frames to freeze
      */
     public void setFreeze(int freeze) {
         this.freeze = freeze;
     }
 
     /**
-     * Decrease the number of freezeing frame
+     * Decrease the number of freezing frame
      */
     public void decreaseFreeze() {
         if (freeze > 0) {

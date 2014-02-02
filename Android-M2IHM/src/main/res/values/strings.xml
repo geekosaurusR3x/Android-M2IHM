@@ -80,4 +80,7 @@
     <string name="editor_width_inc">Width +</string>
     <string name="editor_width_dec">Width -</string>
     <string name="pref_key_max_lvl">max_lvl</string>
+    <string name="pref_cat_engine">Engine</string>
+    <string name="pref_bounce">Bounce off walls</string>
+    <string name="pref_bounce_summ">Whether to bounce off walls</string>
 </resources>

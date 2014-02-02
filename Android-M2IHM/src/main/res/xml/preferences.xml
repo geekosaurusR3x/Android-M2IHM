@@ -8,4 +8,11 @@
             android:summary="@string/pref_mute_summ"
             android:defaultValue="false"/>
     </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_cat_engine">
+        <CheckBoxPreference
+            android:key="@string/pref_key_bounce_off_walls"
+            android:title="@string/pref_bounce"
+            android:summary="@string/pref_bounce_summ"
+            android:defaultValue="false"/>
+    </PreferenceCategory>
 </PreferenceScreen>

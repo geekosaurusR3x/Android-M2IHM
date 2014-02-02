@@ -2,4 +2,5 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="pref_key_mute" tools:ignore="MissingTranslation">pref_key_mute</string>
     <string name="pref_key_highscore">highscore_%1$d</string>
+    <string name="pref_key_bounce_off_walls">bounce</string>
 </resources>

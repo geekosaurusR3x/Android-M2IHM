@@ -1,12 +1,15 @@
 package com.skad.android.androidm2ihm.thread;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Canvas;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.preference.PreferenceManager;
 import android.view.SurfaceHolder;
+import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Level;
 import com.skad.android.androidm2ihm.view.LevelView;
 
@@ -45,9 +48,11 @@ public class GameThread extends Thread implements SensorEventListener, Observer 
         mLevel.addObserver(this);
         mSensorManager = (SensorManager) mContext.getSystemService(Context.SENSOR_SERVICE);
         mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER), SensorManager.SENSOR_DELAY_GAME);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mContext);
+        boolean bounce = sharedPreferences.getBoolean(mContext.getString(R.string.pref_key_bounce_off_walls), false);
         synchronized (this) {
             while (mRunning) {
-                mLevel.update();
+                mLevel.update(bounce);
                 mcanvas = mSurfaceHolder.lockCanvas();
                 if (mcanvas != null) {
                     mLevelView.drawGameElements(mcanvas);
