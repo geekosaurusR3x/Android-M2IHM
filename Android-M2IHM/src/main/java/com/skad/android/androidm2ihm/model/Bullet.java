@@ -7,6 +7,14 @@ package com.skad.android.androidm2ihm.model;
  */
 public class Bullet extends SpriteObject {
 
+    /**
+     * Constructor
+     *
+     * @param x
+     * @param y
+     * @param width
+     * @param height set the type of b
+     */
     public Bullet(int x, int y, int width, int height) {
         super(x, y, width, height);
         this.mType = "b";

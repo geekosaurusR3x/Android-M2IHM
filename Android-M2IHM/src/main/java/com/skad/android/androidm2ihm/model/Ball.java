@@ -22,7 +22,7 @@ public class Ball extends SpriteObject {
      * @param x
      * @param y
      * @param width
-     * @param height
+     * @param height set the type of p
      */
     public Ball(int x, int y, int width, int height) {
         super(x, y, width, height);

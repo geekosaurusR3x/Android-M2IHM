@@ -37,7 +37,7 @@ public class Gun extends SpriteObject {
      * @param y
      * @param width
      * @param height
-     * @param fireRate
+     * @param fireRate set the type of g
      */
     public Gun(int x, int y, int width, int height, int fireRate) {
         super(x, y, width, height);
