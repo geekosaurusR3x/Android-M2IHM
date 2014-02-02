@@ -55,7 +55,7 @@ public class SpaceShipThread extends Thread {
                 if (currentTimeMillis() - mLastTimeSpaceObject > SPACESHIP_FREQUENCY) {
                     Vector2D pos = MathUtils.randomVector(mScreenHeight, mScreenWidth);
                     Vector2D target = MathUtils.randomVector(mScreenHeight, mScreenWidth);
-                    double scaleFactor = MathUtils.randomDouble(2);
+                    double scaleFactor = MathUtils.randomDouble(2) + 0.1; //like that never obtain O for scaleFactor
                     SpaceObject spaceObject = new SpaceObject(pos, (int) (128 * mRatioWidth * scaleFactor), (int) (128 * mRatioHeight * scaleFactor));
                     spaceObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(mContext, Level.getInstance().getPath(), "ship1.png")));
                     spaceObject.setDir(target);
