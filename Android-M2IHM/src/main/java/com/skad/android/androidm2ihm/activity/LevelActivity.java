@@ -280,14 +280,12 @@ public class LevelActivity extends ActionBarActivity implements/* SensorEventLis
      * @param collisionType The type of collision
      */
     public void onCollisionDetected(Level.EVENT collisionType) {
-        mScore.collided();
+        mScore.collided(collisionType);
         switch (collisionType) {
             case COLLISION_BULLET:
                 Log.d(TAG, "Player got hit by a bullet!");
-                // TODO
                 break;
             case COLLISION_WALL:
-                mScore.collided();
                 if (!mMute) {
                     mSoundPool.play(mIdSoundWall, 1, 1, 0, 0, 1);
                 }

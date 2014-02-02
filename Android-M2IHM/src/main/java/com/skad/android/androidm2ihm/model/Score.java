@@ -12,7 +12,8 @@ import java.util.Observable;
  */
 public class Score extends Observable {
 
-    private int mCollisions;
+    private int mWallCollisions;
+    private int mBulletCollisions;
     private int mLevelId;
 
     /**
@@ -21,15 +22,20 @@ public class Score extends Observable {
      * @param levelId The id of the current level
      */
     public Score(int levelId) {
-        mCollisions = 0;
+        mWallCollisions = 0;
+        mBulletCollisions = 0;
         mLevelId = levelId;
     }
 
     /**
      * Call this method to decrement the score when a player hit a wall
      */
-    public void collided() {
-        mCollisions++;
+    public void collided(Level.EVENT event) {
+        if (event == Level.EVENT.COLLISION_BULLET) {
+            mBulletCollisions++;
+        } else if (event == Level.EVENT.COLLISION_WALL) {
+            mWallCollisions++;
+        }
         setChanged();
         notifyObservers();
     }
@@ -38,7 +44,8 @@ public class Score extends Observable {
      * Reset the score
      */
     public void reset() {
-        mCollisions = 0;
+        mWallCollisions = 0;
+        mBulletCollisions = 0;
         setChanged();
         notifyObservers();
     }
@@ -64,7 +71,7 @@ public class Score extends Observable {
      * @return The current score
      */
     public int getTotalScore() {
-        int score = (1000 * mLevelId) - mCollisions;
+        int score = (1000 * mLevelId) - (mWallCollisions * 2) - mBulletCollisions;
         return score > 0 ? score : 0;
     }
 
