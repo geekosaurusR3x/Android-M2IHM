@@ -9,12 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
+ * Parser Class witch read the level file
  * Created by pschmitt on 1/9/14.
  */
 public class LevelParser {
     private LevelParser() {
     }
 
+    /**
+     * Read File and update level singleton
+     *
+     * @param context
+     * @param levelDir
+     * @param levelNum
+     * @param screenWidth
+     * @param screenHeight
+     * @return Level singleton
+     * @see com.skad.android.androidm2ihm.model.Level
+     */
     public static Level getLevelFromFile(Context context, String levelDir, int levelNum, int screenWidth, int screenHeight) {
         double ratioWidth = 1;
         double ratioHeight = 1;
