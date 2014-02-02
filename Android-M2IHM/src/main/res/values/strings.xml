@@ -76,7 +76,7 @@
     <string name="editor_left" tools:ignore="MissingTranslation">←</string>
     <string name="editor_right" tools:ignore="MissingTranslation">→</string>
     <string name="editor_height_inc">Height +</string>
-    <string name="editor_width_dec">Width -</string>
-    <string name="editor_width_inc">Width +</string>
     <string name="editor_height_dec">Height -</string>
+    <string name="editor_width_inc">Width +</string>
+    <string name="editor_width_dec">Width -</string>
 </resources>

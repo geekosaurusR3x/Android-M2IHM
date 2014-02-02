@@ -65,7 +65,7 @@
     <string name="donwload_file_lvl">Téléchargement du niveau</string>
     <string name="main_donwload_level">Télécharger un Level</string>
     <string name="editor_height_inc">Hauteur +</string>
-    <string name="editor_width_dec">Hauteur -</string>
+    <string name="editor_height_dec">Hauteur -</string>
     <string name="editor_width_inc">Largeur +</string>
-    <string name="editor_height_dec">Largeur -</string>
+    <string name="editor_width_dec">Largeur -</string>
 </resources>
