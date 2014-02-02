@@ -22,7 +22,7 @@
     <string name="dialog_success_restart">Recomencer ?</string>
     <string name="action_highscore">Meilleurs scores</string>
     <string name="dialog_highscores_title">Meilleurs scores</string>
-    <string name="dialog_highscores_msg">Level 1: %1$d\nLevel 2: %2$d\nLevel 3: %3$d</string>
+    <string name="dialog_highscores_msg">Niveau %1$d: %2$d\n</string>
     <string name="dialog_highscores_btn_reset">Remise à zéro ?</string>
 
     <string name="action_about">A propos</string>

@@ -14,7 +14,6 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-
 import com.skad.android.androidm2ihm.R;
 import com.skad.android.androidm2ihm.model.Score;
 import com.skad.android.androidm2ihm.task.MoveSdCard;
@@ -106,6 +105,7 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
             linearLayout.addView(linearLayoutsub);
             numlvl++;
         }
+        Score.setNbLevel(this, numlvl);
         listButtonLvl.addView(linearLayout);
     }
 
@@ -149,7 +149,11 @@ public class MainActivity extends ActionBarActivity implements Button.OnClickLis
         Score score = new Score(1);
         AlertDialog.Builder ald = new AlertDialog.Builder(this);
         ald.setTitle(getString(R.string.dialog_highscores_title));
-        ald.setMessage(String.format(getString(R.string.dialog_highscores_msg), score.getHighScore(this), score.getHighScore(this, 2), score.getHighScore(this, 3)));
+        String temp = "";
+        for (int i = 1; i < Score.getNbLevel(this); i++) {
+            temp += String.format(getString(R.string.dialog_highscores_msg), i, score.getHighScore(this, i));
+        }
+        ald.setMessage(temp);
         ald.setNeutralButton(android.R.string.cancel, null);
         ald.setNegativeButton(R.string.dialog_highscores_btn_reset, this);
         ald.create().show();

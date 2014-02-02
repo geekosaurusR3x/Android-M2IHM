@@ -90,6 +90,27 @@ public class Score extends Observable {
     }
 
     /**
+     * Set the number of level
+     * @param context
+     * @param nb
+     */
+    public static void setNbLevel(Context context, int nb) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        sharedPref.edit().putInt(context.getString(R.string.pref_key_max_lvl), nb).commit();
+    }
+
+    /**
+     * Return the number of level
+     *
+     * @param context
+     * @return the number of level
+     */
+    public static int getNbLevel(Context context) {
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+        return sharedPref.getInt(context.getString(R.string.pref_key_max_lvl), 0);
+    }
+
+    /**
      * Save the current score to Preferences. Should be called when a player beats its highscore
      * @param context The current context
      */
@@ -103,7 +124,7 @@ public class Score extends Observable {
      * @param context The current context
      */
     public static void resetHighScores(Context context) {
-        for (int i = 1; i < 4; i++) {
+        for (int i = 1; i < getNbLevel(context); i++) {
             SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
             sharedPref.edit().remove(String.format(context.getString(R.string.pref_key_highscore), i)).commit();
         }

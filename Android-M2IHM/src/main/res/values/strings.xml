@@ -20,7 +20,7 @@
     <string name="dialog_success_restart">Restart</string>
     <string name="action_highscore">Highscores</string>
     <string name="dialog_highscores_title">Highscores</string>
-    <string name="dialog_highscores_msg">Level 1: %1$d\nLevel 2: %2$d\nLevel 3: %3$d</string>
+    <string name="dialog_highscores_msg">Level %1$d: %2$d\n</string>
     <string name="dialog_highscores_btn_reset">Reset</string>
 
     <string name="action_about">About</string>
@@ -79,4 +79,5 @@
     <string name="editor_height_dec">Height -</string>
     <string name="editor_width_inc">Width +</string>
     <string name="editor_width_dec">Width -</string>
+    <string name="pref_key_max_lvl">max_lvl</string>
 </resources>
