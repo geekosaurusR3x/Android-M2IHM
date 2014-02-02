@@ -306,10 +306,10 @@ abstract public class SpriteObject {
             for (int i = collisionBounds.left; i < collisionBounds.right; i++) {
                 for (int j = collisionBounds.top; j < collisionBounds.bottom; j++) {
                     // Deltas
-                    int deltaX1 = MathUtils.maxOrZero(i - (int) mPosition.getX(), mScaledSprite.getWidth());
-                    int deltaY1 = MathUtils.maxOrZero(j - (int) mPosition.getY(), mScaledSprite.getHeight());
-                    int deltaX2 = MathUtils.maxOrZero(i - (int) object.getXPos(), object.getScaledSprite().getWidth());
-                    int deltaY2 = MathUtils.maxOrZero(j - (int) object.getYPos(), object.getScaledSprite().getHeight());
+                    int deltaX1 = MathUtils.maxOrZero(i - (int) mPosition.getX(), mScaledSprite.getWidth() - 1);
+                    int deltaY1 = MathUtils.maxOrZero(j - (int) mPosition.getY(), mScaledSprite.getHeight() - 1);
+                    int deltaX2 = MathUtils.maxOrZero(i - (int) object.getXPos(), object.getScaledSprite().getWidth() - 1);
+                    int deltaY2 = MathUtils.maxOrZero(j - (int) object.getYPos(), object.getScaledSprite().getHeight() - 1);
                     // Pixel content
                     int bitmap1Pixel = mScaledSprite.getPixel(deltaX1, deltaY1);
                     int bitmap2Pixel = object.getScaledSprite().getPixel(deltaX2, deltaY2);
