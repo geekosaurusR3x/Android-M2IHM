@@ -74,4 +74,27 @@ public class MathUtils {
         return new Point((int) cx, (int) cy);
     }
 
+    /**
+     * Compute the angle between two point.
+     *
+     * @param x
+     * @param y
+     * @param targetX
+     * @param targetY
+     * @return Return the angle
+     */
+    public static final float angleFromTwoPoint(int x, int y, int targetX, int targetY) {
+        float angle = 0;
+        double dx = targetX - x;
+        double dy = targetY - y;
+
+        angle = (float) Math.toDegrees(Math.atan2(dy, dx));
+
+        if (angle < 0) {
+            angle += 360;
+        }
+
+        return angle;
+    }
+
 }

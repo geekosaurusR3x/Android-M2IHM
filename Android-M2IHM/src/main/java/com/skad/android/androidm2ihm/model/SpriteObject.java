@@ -276,8 +276,10 @@ abstract public class SpriteObject {
      * Resize the OriginalSprites with the with and the height of the SpriteObject
      */
     public void resize() {
-        mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(), getHeight(), false);
-        if (mAlternateSprite != null) {
+        if (mOriginalSprite != null) {
+            mScaledSprite = Bitmap.createScaledBitmap(mOriginalSprite, getWidth(), getHeight(), false);
+        }
+        if (mOriginalAlternateSprite != null) {
             mAlternateSprite = Bitmap.createScaledBitmap(mOriginalAlternateSprite, getWidth(), getHeight(), false);
         }
     }
@@ -394,16 +396,7 @@ abstract public class SpriteObject {
      * @see com.skad.android.androidm2ihm.model.SpriteObject#rotate(float) for the real rotation
      */
     public void rotate(int targetX, int targetY) {
-        if (mOriginalSprite == null) {
-            return;
-        }
-        double dx = targetX - getBoundingRectangle().centerX();
-        double dy = targetY - getBoundingRectangle().centerY();
-        float angle = (float) Math.toDegrees(Math.atan2(dy, dx));
-        if (angle < 0) {
-            angle += 360;
-        }
-        rotate(angle);
+        rotate(MathUtils.angleFromTwoPoint(getBoundingRectangle().centerX(), getBoundingRectangle().centerY(), targetX, targetY));
     }
 
     /**
@@ -418,7 +411,9 @@ abstract public class SpriteObject {
         mAngle = angle;
         matrix.postRotate(mAngle);
         resize();
-        mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
+        if (mScaledSprite != null) {
+            mScaledSprite = Bitmap.createBitmap(mScaledSprite, 0, 0, mWidth, mHeight, matrix, true);
+        }
         if (mAlternateSprite != null) {
             mAlternateSprite = Bitmap.createBitmap(mAlternateSprite, 0, 0, mWidth, mHeight, matrix, true);
         }
