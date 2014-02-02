@@ -14,7 +14,6 @@ import java.util.Observable;
  */
 public class Level extends Observable {
 
-    public static final int LEVEL_COUNT = 3;
     private static final String TAG = "Level,";
     private static Level mInstance;
     // Business objects
