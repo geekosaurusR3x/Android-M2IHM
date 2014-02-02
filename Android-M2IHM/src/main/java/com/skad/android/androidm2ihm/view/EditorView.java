@@ -18,6 +18,8 @@ public class EditorView extends View {
 
     // Bitmap background;
     private Level mLevel;
+    //Firerate
+    private int mFirerate;
 
     public EditorView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
@@ -34,6 +36,10 @@ public class EditorView extends View {
             canvas.drawBitmap(mObject.getScaledSprite(), (int) (mObject.getXPos()), (int) (mObject.getYPos()), null);
         }
         invalidate();
+    }
+
+    public void setmFirerate(int mFirerate) {
+        this.mFirerate = mFirerate;
     }
 
     public int addElement(int tag, float x, float y) {
@@ -58,7 +64,7 @@ public class EditorView extends View {
                 mLevel.add(spriteObject);
                 break;
             case R.id.editeur_gun:
-                spriteObject = new Gun((int) x, (int) y, 92, 92, 1000);
+                spriteObject = new Gun((int) x, (int) y, 92, 92, mFirerate);
                 spriteObject.setSprite(BitmapFactory.decodeFile(FileUtils.getfileordefault(super.getContext(), mLevel.getPath(), "gun.png")));
                 spriteObject.setId(tag);
                 mLevel.add(spriteObject);

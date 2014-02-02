@@ -83,4 +83,6 @@
     <string name="pref_cat_engine">Engine</string>
     <string name="pref_bounce">Bounce off walls</string>
     <string name="pref_bounce_summ">Whether to bounce off walls</string>
+    <string name="editeur_base_firerate">1000</string>
+    <string name="editeur_text_firerate">Firerate ?</string>
 </resources>

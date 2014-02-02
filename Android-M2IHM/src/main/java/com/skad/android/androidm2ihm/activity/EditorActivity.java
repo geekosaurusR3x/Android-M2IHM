@@ -182,6 +182,9 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
             @Override
             public boolean onMenuItemClick(MenuItem menuItem) {
                 mCurrentTag = menuItem.getItemId();
+                if (mCurrentTag == R.id.editeur_gun) {
+                    showFireRateDialog();
+                }
                 Toast.makeText(EditorActivity.this, String.format(getString(R.string.editeur_item_select), menuItem.getItemId()), Toast.LENGTH_LONG).show();
                 return false;
             }
@@ -194,6 +197,7 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
     public boolean onLongClick(View view) {
         if (view.equals(mEditorView)) {
             mIdSelected = mEditorView.getElementId(mXTouch, mYTouch);
+
             if (mIdSelected != -1) {
                 //Toast.makeText(EditorActivity.this, "Item Selected " + mIdSelected, Toast.LENGTH_LONG).show();
                 Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
@@ -268,6 +272,30 @@ public class EditorActivity extends ActionBarActivity implements View.OnTouchLis
                 })
                 .setNegativeButton(android.R.string.cancel, null)
                 .setMessage(R.string.editeur_save_name_file);
+
+        Dialog dialog = builder.create();
+        dialog.show();
+    }
+
+    /**
+     * Prompt the user for the firerate
+     */
+    public void showFireRateDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        LayoutInflater inflater = getLayoutInflater();
+
+        View textEntrySaveName = inflater.inflate(R.layout.activity_editeur_firerate, null);
+
+        builder.setView(textEntrySaveName)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int id) {
+                        int firerate = Integer.parseInt(((EditText) ((AlertDialog) dialog).findViewById(R.id.editeur_firerate)).getText().toString());
+                        mEditorView.setmFirerate(firerate);
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, null);
 
         Dialog dialog = builder.create();
         dialog.show();
